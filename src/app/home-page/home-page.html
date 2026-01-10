@@ -1,1 +1,116 @@
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
+<nav
+  class="fixed top-0 left-0 right-0 z-50 h-[70px] bg-[#00712D]
+         flex items-center justify-between px-6">
+
+  <h1 class="text-[#D5ED9F] text-3xl">Smart EV</h1>
+
+  <!-- Desktop Menu -->
+  <div class="hidden md:flex gap-x-4 text-[#D5ED9F]">
+    <a routerLink="/" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Home</a>
+    <a routerLink="/products" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Products</a>
+    <a routerLink="/about" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">About</a>
+    <a routerLink="/contact" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Contact</a>
+  </div>
+
+  <!-- Right Side -->
+  <div class="flex items-center gap-x-4">
+
+    <!-- Hamburger -->
+    <button
+      class="md:hidden text-[#D5ED9F] text-3xl"
+      (click)="toggleMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- User Icon (Desktop only) -->
+    <a routerLink="/login" class="hidden md:block text-2xl text-[#D5ED9F]">
+      <i class="far fa-user-circle"></i>
+    </a>
+
+  </div>
+</nav>
+
+<!-- Mobile / Tablet Menu -->
+<div
+  *ngIf="isMenuOpen"
+  class="fixed top-[70px] right-0 w-52 bg-[#00712D]
+         flex flex-col text-[#D5ED9F] shadow-lg z-40">
+
+  <a routerLink="/" (click)="closeMenu()"
+     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Home</a>
+
+  <a routerLink="/products" (click)="closeMenu()"
+     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Products</a>
+
+  <a routerLink="/about" (click)="closeMenu()"
+     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">About</a>
+
+  <a routerLink="/contact" (click)="closeMenu()"
+     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Contact</a>
+
+  <a routerLink="/login" (click)="closeMenu()"
+     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Login</a>
+
+</div>
+
+
+
+<div class="min-h-screen flex flex-col gap-y-12 py-[70px]">
+
+  <div class="h-[75vh] bg-[url('/Tata-Nexon-EV-5-jpg.webp')] bg-cover bg-center pt-12 flex flex-col gap-y-2 items-center">
+
+    <p class="text-white text-xl md:text-2xl lg:text-3xl">
+      LET'S RIDE THE
+    </p>
+
+    <h1 class="font-bold text-white text-4xl md:text-5xl lg:text-6xl">
+      FUTURE
+    </h1>
+
+  </div>
+
+  <!-- CARDS -->
+<div class="flex md:flex-row flex-col w-full px-12 gap-12">
+
+   <div class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12">
+    <div class="flex flex-col gap-y-2">
+      <h3 class="md:text-2xl text-xl font-semibold">Vehicles Purchased</h3>
+      <p class="md:text-3xl text-xl font-bold text-[#FF9100]">12,450+</p>
+      <p class="text-xs sm:text-md text-gray-500">Electric vehicles adopted annually</p>
+    </div>
+    <i class="fa-solid fa-car sm:text-8xl text-6xl text-[#00712D]"></i>
+  </div>
+
+  <div class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12">
+    <div class="flex flex-col gap-y-2">
+      <h3 class="md:text-2xl text-xl font-semibold">Families Benefited</h3>
+      <p class="md:text-3xl text-xl font-bold text-[#FF9100]">8,300+</p>
+      <p class="text-xs sm:text-md text-gray-500">Households powered by EV mobility</p>
+    </div>
+    <i class="fa-solid fa-people-group sm:text-8xl text-6xl text-[#00712D]"></i>
+  </div>
+
+</div>
+
+<div class="w-full h-[500px] overflow-x-auto hide-scrollbar">
+  <div class="flex h-full gap-x-8 px-12">
+
+    <div
+      *ngFor="let v of vehicles"
+      class="bg-cover bg-center h-full w-[800px] md:w-[60vw] flex-shrink-0
+             flex flex-col p-12 justify-end items-start rounded-lg"
+      [style.backgroundImage]="'url(' + v.img + ')'">
+
+      <h1 class="text-white text-6xl font-bold">{{ v.name }}</h1>
+      <p class="text-white text-xl">{{ v.des }}</p>
+      <button class="mt-4 bg-[#00712D] text-white px-4 py-2 rounded hover:bg-[#005a23]">
+        Learn More
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+
+</div>
