@@ -1,9 +1,6 @@
 @import "tailwindcss";
 body{
-    background-color: #FFFBE6;
-}
-nav{
-    background-color: #00712D;
+background-color: #E6F4EA;
 }
 .hide-scrollbar {
   -ms-overflow-style: none;     /* IE & Edge */

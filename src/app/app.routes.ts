@@ -4,11 +4,21 @@ import { LoginPage } from './login-page/login-page';
 import { PersonalUserDashboard } from './personal-user-dashboard/personal-user-dashboard';
 import { ServiceUserDashboard } from './service-user-dashboard/service-user-dashboard';
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
+import { Generalhome } from './home-page/generalhome/generalhome';
+import { About } from './home-page/about/about';
+import { Products } from './home-page/products/products';
+import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
 
 export const routes: Routes = [
-    {path:'',component:HomePage},
+    {path:'',component:HomePage,children:[
+        {path:'',component:Generalhome},
+        {path:'about',component:About},
+        {path:'products',component:Products}
+    ]},
     {path:'login',component:LoginPage},
-    {path:'personal-user',component:PersonalUserDashboard},
+    {path:'personal-user',component:PersonalUserDashboard,children:[
+        {path:'',component:Userdashboard}
+    ]},
     {path:'service-user',component:ServiceUserDashboard},
     {path:'admin-user',component:AdminDashboard}
 ];
