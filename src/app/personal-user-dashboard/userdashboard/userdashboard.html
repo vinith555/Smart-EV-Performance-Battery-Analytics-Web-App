@@ -22,6 +22,15 @@
             <h2 class="text-xl font-semibold">Vehicle Details</h2>
             <div class="grid grid-cols-2 gap-4 place-items-center py-6">
 
+                <div
+                class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start
+                        transition-all hover:-translate-y-1 hover:shadow-xl"
+                >
+                <i class="fa-solid fa-id-card text-slate-700"></i>
+                <p class="text-sm font-medium text-gray-500">Customer ID</p>
+                <p class="text-lg font-semibold text-slate-700">CUST-10234</p>
+                </div>
+
                 <div class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
                     <i class="fas fa-car text-green-600 text-xl"></i>
                     <p class="text-sm font-medium text-gray-500">Model</p>
@@ -44,6 +53,12 @@
                     <i class="fas fa-charging-station text-orange-600 text-xl"></i>
                     <p class="text-sm font-medium text-gray-500">Charging Time</p>
                     <p class="text-lg font-semibold text-orange-500">8 hours (Level 2)</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fa-solid fa-palette text-teal-600"></i>
+                    <p class="text-sm font-medium text-gray-500">Color</p>
+                    <p class="text-lg font-semibold text-teal-500">Red</p>
                 </div>
 
             </div>
@@ -110,7 +125,92 @@
 
         </div>
     </section>
-    <section class="w-full rounded-lg h-96 bg-white p-4 shadow-md">
-        <h2 class="text-xl font-semibold">All Invoices</h2>
+    
+    <section class="w-full rounded-lg bg-white p-4 shadow-md">
+        <h2 class="text-xl font-semibold">Trip Summary</h2>
+
+        <div class="overflow-x-auto mt-4">
+            <table class="min-w-full">
+            <thead class="text-gray-500 text-sm uppercase">
+                <tr class="border-b">
+                <th class="px-4 py-3 text-left">Trip ID</th>
+                <th class="px-4 py-3 text-left">Vehicle No</th>
+                <th class="px-4 py-3 text-left">Driver</th>
+                <th class="px-4 py-3 text-left">Start</th>
+                <th class="px-4 py-3 text-left">End</th>
+                <th class="px-4 py-3 text-left">Distance</th>
+                <th class="px-4 py-3 text-left">Duration</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+                <tr
+                *ngFor="let trip of paginatedTrips"
+                class="hover:bg-gray-50 border-b border-gray-200"
+                >
+                <td class="px-4 py-3 text-blue-600 font-medium">
+                    {{ trip.tripId }}
+                </td>
+
+                <td class="px-4 py-3">{{ trip.vehicleNo }}</td>
+                <td class="px-4 py-3">{{ trip.driver }}</td>
+                <td class="px-4 py-3">{{ trip.startLocation }}</td>
+                <td class="px-4 py-3">{{ trip.endLocation }}</td>
+
+                <td class="px-4 py-3 font-semibold">
+                    {{ trip.distance }} km
+                </td>
+
+                <td class="px-4 py-3">
+                    {{ trip.duration }}
+                </td>
+
+                <td class="px-4 py-3">
+                    <span
+                    class="px-2 py-1 text-sm border rounded"
+                    [ngClass]="{
+                        'border-green-500 bg-green-100 text-green-700': trip.status === 'Completed',
+                        'border-yellow-500 bg-yellow-100 text-yellow-700': trip.status === 'Ongoing',
+                        'border-red-500 bg-red-100 text-red-700': trip.status === 'Cancelled'
+                    }"
+                    >
+                    {{ trip.status }}
+                    </span>
+                </td>
+
+                <td class="px-4 py-3 text-center space-x-2">
+                    <button class="text-blue-600 hover:text-blue-700">
+                    <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-700">
+                    <i class="fa-solid fa-route"></i>
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between my-4">
+            <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="previous()"
+            [disabled]="index <= 0"
+            >
+            <i class="fa-solid fa-caret-left"></i> Prev
+            </button>
+
+            <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="next()"
+            [disabled]="index >= trips.length"
+            >
+            Next <i class="fa-solid fa-caret-right"></i>
+            </button>
+        </div>
     </section>
+
 </div>

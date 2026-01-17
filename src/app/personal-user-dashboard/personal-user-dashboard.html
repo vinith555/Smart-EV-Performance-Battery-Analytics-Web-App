@@ -4,8 +4,8 @@
          flex items-center justify-between px-6">
   <!-- Left Section -->
   <div class="flex items-center gap-x-6">
-    <button type="button" class="flex items-center justify-center" (click)="toggleNavbar()">
-      <i class="fa-solid fa-bars text-xl text-gray-600"></i>
+    <button type="button" class="flex items-center justify-center hover:bg-green-600 text-gray-600 hover:text-white rounded p-2" (click)="toggleNavbar()">
+      <i class="fa-solid fa-bars text-xl "></i>
     </button>
 
     <h1 class="text-2xl font-bold text-gray-800">
@@ -26,18 +26,17 @@
 </header>
 
 <nav *ngIf="isNavbarCollapsed" class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20">
-        <a routerLink="/personal-user/" routerLinkActive="active-link" class="hover:bg-gray-200 py-1 px-2 rounded" (click)="toggleNavbar()"><i class="fa-solid fa-home mr-2"></i>Dashboard</a>
-        <a routerLink="/information" routerLinkActive="active-link" class="hover:bg-gray-200 py-1 px-2 rounded" (click)="toggleNavbar()"><i class="fa-solid fa-circle-info mr-2"></i>Information</a>
-        <a routerLink="/station" routerLinkActive="active-link" class="hover:bg-gray-200 py-1 px-2 rounded" (click)="toggleNavbar()"><i class="fa-solid fa-charging-station mr-2"></i>Station</a>
-        <a routerLink="/management" routerLinkActive="active-link" class="hover:bg-gray-200 py-1 px-2 rounded" (click)="toggleNavbar()"><i class="fa-solid fa-gears mr-2"></i>Management</a>
+        <a routerLink="/personal-user/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-home mr-2"></i>Dashboard</a>
+        <a routerLink="/personal-user/information" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-circle-info mr-2"></i>Information</a>
+        <a routerLink="/management" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-gears mr-2"></i>Management</a>
 </nav>
 <div
   *ngIf="isNavbarCollapsed"
   class="fixed inset-0 top-[70px] z-10
-         bg-black/20"
+         bg-black/50"
   (click)="toggleNavbar()">
 </div>
 
 <div class="mt-[70px] p-4">
-  <router-outlet *ngIf="!isNavbarCollapsed"></router-outlet>
+  <router-outlet></router-outlet>
 </div>

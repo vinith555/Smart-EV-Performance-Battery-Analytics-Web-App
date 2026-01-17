@@ -8,6 +8,7 @@ import { Generalhome } from './home-page/generalhome/generalhome';
 import { About } from './home-page/about/about';
 import { Products } from './home-page/products/products';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
+import { Information } from './personal-user-dashboard/information/information';
 
 export const routes: Routes = [
     {path:'',component:HomePage,children:[
@@ -17,7 +18,8 @@ export const routes: Routes = [
     ]},
     {path:'login',component:LoginPage},
     {path:'personal-user',component:PersonalUserDashboard,children:[
-        {path:'',component:Userdashboard}
+        {path:'',component:Userdashboard},
+        {path:'information',component:Information}
     ]},
     {path:'service-user',component:ServiceUserDashboard},
     {path:'admin-user',component:AdminDashboard}

@@ -1,4 +1,6 @@
 .active-link{
-  background-color: #E6F4EA; /* light CRT green */
-  color: #2E7D32;           /* terminal green */
+  color: #2E7D32; 
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-left-color: #22c55e;          /* terminal green */
 }
