@@ -1,0 +1,216 @@
+<div class="flex flex-col gap-y-8 mx-6">
+    <section class="flex flex-wrap gap-6 h-auto">
+        <div class="flex flex-col gap-4 w-full lg:flex-1 bg-white p-4 mx-auto rounded-xl shadow-md">
+            <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">{{ evModel }}</h2>
+            <p class="text-md text-[#2E7D32] font-semibold bg-[#E6F4EA] p-1 rounded">{{ yearModel }}</p>
+            </div>
+
+            <img
+            [src]="vehicleImage"
+            alt=""
+            class="w-full h-[260px] object-contain"
+            >
+        </div>
+
+        <div class="w-full lg:flex-1 max-w-[650px] bg-white p-4 mx-auto rounded-xl shadow-md ">
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded-xl shadow-md">
+            <h2 class="text-xl font-semibold">Vehicle Details</h2>
+            <div class="grid grid-cols-2 gap-4 place-items-center py-6">
+
+                <div
+                class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start
+                        transition-all hover:-translate-y-1 hover:shadow-xl"
+                >
+                <i class="fa-solid fa-id-card text-slate-700"></i>
+                <p class="text-sm font-medium text-gray-500">Customer ID</p>
+                <p class="text-lg font-semibold text-slate-700">CUST-10234</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-car text-green-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Model</p>
+                    <p class="text-lg font-semibold text-green-500">Demo Cars</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-battery-half text-blue-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Battery Capacity</p>
+                    <p class="text-lg font-semibold text-blue-500">50 kWh</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-road text-purple-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Range</p>
+                    <p class="text-lg font-semibold text-purple-500">250 miles</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-charging-station text-orange-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Charging Time</p>
+                    <p class="text-lg font-semibold text-orange-500">8 hours (Level 2)</p>
+                </div>
+
+                <div class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fa-solid fa-palette text-teal-600"></i>
+                    <p class="text-sm font-medium text-gray-500">Color</p>
+                    <p class="text-lg font-semibold text-teal-500">Red</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-md">
+            <div class="flex justify-between">
+                <h2 class="text-xl font-semibold">Charging Information</h2>
+                <h2 class="text-xl font-semibold">History</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-4 place-items-center mt-6">
+                <div class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-battery-half text-green-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Percentage</p>
+                    <p class="text-lg font-semibold text-green-500">76%</p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl bg-gray-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <p class="text-lg font-semibold">26 jan'24</p>
+                    <p class="text-sm font-medium text-gray-500">50 min</p>
+                    <p class="text-lg font-semibold text-gray-500"><i class="fas fa-bolt text-green-600 text-xl"></i> 56 kWh</p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-bolt text-blue-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Kwh</p>
+                    <p class="text-lg font-semibold text-blue-500">76%</p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl bg-gray-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <p class="text-lg font-semibold">26 jan'24</p>
+                    <p class="text-sm font-medium text-gray-500">50 min</p>
+                    <p class="text-lg font-semibold text-gray-500"><i class="fas fa-bolt text-green-600 text-xl"></i> 56 kWh</p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <i class="fas fa-dollar-sign text-orange-600 text-xl"></i>
+                    <p class="text-sm font-medium text-gray-500">Total</p>
+                    <p class="text-lg font-semibold text-orange-500">$765</p>
+                </div>
+                <div class="flex flex-col gap-2 rounded-xl bg-gray-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
+                    <p class="text-lg font-semibold">26 jan'24</p>
+                    <p class="text-sm font-medium text-gray-500">50 min</p>
+                    <p class="text-lg font-semibold text-gray-500"><i class="fas fa-bolt text-green-600 text-xl"></i> 56 kWh</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-md sm:col-span-2 lg:col-span-1">
+            <h2 class="text-xl font-semibold">Statistics</h2>
+            <div class="flex my-2">
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">24 hours</button>
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">30 days</button>
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">1 year</button>
+            </div>
+            <div>
+                <h3 class="text-gray-600 text-lg">Total Energy Consumed</h3>
+                <p class="text-gray-600"><span class="text-black text-2xl font-semibold">50</span>kwh</p>
+            </div>
+            <apx-chart
+                [series]="statistics.series!"
+                [chart]="statistics.chart!"
+                [xaxis]="statistics.xaxis!"
+                [stroke]="statistics.stroke!"
+                [dataLabels]="statistics.dataLabels!"
+                >
+            </apx-chart>
+
+        </div>
+    </section>
+    
+    <section class="w-full rounded-lg bg-white p-4 shadow-md">
+        <h2 class="text-xl font-semibold">Trip Summary</h2>
+
+        <div class="overflow-x-auto mt-4">
+            <table class="min-w-full">
+            <thead class="text-gray-500 text-sm uppercase">
+                <tr class="border-b">
+                <th class="px-4 py-3 text-left">Trip ID</th>
+                <th class="px-4 py-3 text-left">Vehicle No</th>
+                <th class="px-4 py-3 text-left">Driver</th>
+                <th class="px-4 py-3 text-left">Start</th>
+                <th class="px-4 py-3 text-left">End</th>
+                <th class="px-4 py-3 text-left">Distance</th>
+                <th class="px-4 py-3 text-left">Duration</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+                <tr
+                *ngFor="let trip of paginatedTrips"
+                class="hover:bg-gray-50 border-b border-gray-200"
+                >
+                <td class="px-4 py-3 text-blue-600 font-medium">
+                    {{ trip.tripId }}
+                </td>
+
+                <td class="px-4 py-3">{{ trip.vehicleNo }}</td>
+                <td class="px-4 py-3">{{ trip.driver }}</td>
+                <td class="px-4 py-3">{{ trip.startLocation }}</td>
+                <td class="px-4 py-3">{{ trip.endLocation }}</td>
+
+                <td class="px-4 py-3 font-semibold">
+                    {{ trip.distance }} km
+                </td>
+
+                <td class="px-4 py-3">
+                    {{ trip.duration }}
+                </td>
+
+                <td class="px-4 py-3">
+                    <span
+                    class="px-2 py-1 text-sm border rounded"
+                    [ngClass]="{
+                        'border-green-500 bg-green-100 text-green-700': trip.status === 'Completed',
+                        'border-yellow-500 bg-yellow-100 text-yellow-700': trip.status === 'Ongoing',
+                        'border-red-500 bg-red-100 text-red-700': trip.status === 'Cancelled'
+                    }"
+                    >
+                    {{ trip.status }}
+                    </span>
+                </td>
+
+                <td class="px-4 py-3 text-center space-x-2">
+                    <button class="text-blue-600 hover:text-blue-700">
+                    <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button class="text-green-600 hover:text-green-700">
+                    <i class="fa-solid fa-route"></i>
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between my-4">
+            <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="previous()"
+            [disabled]="index <= 0"
+            >
+            <i class="fa-solid fa-caret-left"></i> Prev
+            </button>
+
+            <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="next()"
+            [disabled]="index >= trips.length"
+            >
+            Next <i class="fa-solid fa-caret-right"></i>
+            </button>
+        </div>
+    </section>
+
+</div>

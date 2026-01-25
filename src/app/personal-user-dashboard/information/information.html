@@ -1,0 +1,219 @@
+<div class="flex flex-col gap-y-8 mx-6">
+
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+
+        <div class="rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+        
+        <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-slate-600">Battery Health</h3>
+            <i class="fa-solid fa-heart-pulse text-blue-500 text-2xl"></i>
+        </div>
+        <p class="mt-4 text-3xl font-bold text-slate-800">85%</p>
+        <p class="mt-1 text-sm text-slate-500">Good condition</p>
+        <div class="mt-4 h-2 w-full rounded-full bg-slate-200">
+            <div class="h-full w-[85%] rounded-full bg-blue-500"></div>
+        </div>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-slate-600">Current Charge</h3>
+            <i class="fa-solid fa-bolt text-green-500 text-2xl"></i>
+            </div>
+
+            <p class="mt-4 text-3xl font-bold text-slate-800">64%</p>
+            <p class="mt-1 text-sm text-slate-500">Charging normally</p>
+
+            <div class="mt-4 h-2 w-full rounded-full bg-slate-200">
+            <div class="h-full w-[64%] rounded-full bg-green-500"></div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-slate-600">Charge Cycles</h3>
+            <i class="fa-solid fa-rotate text-purple-500 text-2xl"></i>
+            </div>
+
+            <p class="mt-4 text-3xl font-bold text-slate-800">487</p>
+            <p class="mt-1 text-sm text-slate-500">Normal usage</p>
+
+            <p class="mt-4 text-xs text-slate-400">
+            Typical lifespan ~1000 cycles
+            </p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-slate-600">Temperature</h3>
+            <i class="fa-solid fa-temperature-three-quarters text-orange-500 text-2xl"></i>
+            </div>
+
+            <p class="mt-4 text-3xl font-bold text-slate-800">32°C</p>
+            <p class="mt-1 text-sm text-slate-500">Optimal range</p>
+
+            <div class="mt-4 h-2 w-full rounded-full bg-slate-200">
+            <div class="h-full w-[45%] rounded-full bg-orange-500"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="w-full rounded-lg h-auto bg-white p-4 shadow-md">
+        <h2 class="text-xl font-semibold">All Invoices</h2>
+        <div class="overflow-x-auto mt-4">
+            <table class="min-w-full">
+                <thead class="text-gray-500 text-sm uppercase">
+                <tr class="border-b">
+                    <th class="px-4 py-3 text-left">Invoice #</th>
+                    <th class="px-4 py-3 text-left">Vehicle No</th>
+                    <th class="px-4 py-3 text-left">Customer</th>
+                    <th class="px-4 py-3 text-left">Service</th>
+                    <th class="px-4 py-3 text-left">Date</th>
+                    <th class="px-4 py-3 text-left">Amount</th>
+                    <th class="px-4 py-3 text-left">Status</th>
+                    <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody class="divide-y">
+                <tr
+                    *ngFor="let invoice of paginatedinvoices"
+                    class="hover:bg-gray-50 border-b border-gray-300"
+                    >
+                    <td class="px-4 py-3 text-blue-500">{{ invoice.invoiceNo }}</td>
+                    <td class="px-4 py-3">{{ invoice.vehicleNo }}</td>
+                    <td class="px-4 py-3">{{ invoice.customer }}</td>
+                    <td class="px-4 py-3">{{ invoice.service }}</td>
+                    <td class="px-4 py-3">{{ invoice.date }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ invoice.amount }}</td>
+
+                    <td class="px-4 py-3">
+                        <span
+                        class="px-2 py-1 text-md border rounded"
+                        [ngClass]="{
+                            'border-green-500 bg-green-100 text-green-700': invoice.status === 'Paid',
+                            'border-yellow-500 bg-yellow-100 text-yellow-700': invoice.status === 'Pending'
+                        }"
+                        >
+                        {{ invoice.status }}
+                        </span>
+                    </td>
+
+                    <td class="px-4 py-3 text-center space-x-2">
+                        <button class="text-blue-600 cursor-pointer">
+                        <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <button class="text-green-600 cursor-pointer">
+                        <i class="fa-solid fa-download"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="flex justify-between my-4">
+                <button class="text-blue-600 hover:text-blue-700 cursor-pointer disabled:text-gray-400" (click)="previous()" [disabled]="index1 <= 0"><i class="fa-solid fa-caret-left "></i>Prev</button>
+                <button class="text-blue-600 hover:text-blue-700 cursor-pointer disabled:text-gray-400" (click)="next()" [disabled]="index1 >= invoices.length">Next<i class="fa-solid fa-caret-right"></i></button>
+        </div>
+    </section>
+
+    <section class="w-full rounded-lg bg-white p-4 shadow-md">
+      <h2 class="text-xl font-semibold">Vehicle Issues & Faults</h2>
+
+      <div class="overflow-x-auto mt-4">
+        <table class="min-w-full">
+          <thead class="text-gray-500 text-sm uppercase">
+            <tr class="border-b">
+              <th class="px-4 py-3 text-left">Issue ID</th>
+              <th class="px-4 py-3 text-left">Vehicle No</th>
+              <th class="px-4 py-3 text-left">Error Code</th>
+              <th class="px-4 py-3 text-left">Issue Type</th>
+              <th class="px-4 py-3 text-left">Description</th>
+              <th class="px-4 py-3 text-left">Detected On</th>
+              <th class="px-4 py-3 text-left">Severity</th>
+              <th class="px-4 py-3 text-left">Status</th>
+              <th class="px-4 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y">
+            <tr
+              *ngFor="let issue of paginatedIssues"
+              class="hover:bg-gray-50 border-b border-gray-200"
+            >
+              <td class="px-4 py-3 text-blue-600 font-medium">
+                {{ issue.issueId }}
+              </td>
+
+              <td class="px-4 py-3">{{ issue.vehicleNo }}</td>
+              <td class="px-4 py-3 font-mono">{{ issue.errorCode }}</td>
+              <td class="px-4 py-3">{{ issue.type }}</td>
+
+              <td class="px-4 py-3 max-w-xs truncate" title="{{ issue.description }}">
+                {{ issue.description }}
+              </td>
+
+              <td class="px-4 py-3">{{ issue.date }}</td>
+
+              <td class="px-4 py-3">
+                <span
+                  class="px-2 py-1 text-sm border rounded"
+                  [ngClass]="{
+                    'border-red-500 bg-red-100 text-red-700': issue.severity === 'High',
+                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.severity === 'Medium',
+                    'border-green-500 bg-green-100 text-green-700': issue.severity === 'Low'
+                  }"
+                >
+                  {{ issue.severity }}
+                </span>
+              </td>
+
+              <td class="px-4 py-3">
+                <span
+                  class="px-2 py-1 text-sm border rounded"
+                  [ngClass]="{
+                    'border-green-500 bg-green-100 text-green-700': issue.status === 'Resolved',
+                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.status === 'In Progress',
+                    'border-red-500 bg-red-100 text-red-700': issue.status === 'Open'
+                  }"
+                >
+                  {{ issue.status }}
+                </span>
+              </td>
+
+              <td class="px-4 py-3 text-center space-x-2">
+                <button class="text-blue-600 hover:text-blue-700">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button class="text-orange-600 hover:text-orange-700">
+                  <i class="fa-solid fa-screwdriver-wrench"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-between my-4">
+        <button
+          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+          (click)="previous2()"
+          [disabled]="index2 <= 0"
+        >
+          <i class="fa-solid fa-caret-left"></i> Prev
+        </button>
+
+        <button
+          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+          (click)="next2()"
+          [disabled]="index2 >= issues.length"
+        >
+          Next <i class="fa-solid fa-caret-right"></i>
+        </button>
+      </div>
+    </section>
+
+</div>
