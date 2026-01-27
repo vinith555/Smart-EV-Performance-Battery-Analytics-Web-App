@@ -1,0 +1,207 @@
+<div class="flex flex-col gap-y-8 mx-6">
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <h2 class="text-md font-semibold text-gray-600">New Tasks</h2>
+                <i class="fa-solid fa-list-check text-2xl text-emerald-500"></i>
+            </div>
+            <div class="flex items-center justify-between">
+                <p class="text-6xl font-semibold">5</p>
+                <div class="w-32">
+                <apx-chart
+                [series]="newTasksChartOptions.series!"
+                [chart]="newTasksChartOptions.chart!"
+                [xaxis]="newTasksChartOptions.xaxis!"
+                [yaxis]="newTasksChartOptions.yaxis!"
+                [grid]="newTasksChartOptions.grid!"
+                [stroke]="newTasksChartOptions.stroke!"
+                [tooltip]="newTasksChartOptions.tooltip!"
+                [dataLabels]="newTasksChartOptions.dataLabels!"
+                [colors]="newTasksChartOptions.colors!"
+                ></apx-chart>
+                </div>
+            </div>
+        </div>
+        <!-- In Progress -->
+        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <h2 class="text-md font-semibold text-gray-600">In Progress</h2>
+                <i class="fa-solid fa-spinner text-2xl text-blue-500"></i>
+            </div>
+            <div class="flex items-center justify-between">
+                <p class="text-6xl font-semibold">8</p>
+                <div class="w-32">
+                    <apx-chart
+                        [series]="inProgressChartOptions.series!"
+                        [chart]="inProgressChartOptions.chart!"
+                        [xaxis]="inProgressChartOptions.xaxis!"
+                        [yaxis]="inProgressChartOptions.yaxis!"
+                        [grid]="inProgressChartOptions.grid!"
+                        [stroke]="inProgressChartOptions.stroke!"
+                        [tooltip]="inProgressChartOptions.tooltip!"
+                        [dataLabels]="inProgressChartOptions.dataLabels!"
+                        [colors]="inProgressChartOptions.colors!"
+                    ></apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blocked -->
+        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <h2 class="text-md font-semibold text-gray-600">Blocked</h2>
+                <i class="fa-solid fa-ban text-2xl text-yellow-500"></i>
+            </div>
+            <div class="flex items-center justify-between">
+                <p class="text-6xl font-semibold">2</p>
+                <div class="w-32">
+                    <apx-chart
+                        [series]="blockedChartOptions.series!"
+                        [chart]="blockedChartOptions.chart!"
+                        [xaxis]="blockedChartOptions.xaxis!"
+                        [yaxis]="blockedChartOptions.yaxis!"
+                        [grid]="blockedChartOptions.grid!"
+                        [stroke]="blockedChartOptions.stroke!"
+                        [tooltip]="blockedChartOptions.tooltip!"
+                        [dataLabels]="blockedChartOptions.dataLabels!"
+                        [colors]="blockedChartOptions.colors!"
+                    ></apx-chart>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overdue -->
+        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <h2 class="text-md font-semibold text-gray-600">Overdue</h2>
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500"></i>
+            </div>
+            <div class="flex items-center justify-between">
+                <p class="text-6xl font-semibold">3</p>
+                <div class="w-32">
+                    <apx-chart
+                        [series]="overdueChartOptions.series!"
+                        [chart]="overdueChartOptions.chart!"
+                        [xaxis]="overdueChartOptions.xaxis!"
+                        [yaxis]="overdueChartOptions.yaxis!"
+                        [grid]="overdueChartOptions.grid!"
+                        [stroke]="overdueChartOptions.stroke!"
+                        [tooltip]="overdueChartOptions.tooltip!"
+                        [dataLabels]="overdueChartOptions.dataLabels!"
+                        [colors]="overdueChartOptions.colors!"
+                    ></apx-chart>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="w-full rounded-lg bg-white p-4 shadow-md">
+    <h2 class="text-xl font-semibold">Job & Task Management</h2>
+
+    <div class="overflow-x-auto mt-4">
+        <table class="min-w-full">
+            <thead class="text-gray-500 text-sm uppercase">
+                <tr class="border-b">
+                    <th class="px-4 py-3 text-left">Job ID</th>
+                    <th class="px-4 py-3 text-left">Task</th>
+                    <th class="px-4 py-3 text-left">Assigned To</th>
+                    <th class="px-4 py-3 text-left">Start</th>
+                    <th class="px-4 py-3 text-left">Deadline</th>
+                    <th class="px-4 py-3 text-left">Priority</th>
+                    <th class="px-4 py-3 text-left">SLA</th>
+                    <th class="px-4 py-3 text-left">Status</th>
+                    <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y">
+                <tr
+                    *ngFor="let job of paginatedJobs"
+                    class="hover:bg-gray-50 border-b border-gray-200"
+                >
+                    <td class="px-4 py-3 text-blue-600 font-medium">
+                        {{ job.jobId }}
+                    </td>
+
+                    <td class="px-4 py-3">{{ job.taskName }}</td>
+                    <td class="px-4 py-3">{{ job.assignedTo }}</td>
+                    <td class="px-4 py-3">{{ job.startTime }}</td>
+                    <td class="px-4 py-3">{{ job.deadline }}</td>
+
+                    <!-- Priority -->
+                    <td class="px-4 py-3">
+                        <span
+                            class="px-2 py-1 text-sm border rounded"
+                            [ngClass]="{
+                                'border-red-500 bg-red-100 text-red-700': job.priority === 'Critical',
+                                'border-orange-500 bg-orange-100 text-orange-700': job.priority === 'High',
+                                'border-green-500 bg-green-100 text-green-700': job.priority === 'Normal'
+                            }"
+                        >
+                            {{ job.priority }}
+                        </span>
+                    </td>
+
+                    <!-- SLA -->
+                    <td class="px-4 py-3 font-semibold"
+                        [ngClass]="{
+                            'text-green-600': job.slaStatus === 'On Track',
+                            'text-yellow-600': job.slaStatus === 'At Risk',
+                            'text-red-600': job.slaStatus === 'Breached'
+                        }"
+                    >
+                        {{ job.slaTime }}
+                    </td>
+
+                    <!-- Status -->
+                    <td class="px-4 py-3">
+                        <span
+                            class="px-2 py-1 text-sm border rounded"
+                            [ngClass]="{
+                                'border-blue-500 bg-blue-100 text-blue-700': job.status === 'Assigned',
+                                'border-yellow-500 bg-yellow-100 text-yellow-700': job.status === 'In Progress',
+                                'border-green-500 bg-green-100 text-green-700': job.status === 'Completed'
+                            }"
+                        >
+                            {{ job.status }}
+                        </span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="px-4 py-3 text-center space-x-2">
+                        <button class="text-blue-600 hover:text-blue-700" title="View">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <button class="text-yellow-600 hover:text-yellow-700" title="Reassign">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-700" title="Escalate">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination (unchanged) -->
+    <div class="flex justify-between my-4">
+        <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="previous()"
+            [disabled]="index <= 0"
+        >
+            <i class="fa-solid fa-caret-left"></i> Prev
+        </button>
+
+        <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="next()"
+            [disabled]="index >= jobs.length"
+        >
+            Next <i class="fa-solid fa-caret-right"></i>
+        </button>
+    </div>
+    </section>
+    
+
+</div>

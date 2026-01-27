@@ -10,8 +10,23 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class PersonalUserDashboard {
   isNavbarCollapsed = false;
+  isNotificationsVisible = false;
+
+  toggleNotifications() {
+    this.isNotificationsVisible = !this.isNotificationsVisible;
+  }
 
   toggleNavbar() {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
+
+  notifications:string[] = [
+  'New Message from Admin',
+  'System Maintenance Scheduled',
+  'Profile Updated Successfully',
+  'Password Changed',
+  'New Login Detected',
+  'Support Ticket Resolved'
+];
+
 }

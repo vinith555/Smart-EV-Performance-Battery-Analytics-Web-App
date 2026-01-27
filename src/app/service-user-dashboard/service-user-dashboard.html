@@ -1,1 +1,53 @@
-<p>service-user-dashboard works!</p>
+<header
+  class="fixed top-0 left-0 right-0 z-10 h-[70px]
+         bg-white shadow-md
+         flex items-center justify-between px-6">
+  <!-- Left Section -->
+  <div class="flex items-center gap-x-6">
+    <button type="button" class="flex items-center justify-center hover:bg-green-600 text-gray-600 hover:text-white rounded p-2" (click)="toggleNavbar()">
+      <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+
+    <h1 class="text-2xl font-bold text-gray-800">
+      EV Service User
+    </h1>
+  </div>
+
+  <!-- Right Section -->
+  <div class="flex items-center gap-x-4">
+    <button type="button" class="flex items-center justify-center hover:bg-green-600 text-gray-600 hover:text-white rounded p-2" (click)="toggleNotifications()">
+      <i class="fa-regular fa-bell text-2xl"></i>
+    </button>
+
+    <button type="button" class="flex items-center justify-center hover:bg-green-600 text-gray-600 hover:text-white rounded p-2">
+      <i class="fa-regular fa-user text-2xl"></i>
+    </button>
+  </div>
+</header>
+
+<nav *ngIf="isNavbarCollapsed" class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20">
+        <a routerLink="/service-user/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-home mr-2"></i>Dashboard</a>
+        <a routerLink="/personal-user/information" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-circle-info mr-2"></i>Information</a>
+        <a routerLink="/help-support" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-headset mr-2"></i> Help & Support</a>
+</nav>
+<div
+  *ngIf="isNavbarCollapsed"
+  class="fixed inset-0 top-[70px] z-10
+         bg-black/50"
+  (click)="toggleNavbar()">
+</div>
+
+<div *ngIf="isNotificationsVisible" class="flex flex-col gap-y-4 fixed top-[70px] right-4 w-64 h-80 overflow-y-auto bg-white shadow-lg rounded-md p-4 z-30 ">
+  <div class="flex justify-between">
+    <h2>Notification</h2>
+    <button class="text-red-500 cursor-pointer">Clear all</button>
+  </div>
+  <!-- <div >
+    <p *ngFor="let n of notifications" class="text-sm text-gray-600 hover:text-green-500 hover:bg-green-100 rounded px-4 py-2">{{n}}</p>
+  </div> -->
+  
+</div>
+
+<div class="mt-[70px] p-4">
+  <router-outlet></router-outlet>
+</div>
