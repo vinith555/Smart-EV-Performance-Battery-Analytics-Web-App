@@ -10,6 +10,7 @@ import { Products } from './home-page/products/products';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
 import { Information } from './personal-user-dashboard/information/information';
 import { Suerdashboard } from './service-user-dashboard/suerdashboard/suerdashboard';
+import { VehicleInfo } from './service-user-dashboard/vehicle-info/vehicle-info';
 
 export const routes: Routes = [
     {path:'',component:HomePage,children:[
@@ -23,7 +24,8 @@ export const routes: Routes = [
         {path:'information',component:Information}
     ]},
     {path:'service-user',component:ServiceUserDashboard,children:[
-        {path:'',component:Suerdashboard}
+        {path:'',component:Suerdashboard},
+        {path:'vehicle-info',component:VehicleInfo}
     ]},
     {path:'admin-user',component:AdminDashboard}
 ];
