@@ -95,8 +95,13 @@
         </div>
     </section>
     <section class="w-full rounded-lg bg-white p-4 shadow-md">
-    <h2 class="text-xl font-semibold">Job & Task Management</h2>
-
+        <div class="flex justify-between">
+            <h2 class="text-xl font-semibold">Job & Task Management</h2>
+            <div class="flex gap-x-2 text-lg">
+                <button ><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button>
+                <button ><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
+            </div>
+        </div>
     <div class="overflow-x-auto mt-4">
         <table class="min-w-full">
             <thead class="text-gray-500 text-sm uppercase">
@@ -196,12 +201,10 @@
         <button
             class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
             (click)="next()"
-            [disabled]="index >= jobs.length"
+            [disabled]="index >= jobs.length - pageSize"
         >
             Next <i class="fa-solid fa-caret-right"></i>
         </button>
     </div>
     </section>
-    
-
 </div>

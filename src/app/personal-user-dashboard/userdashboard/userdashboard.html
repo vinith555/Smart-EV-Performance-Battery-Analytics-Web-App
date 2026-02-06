@@ -107,9 +107,9 @@
         <div class="bg-white p-4 rounded-xl shadow-md sm:col-span-2 lg:col-span-1">
             <h2 class="text-xl font-semibold">Statistics</h2>
             <div class="flex my-2">
-                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">24 hours</button>
-                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">30 days</button>
-                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700">1 year</button>
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700" (click)="statistics = statisticsChangeFunction([10,30,42,12,50])">24 hours</button>
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700" (click)="statistics =  statisticsChangeFunction([30,10,12,66,27])">30 days</button>
+                <button type="button" class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700" (click)="statistics =  statisticsChangeFunction([20,18,25,46,30])">1 year</button>
             </div>
             <div>
                 <h3 class="text-gray-600 text-lg">Total Energy Consumed</h3>
@@ -127,20 +127,55 @@
         </div>
     </section>
     
-    <section class="w-full rounded-lg bg-white p-4 shadow-md">
-        <h2 class="text-xl font-semibold">Trip Summary</h2>
+    <section class="relative w-full rounded-lg bg-white p-4 shadow-md">
+
+        <div *ngIf="filter" class="absolute grid grid-cols-2 h-64 w-auto p-4 gap-2 top-12 z-10 right-2 bg-white shadow-lg shadow-gray-300 border-2 border-gray-200 rounded-md">
+            <div class="w-[150px]">
+                <p class="font-semibold">Start Date</p>
+                <input type="date" class="border-2 border-gray-300 rounded bg-white p-1">
+            </div>
+            <div class="w-[150px]">
+                <p class="font-semibold">End Date</p>
+                <input type="date" class="border-2 border-gray-300 rounded bg-white p-1">
+            </div>
+            <div class="w-[150px]">
+                <p class="font-semibold">Start Location</p>
+                <input type="text" class="w-full border-2 border-gray-300 rounded bg-white p-1">
+            </div>
+            <div class="w-[150px]">
+                <p class="font-semibold">End Location</p>
+                <input type="text" class="w-full border-2 border-gray-300 rounded bg-white p-1">
+            </div>
+            <div class="w-[150px]">
+                <p class="font-semibold">Status</p>
+                <select class="w-full border-2 border-gray-300 rounded bg-white p-1">
+                    <option value="">None</option>
+                    <option value="">Completed</option>
+                    <option value="">Ongoing</option>
+                    <option value="">Cancelled</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex justify-between">
+            <h2 class="text-xl font-semibold">Trip Summary</h2>
+            <div class="flex gap-x-2 text-lg">
+                <button (click)="tripForm = !tripForm"><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button>
+                <button (click)="filter = !filter"><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
+            </div>
+        </div>
+        
 
         <div class="overflow-x-auto mt-4">
             <table class="min-w-full">
             <thead class="text-gray-500 text-sm uppercase">
                 <tr class="border-b">
                 <th class="px-4 py-3 text-left">Trip ID</th>
-                <th class="px-4 py-3 text-left">Vehicle No</th>
-                <th class="px-4 py-3 text-left">Driver</th>
+                <th class="px-4 py-3 text-left">Date</th>
                 <th class="px-4 py-3 text-left">Start</th>
                 <th class="px-4 py-3 text-left">End</th>
                 <th class="px-4 py-3 text-left">Distance</th>
                 <th class="px-4 py-3 text-left">Duration</th>
+                <th class="px-4 py-3 text-left">Avg Speed</th>
                 <th class="px-4 py-3 text-left">Status</th>
                 <th class="px-4 py-3 text-center">Actions</th>
                 </tr>
@@ -148,15 +183,13 @@
 
             <tbody class="divide-y">
                 <tr
-                *ngFor="let trip of paginatedTrips"
+                *ngFor="let trip of paginatedTrips; let i = index"
                 class="hover:bg-gray-50 border-b border-gray-200"
                 >
                 <td class="px-4 py-3 text-blue-600 font-medium">
                     {{ trip.tripId }}
                 </td>
-
-                <td class="px-4 py-3">{{ trip.vehicleNo }}</td>
-                <td class="px-4 py-3">{{ trip.driver }}</td>
+                <td class="px-4 py-3">{{ trip.date }}</td>
                 <td class="px-4 py-3">{{ trip.startLocation }}</td>
                 <td class="px-4 py-3">{{ trip.endLocation }}</td>
 
@@ -166,6 +199,10 @@
 
                 <td class="px-4 py-3">
                     {{ trip.duration }}
+                </td>
+
+                <td class="px-4 py-3">
+                    {{ trip.avgSpeed }} km/hr
                 </td>
 
                 <td class="px-4 py-3">
@@ -182,10 +219,10 @@
                 </td>
 
                 <td class="px-4 py-3 text-center space-x-2">
-                    <button class="text-blue-600 hover:text-blue-700">
+                    <button class="text-blue-600 hover:text-blue-700" (click)="view(i)">
                     <i class="fa-solid fa-eye"></i>
                     </button>
-                    <button class="text-green-600 hover:text-green-700">
+                    <button class="text-green-600 hover:text-green-700" (click)="tripAction(i)">
                     <i class="fa-solid fa-route"></i>
                     </button>
                 </td>
@@ -193,8 +230,6 @@
             </tbody>
             </table>
         </div>
-
-        <!-- Pagination -->
         <div class="flex justify-between my-4">
             <button
             class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
@@ -207,11 +242,355 @@
             <button
             class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
             (click)="next()"
-            [disabled]="index >= trips.length"
+            [disabled]="index >= trips.length - pageSize"
             >
             Next <i class="fa-solid fa-caret-right"></i>
             </button>
         </div>
     </section>
+</div>
+<div *ngIf="tripForm" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+  <form
+    #form="ngForm"
+    (ngSubmit)="tripData(form)"
+    class="bg-white
+           shadow shadow-gray-300 border-2 border-gray-200
+           rounded-md p-4"
+    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 w-full max-w-md sm:max-w-xl h-96 overflow-y-auto">
+        <div>
+      <p class="font-semibold">Trip ID</p>
+      <input
+        type="text"
+        name="tripId"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
 
+    <div>
+      <p class="font-semibold">Start Date</p>
+      <input
+        type="date"
+        name="startDate"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">End Date</p>
+      <input
+        type="date"
+        name="endDate"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Start Location</p>
+      <input
+        type="text"
+        name="startLocation"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">End Location</p>
+      <input
+        type="text"
+        name="endLocation"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Distance (km)</p>
+      <input
+        type="text"
+        name="distance"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Duration</p>
+      <input
+        type="text"
+        name="duration"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Avg Speed</p>
+      <input
+        type="text"
+        name="avgSpeed"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Fuel</p>
+      <input
+        type="text"
+        name="fuel"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Cost</p>
+      <input
+        type="text"
+        name="cost"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Status</p>
+      <select
+        name="status"
+        ngModel
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      >
+        <option value="">Select</option>
+        <option value="Completed">Completed</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="sm:col-span-2">
+      <p class="font-semibold">Notes</p>
+      <textarea
+        name="notes"
+        ngModel
+        class="w-full h-24 border-2 border-gray-300 rounded bg-white p-1"
+      >
+      </textarea>
+    </div>
+    </div>
+    <div class="sm:col-span-2 flex justify-between mt-2">
+      <button type="button" (click)="tripForm = !tripForm"
+      class="px-3 py-1.5 rounded-full text-red-600 border-2 border-red-300 hover:text-white
+               hover:bg-red-700 transition"
+        >
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-3 py-1.5 rounded-full text-green-600 border-2 border-green-300 hover:text-white
+               hover:bg-green-700 transition"
+      >
+       <i class="fa-solid fa-check"></i> Submit
+      </button>
+    </div>
+
+  </form>
+</div>
+<div *ngIf="actionForm" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+    <form
+    #form="ngForm"
+    (ngSubmit)="tripUpdatedData(form)"
+    class="bg-white
+           shadow shadow-gray-300 border-2 border-gray-200
+           rounded-md p-4"
+    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 w-full max-w-md sm:max-w-xl h-96 overflow-y-auto">
+        <div>
+      <p class="font-semibold">Trip ID</p>
+      <input
+        type="text"
+        name="tripId"
+        [(ngModel)] = "trips[indexAc].tripId"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Start Date</p>
+      <input
+        type="date"
+        name="startDate"
+        [(ngModel)] = "trips[indexAc].date"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">End Date</p>
+      <input
+        type="date"
+        name="endDate"
+        [(ngModel)] = "trips[indexAc].date"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Start Location</p>
+      <input
+        type="text"
+        name="startLocation"
+        [(ngModel)] = "trips[indexAc].startLocation"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">End Location</p>
+      <input
+        type="text"
+        name="endLocation"
+        [(ngModel)] = "trips[indexAc].endLocation"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Distance (km)</p>
+      <input
+        type="text"
+        name="distance"
+        [(ngModel)] = "trips[indexAc].distance"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Duration</p>
+      <input
+        type="text"
+        name="duration"
+       [(ngModel)] = "trips[indexAc].duration"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Avg Speed</p>
+      <input
+        type="text"
+        name="avgSpeed"
+        [(ngModel)] = "trips[indexAc].avgSpeed"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Fuel</p>
+      <input
+        type="text"
+        name="fuel"
+        [(ngModel)] = "trips[indexAc].fuel"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Cost</p>
+      <input
+        type="text"
+        name="cost"
+        [(ngModel)] = "trips[indexAc].cost"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Status</p>
+      <select
+        name="status"
+        [(ngModel)] = "trips[indexAc].status"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      >
+        <option value="">Select</option>
+        <option value="Completed">Completed</option>
+        <option value="Ongoing">Ongoing</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="sm:col-span-2">
+      <p class="font-semibold">Notes</p>
+      <textarea
+        name="notes"
+        [(ngModel)] = "trips[indexAc].notes"
+        class="w-full h-24 border-2 border-gray-300 rounded bg-white p-1"
+      >
+      </textarea>
+    </div>
+    </div>
+    <div class="sm:col-span-2 flex justify-between mt-2">
+      <button type="button" (click)="actionForm = !actionForm"
+      class="px-3 py-1.5 rounded-full text-red-600 border-2 border-red-300 hover:text-white
+               hover:bg-red-700 transition"
+        >
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-3 py-1.5 rounded-full text-blue-600 border-2 border-blue-300 hover:text-white
+               hover:bg-blue-700 transition"
+      >
+       <i class="fa-solid fa-pen-to-square"></i> Update
+      </button>
+    </div>
+  </form>
+</div>
+<div *ngIf="viewBox" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+    <div class="flex flex-col gap-y-1 w-auto bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4">
+        <div class="flex justify-end">
+            <button (click)="viewBox = !viewBox" class="border-2 border-gray-300 hover:border-gray-700 rounded"><i class="text-gray-500 fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="flex justify-between">
+            <p>Trip ID:</p><p class="ml-4 font-semibold">{{trips[indexView].tripId}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Start Date:</p><p class="ml-4 font-semibold">{{trips[indexView].date}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>End Date:</p><p class="ml-4 font-semibold">{{trips[indexView].date}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Start Location:</p><p class="ml-4 font-semibold">{{trips[indexView].startLocation}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>End Location:</p><p class="ml-4 font-semibold">{{trips[indexView].endLocation}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Distance:</p><p class="ml-4 font-semibold">{{trips[indexView].distance}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Duration:</p><p class="ml-4 font-semibold">{{trips[indexView].duration}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Avg Speed:</p><p class="ml-4 font-semibold">{{trips[indexView].avgSpeed}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Fuel:</p><p class="ml-4 font-semibold">{{trips[indexView].fuel}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Cost:</p><p class="ml-4 font-semibold">{{trips[indexView].cost}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Status:</p><p class="ml-4 font-semibold">{{trips[indexView].status}}</p>
+        </div>
+        <div>
+            <p>Notes:</p>
+            <textarea name="" id="" class="w-full border-2 border-gray-500 rounded p-2">{{trips[indexView].notes}}</textarea>
+        </div>
+    </div>
 </div>

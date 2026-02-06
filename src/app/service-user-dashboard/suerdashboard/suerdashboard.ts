@@ -199,7 +199,6 @@ jobs: Job[] = [
     }
   }
 
-  // Optional: calculate SLA status dynamically based on current time
   calculateSla(job: Job) {
     const now = new Date();
     const deadline = new Date(job.deadline);

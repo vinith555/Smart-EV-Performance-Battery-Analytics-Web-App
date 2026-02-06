@@ -115,7 +115,7 @@
         </div>
         <div class="flex justify-between my-4">
                 <button class="text-blue-600 hover:text-blue-700 cursor-pointer disabled:text-gray-400" (click)="previous()" [disabled]="index1 <= 0"><i class="fa-solid fa-caret-left "></i>Prev</button>
-                <button class="text-blue-600 hover:text-blue-700 cursor-pointer disabled:text-gray-400" (click)="next()" [disabled]="index1 >= invoices.length">Next<i class="fa-solid fa-caret-right"></i></button>
+                <button class="text-blue-600 hover:text-blue-700 cursor-pointer disabled:text-gray-400" (click)="next()" [disabled]="index1 >= invoices.length - pageSize">Next<i class="fa-solid fa-caret-right"></i></button>
         </div>
     </section>
 
@@ -209,7 +209,7 @@
         <button
           class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
           (click)="next2()"
-          [disabled]="index2 >= issues.length"
+          [disabled]="index2 >= issues.length - pageSize"
         >
           Next <i class="fa-solid fa-caret-right"></i>
         </button>

@@ -1,15 +1,15 @@
 <div class="flex flex-col gap-y-8">
-    <!-- <section class="flex gap-x-4 justify-center w-full">
-        <input type="search" class="w-1/2 h-10 p-2 border-2 border-gray-400 rounded bg-white shadow-md" placeholder="Enter The Vehicle Number">
-        <button class="px-6 py-1 rounded bg-green-500">
-            Search
-        </button>
-    </section> -->
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+    <section class="flex gap-x-4 justify-center w-full">
+      <div class="w-1/2 h-12 relative">
+        <input type="search" class="rounded-l-full h-full px-6 w-full bg-white shadow-md" placeholder="Enter The Vehicle Number">
+        <button class="absolute top-0 bottom-0 rounded-r-full bg-green-500 w-12"><i class="text-white font-semibold fa-solid fa-magnifying-glass search-icon"></i></button>
+      </div>
+    </section>
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
         <div class="bg-white rounded-xl shadow-md p-4">
             <h2 class="text-xl font-semibold mb-4">Owner Details</h2>
             <div class="h-full flex flex-col">
-                <div class="h-[120px] bg-gray-100 rounded-lg relative">
+                <div class="h-[120px] bg-slate-100 rounded-lg relative">
                     <img class="absolute rounded-full h-32 w-32 top-8 left-8 border-6 border-white" src="https://randomuser.me/api/portraits/men/44.jpg">
                     <p class="text-lg font-semibold absolute top-4 right-4">John Doe</p>
                 </div>
@@ -116,8 +116,7 @@
          </div>
     </section>
     <section class="w-full rounded-lg bg-white p-4 shadow-md">
-      <h2 class="text-xl font-semibold">Vehicle Issues & Faults</h2>
-
+        <h2 class="text-xl font-semibold">Vehicle Issues & Faults</h2>
       <div class="overflow-x-auto mt-4">
         <table class="min-w-full">
           <thead class="text-gray-500 text-sm uppercase">
@@ -205,7 +204,7 @@
         <button
           class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
           (click)="next2()"
-          [disabled]="index2 >= issues.length"
+          [disabled]="index2 >= issues.length - pageSize"
         >
           Next <i class="fa-solid fa-caret-right"></i>
         </button>

@@ -28,6 +28,7 @@
 <nav *ngIf="isNavbarCollapsed" class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20">
         <a routerLink="/service-user/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-home mr-2"></i>Dashboard</a>
         <a routerLink="/service-user/vehicle-info" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-car-burst mr-2"></i>Vehicle Information</a>
+        <a routerLink="/hi" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-file-lines mr-2"></i>Create Bill</a>
         <a routerLink="/help-support" routerLinkActive="active-link" class="hover:text-green-600 py-1 px-2 rounded-md" (click)="toggleNavbar()"><i class="fa-solid fa-headset mr-2"></i> Help & Support</a>
 </nav>
 <div

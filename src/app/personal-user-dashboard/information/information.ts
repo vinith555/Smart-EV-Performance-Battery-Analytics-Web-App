@@ -127,12 +127,13 @@ export class Information {
     return this.invoices.slice(this.index1, this.index1 + this.pageSize);
   }
   index1:number = 0;
-  previous(){
-    if (this.index1 + this.pageSize < this.issues.length) {
+    next() {
+    if (this.index1 + this.pageSize < this.invoices.length) {
       this.index1 += this.pageSize;
-    }
+    } 
   }
-  next(){
+
+  previous() {
     if (this.index1 > 0) {
       this.index1 -= this.pageSize;
     }
