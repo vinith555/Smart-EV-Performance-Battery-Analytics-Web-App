@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-y-8">
-    <section class="flex gap-x-4 justify-center w-full">
+    <section class="sticky top-24 z-5 flex gap-x-4 justify-center w-full">
       <div class="w-1/2 h-12 relative">
         <input type="search" class="rounded-l-full h-full px-6 w-full bg-white shadow-md" placeholder="Enter The Vehicle Number">
         <button class="absolute top-0 bottom-0 rounded-r-full bg-green-500 w-12"><i class="text-white font-semibold fa-solid fa-magnifying-glass search-icon"></i></button>
@@ -123,11 +123,10 @@
             <tr class="border-b">
               <th class="px-4 py-3 text-left">Issue ID</th>
               <th class="px-4 py-3 text-left">Vehicle No</th>
-              <th class="px-4 py-3 text-left">Error Code</th>
-              <th class="px-4 py-3 text-left">Issue Type</th>
+              <th class="px-4 py-3 text-left">Category</th>
               <th class="px-4 py-3 text-left">Description</th>
               <th class="px-4 py-3 text-left">Detected On</th>
-              <th class="px-4 py-3 text-left">Severity</th>
+              <th class="px-4 py-3 text-left">Priority</th>
               <th class="px-4 py-3 text-left">Status</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -143,25 +142,23 @@
               </td>
 
               <td class="px-4 py-3">{{ issue.vehicleNo }}</td>
-              <td class="px-4 py-3 font-mono">{{ issue.errorCode }}</td>
-              <td class="px-4 py-3">{{ issue.type }}</td>
+              <td class="px-4 py-3 font-mono">{{ issue.Category }}</td>
+              
 
               <td class="px-4 py-3 max-w-xs truncate" title="{{ issue.description }}">
                 {{ issue.description }}
               </td>
-
-              <td class="px-4 py-3">{{ issue.date }}</td>
-
+              <td class="px-4 py-3">{{ issue.dateReported }}</td>
               <td class="px-4 py-3">
                 <span
                   class="px-2 py-1 text-sm border rounded"
                   [ngClass]="{
-                    'border-red-500 bg-red-100 text-red-700': issue.severity === 'High',
-                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.severity === 'Medium',
-                    'border-green-500 bg-green-100 text-green-700': issue.severity === 'Low'
+                    'border-red-500 bg-red-100 text-red-700': issue.priority === 'High',
+                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.priority === 'Medium',
+                    'border-green-500 bg-green-100 text-green-700': issue.priority === 'Low'
                   }"
                 >
-                  {{ issue.severity }}
+                  {{ issue.priority }}
                 </span>
               </td>
 

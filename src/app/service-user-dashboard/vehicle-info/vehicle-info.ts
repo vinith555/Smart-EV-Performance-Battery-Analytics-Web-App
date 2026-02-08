@@ -4,12 +4,17 @@ import { Component } from '@angular/core';
 interface VehicleIssue {
   issueId: string;
   vehicleNo: string;
-  errorCode: string;
-  type: string;
+  Category:string;
   description: string;
-  date: string;
-  severity: 'Low' | 'Medium' | 'High';
+  dateReported: string;
+  dateCompleted:string;
+  assignedTo:string;
+  assignedBy:string;
+  priority:'Low' | 'Medium' | 'High';
   status: 'Open' | 'In Progress' | 'Resolved';
+  costOfIssue:number;
+  attachment:string;
+  notes:string;
 }
 @Component({
   selector: 'app-vehicle-info',
@@ -19,36 +24,6 @@ interface VehicleIssue {
 })
 export class VehicleInfo {
   issues: VehicleIssue[] = [
-    {
-      issueId: 'ISS-001',
-      vehicleNo: 'EV-1023',
-      errorCode: 'BMS-021',
-      type: 'Battery',
-      description: 'Battery temperature exceeded safe threshold',
-      date: '2026-01-10',
-      severity: 'High',
-      status: 'Open',
-    },
-    {
-      issueId: 'ISS-002',
-      vehicleNo: 'EV-1045',
-      errorCode: 'MCU-014',
-      type: 'Motor Controller',
-      description: 'Motor controller communication failure',
-      date: '2026-01-09',
-      severity: 'Medium',
-      status: 'In Progress',
-    },
-    {
-      issueId: 'ISS-003',
-      vehicleNo: 'EV-1099',
-      errorCode: 'CHG-008',
-      type: 'Charging',
-      description: 'Charging interrupted due to voltage fluctuation',
-      date: '2026-01-07',
-      severity: 'Low',
-      status: 'Resolved',
-    },
   ];
 
   pageSize = 5;
