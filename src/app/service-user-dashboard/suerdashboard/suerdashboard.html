@@ -98,7 +98,7 @@
         <div class="flex justify-between">
             <h2 class="text-xl font-semibold">Job & Task Management</h2>
             <div class="flex gap-x-2 text-lg">
-                <button ><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button>
+                <!-- <button ><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button> -->
                 <button ><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
             </div>
         </div>
@@ -106,8 +106,8 @@
         <table class="min-w-full">
             <thead class="text-gray-500 text-sm uppercase">
                 <tr class="border-b">
-                    <th class="px-4 py-3 text-left">Job ID</th>
-                    <th class="px-4 py-3 text-left">Task</th>
+                    <th class="px-4 py-3 text-left">Task ID</th>
+                    <th class="px-4 py-3 text-left">Category</th>
                     <th class="px-4 py-3 text-left">Assigned To</th>
                     <th class="px-4 py-3 text-left">Start</th>
                     <th class="px-4 py-3 text-left">Deadline</th>
@@ -120,26 +120,26 @@
 
             <tbody class="divide-y">
                 <tr
-                    *ngFor="let job of paginatedJobs"
+                    *ngFor="let job of paginatedJobs;let i = index"
                     class="hover:bg-gray-50 border-b border-gray-200"
                 >
                     <td class="px-4 py-3 text-blue-600 font-medium">
-                        {{ job.jobId }}
+                        {{ job.taskId }}
                     </td>
 
-                    <td class="px-4 py-3">{{ job.taskName }}</td>
+                    <td class="px-4 py-3">{{ job.category }}</td>
                     <td class="px-4 py-3">{{ job.assignedTo }}</td>
-                    <td class="px-4 py-3">{{ job.startTime }}</td>
-                    <td class="px-4 py-3">{{ job.deadline }}</td>
+                    <td class="px-4 py-3">{{ job.start }}</td>
+                    <td class="px-4 py-3">{{ job.deadLine }}</td>
 
                     <!-- Priority -->
                     <td class="px-4 py-3">
                         <span
                             class="px-2 py-1 text-sm border rounded"
                             [ngClass]="{
-                                'border-red-500 bg-red-100 text-red-700': job.priority === 'Critical',
-                                'border-orange-500 bg-orange-100 text-orange-700': job.priority === 'High',
-                                'border-green-500 bg-green-100 text-green-700': job.priority === 'Normal'
+                                'border-red-500 bg-red-100 text-red-700': job.priority === 'High',
+                                'border-yellow-500 bg-yellow-100 text-yellow-700': job.priority === 'Medium',
+                                'border-green-500 bg-green-100 text-green-700': job.priority === 'Low'
                             }"
                         >
                             {{ job.priority }}
@@ -173,7 +173,7 @@
 
                     <!-- Actions -->
                     <td class="px-4 py-3 text-center space-x-2">
-                        <button class="text-blue-600 hover:text-blue-700" title="View">
+                        <button class="text-blue-600 hover:text-blue-700" title="View" (click)="jobViewIndex = i; jobViewBox = true;">
                             <i class="fa-solid fa-eye"></i>
                         </button>
                         <button class="text-yellow-600 hover:text-yellow-700" title="Reassign">
@@ -188,7 +188,6 @@
         </table>
     </div>
 
-    <!-- Pagination (unchanged) -->
     <div class="flex justify-between my-4">
         <button
             class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
@@ -207,4 +206,54 @@
         </button>
     </div>
     </section>
+</div>
+<div *ngIf="jobViewBox" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+    <div class="overflow-x-auto flex flex-col gap-y-1 w-auto bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4">
+        <div class="flex justify-start">
+            <button (click)="jobViewBox = !jobViewBox" class="border-2 border-gray-300 hover:border-gray-700 rounded"><i class="text-gray-500 fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="min-w-[350px] w-auto">
+        <div class="flex justify-between">
+            <p>Task ID:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].taskId}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Category:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].category}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Description:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].description}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Start:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].start}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Deadline:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].deadLine}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Assigned By:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].assignedBy}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Assigned To:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].assignedTo}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Priority:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].priority}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Status:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].status}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>SLA Time:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].slaTime}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>SLA Status:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].slaStatus}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Attachment:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].attachment}}</p>
+        </div>
+        
+        <div>
+            <p>Notes:</p>
+            <textarea name="" id="" class="w-full border-2 border-gray-500 rounded p-2">{{jobs[jobViewIndex].notes}}</textarea>
+        </div>
+        </div>
+    </div>
 </div>
