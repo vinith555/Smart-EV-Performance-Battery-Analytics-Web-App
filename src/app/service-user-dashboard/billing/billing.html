@@ -1,0 +1,115 @@
+<div class="px-4">
+  <div class="grid grid-cols-1  lg:grid-cols-3 gap-6">
+    <div class="h-auto lg:col-span-2 bg-white rounded-lg shadow p-5">
+      <h2 class="text-2xl font-semibold mb-6">Generate Bill</h2>
+      <h3 class="text-lg font-semibold mb-4">Billing Items</h3>
+      <div class="overflow-y-auto overflow-y-auto min-w-full max-h-[400px]">
+        <table class="w-full text-md relative">
+        <thead class="bg-white sticky top-0 z-5">
+          <tr class="border-b text-left text-gray-600">
+            <th class="py-2">Item</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Tax</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of billItems; let i = index" class="border-b border-gray-400">
+            <td class="py-2">
+              <input class="border-2 border-gray-300 rounded-md px-3 py-1.5 mr-2" [(ngModel)]="item.name">
+            </td>
+            <td>
+              <input type="number" class="border-2 border-gray-300 rounded-md px-3 py-1.5 w-16 mr-2" [(ngModel)]="item.qty">
+            </td>
+            <td>
+              <input type="number" class="border-2 border-gray-300 rounded-md px-3 py-1.5 w-16 mr-2" [(ngModel)]="item.rate">
+            </td>
+            <td>
+              <input type="number" class="border-2 border-gray-300 rounded-md px-3 py-1.5 w-16 mr-2" [(ngModel)]="item.tax">
+            </td>
+            <td class="font-medium">
+              ₹ {{ item.qty * item.rate }}
+            </td>
+            <td>
+              <button class="text-red-500" (click)="removeItem(i)"><i class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <button
+        class="mt-4 px-4 py-2 border-2 bg-blue-100 border-blue-300 text-blue-600 hover:text-white hover:bg-blue-600 rounded-full"
+        (click)="addEmptyItem()">
+        Add Item
+      </button>
+    </div>
+    <div class="bg-white rounded-lg shadow p-5 space-y-6">
+      <div class="grid grid-cols-2 gap-x-4">
+        <div class="flex flex-col">
+          <label for="vehicleNo" class="font-semibold">Vehicle No:</label>
+          <input id="vehicleNo" class="p-1 border-2 border-gray-300 rounded" name="vehicleNo" type="text">
+        </div>
+        <div class="flex flex-col">
+          <label for="billNo" class="font-semibold">Bill No:</label>
+          <input id="billNo" class="p-1 border-2 border-gray-300 rounded" name="billNo" type="text">
+        </div>
+         <div class="flex flex-col">
+          <label for="owner" class="font-semibold">Owner:</label>
+          <input id="owner" class="p-1 border-2 border-gray-300 rounded" name="owner" type="text">
+        </div>
+        <div class="flex flex-col">
+          <label for="date" class="font-semibold">Date:</label>
+          <input id="date" class="p-1 border-2 border-gray-300 rounded" name="date" type="date">
+        </div>
+        <div class="flex flex-col">
+          <label for="place" class="font-semibold">Place:</label>
+          <input id="place" class="p-1 border-2 border-gray-300 rounded" name="place" type="text">
+        </div>
+        <div class="flex flex-col">
+          <label for="type" class="font-semibold">Type Of Payment:</label>
+          <input id="type" class="p-1 border-2 border-gray-300 rounded" name="type" type="text">
+        </div>
+        <div class="flex flex-col">
+          <label for="biller" class="font-semibold">Biller:</label>
+          <input id="biller" class="p-1 border-2 border-gray-300 rounded" name="biller" type="text">
+        </div>
+        <div class="flex flex-col">
+          <label for="time" class="font-semibold">Time:</label>
+          <input id="time" class="p-1 border-2 border-gray-300 rounded" name="time" type="time">
+        </div>
+        
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Add From Records</h3>
+        <select class="border-2 border-gray-300 rounded p-1 w-full" (change)="addFromTable($event)">
+          <option value="">Select Item</option>
+          <option *ngFor="let p of products" [value]="p.id">
+            {{ p.name }} – ₹{{ p.price }}
+          </option>
+        </select>
+      </div>
+      <div class="border-t pt-1">
+        <h3 class="text-lg font-semibold mb-1">Bill Summary</h3>
+        <div class="flex justify-between">
+          <span>Subtotal</span>
+          <span>₹ {{ getTotal() }}</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span>Tax (10%)</span>
+          <span>₹ {{ getTotal() * 0.1 }}</span>
+        </div>
+        <div class="flex justify-between font-bold text-lg border-t pt-2">
+          <span>Grand Total</span>
+          <span>₹ {{ getTotal() * 1.1 }}</span>
+        </div>
+      </div>
+      <button
+        class="w-full py-2 font-semibold bg-green-50 border-2 border-green-300 text-green-600 hover:bg-green-600 hover:text-white rounded-full text-lg"
+        (click)="generateBill()">
+        <i class="fa-solid fa-file-invoice"></i>Generate Bill
+      </button>
+    </div>
+  </div>
+</div>

@@ -128,11 +128,10 @@
             <tr class="border-b">
               <th class="px-4 py-3 text-left">Issue ID</th>
               <th class="px-4 py-3 text-left">Vehicle No</th>
-              <th class="px-4 py-3 text-left">Error Code</th>
-              <th class="px-4 py-3 text-left">Issue Type</th>
+              <th class="px-4 py-3 text-left">Category</th>
               <th class="px-4 py-3 text-left">Description</th>
               <th class="px-4 py-3 text-left">Detected On</th>
-              <th class="px-4 py-3 text-left">Severity</th>
+              <th class="px-4 py-3 text-left">Priority</th>
               <th class="px-4 py-3 text-left">Status</th>
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
@@ -140,7 +139,7 @@
 
           <tbody class="divide-y">
             <tr
-              *ngFor="let issue of paginatedIssues"
+              *ngFor="let issue of paginatedIssues; let i = index"
               class="hover:bg-gray-50 border-b border-gray-200"
             >
               <td class="px-4 py-3 text-blue-600 font-medium">
@@ -148,25 +147,24 @@
               </td>
 
               <td class="px-4 py-3">{{ issue.vehicleNo }}</td>
-              <td class="px-4 py-3 font-mono">{{ issue.errorCode }}</td>
-              <td class="px-4 py-3">{{ issue.type }}</td>
+              <td class="px-4 py-3 font-mono">{{ issue.Category }}</td>
 
               <td class="px-4 py-3 max-w-xs truncate" title="{{ issue.description }}">
                 {{ issue.description }}
               </td>
 
-              <td class="px-4 py-3">{{ issue.date }}</td>
+              <td class="px-4 py-3">{{ issue.dateReported }}</td>
 
               <td class="px-4 py-3">
                 <span
                   class="px-2 py-1 text-sm border rounded"
                   [ngClass]="{
-                    'border-red-500 bg-red-100 text-red-700': issue.severity === 'High',
-                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.severity === 'Medium',
-                    'border-green-500 bg-green-100 text-green-700': issue.severity === 'Low'
+                    'border-red-500 bg-red-100 text-red-700': issue.priority === 'High',
+                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.priority === 'Medium',
+                    'border-green-500 bg-green-100 text-green-700': issue.priority === 'Low'
                   }"
                 >
-                  {{ issue.severity }}
+                  {{ issue.priority }}
                 </span>
               </td>
 
@@ -184,10 +182,10 @@
               </td>
 
               <td class="px-4 py-3 text-center space-x-2">
-                <button class="text-blue-600 hover:text-blue-700">
+                <button class="text-blue-600 hover:text-blue-700" title="View" (click)="issueViewIndex = i; issueViewBox = true;">
                   <i class="fa-solid fa-eye"></i>
                 </button>
-                <button class="text-orange-600 hover:text-orange-700">
+                <button class="text-orange-600 hover:text-orange-700" title="Action" (click)="issueActionindex = i; issueactionForm = true;">
                   <i class="fa-solid fa-screwdriver-wrench"></i>
                 </button>
               </td>
@@ -215,5 +213,214 @@
         </button>
       </div>
     </section>
+</div>
+<div *ngIf="issueViewBox" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+    <div class="overflow-x-auto flex flex-col gap-y-1 bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4">
+        <div class="flex justify-start">
+            <button (click)="issueViewBox = !issueViewBox" class="border-2 border-gray-300 hover:border-gray-700 rounded"><i class="text-gray-500 fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="min-w-[350px] w-auto">
+        <div class="flex justify-between">
+            <p>Issue ID:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].issueId}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Vehicle NO:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].vehicleNo}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Category:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].Category}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Description:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].description}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Date Reported:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].dateReported}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Date Completed:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].dateCompleted}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Assigned To:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].assignedTo}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Assigned By:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].assignedBy}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Priority:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].priority}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Status:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].status}}</p>
+        </div>
+        <div class="flex justify-between">
+            <p>Cost Of Issue:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].costofIssue}}</p>
+        </div>
+        <div>
+            <p>Notes:</p>
+            <textarea name="" id="" class="w-full border-2 border-gray-500 rounded p-2">{{issues[issueViewIndex].notes}}</textarea>
+        </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="issueactionForm" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
+    <form
+    #form="ngForm"
+    (ngSubmit)="issueUpdatedData(form)"
+    class="bg-white
+           shadow shadow-gray-300 border-2 border-gray-200
+           rounded-md p-4"
+    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 w-full max-w-md sm:max-w-xl h-96 overflow-y-auto">
+    <div>
+      <p class="font-semibold">Issue ID</p>
+      <input
+        type="text"
+        name="issueId"
+        [(ngModel)] = "issues[issueActionindex].issueId"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
 
+    <div>
+      <p class="font-semibold">Vehicle NO</p>
+      <input
+        type="text"
+        name="vehicleNo"
+        [(ngModel)] = "issues[issueActionindex].vehicleNo"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Category</p>
+      <input
+        type="text"
+        name="Category"
+        [(ngModel)] = "issues[issueActionindex].Category"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Description</p>
+      <input
+        type="text"
+        name="description"
+        [(ngModel)] = "issues[issueActionindex].description"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Date Reported</p>
+      <input
+        type="date"
+        name="startDate"
+        [(ngModel)] = "issues[issueActionindex].dateReported"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Date Completed</p>
+      <input
+        type="date"
+        name="endDate"
+        [(ngModel)] = "issues[issueActionindex].dateCompleted"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Assigned To</p>
+      <input
+        type="text"
+        name="assignedTo"
+        [(ngModel)] = "issues[issueActionindex].assignedTo"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Assigned By</p>
+      <input
+        type="text"
+        name="assignedBy"
+        [(ngModel)] = "issues[issueActionindex].assignedBy"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Priority</p>
+      <select
+        name="priority"
+        [(ngModel)] = "issues[issueActionindex].priority"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      >
+        <option value="">Select</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+
+    <div>
+      <p class="font-semibold">Status</p>
+      <select
+        name="status"
+        [(ngModel)] = "issues[issueActionindex].status"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      >
+        <option value="">Select</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+    </div>
+
+    <div>
+      <p class="font-semibold">Cost Of Issue</p>
+      <input
+        type="number"
+        name="costofIssue"
+        [(ngModel)] = "issues[issueActionindex].costofIssue"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div>
+      <p class="font-semibold">Attachment</p>
+      <input
+        type="file"
+        name="attachment"
+        [(ngModel)] = "issues[issueActionindex].attachment"
+        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      />
+    </div>
+
+    <div class="sm:col-span-2">
+      <p class="font-semibold">Notes</p>
+      <textarea
+        name="notes"
+        [(ngModel)] = "issues[issueActionindex].notes"
+        class="w-full h-24 border-2 border-gray-300 rounded bg-white p-1"
+      >
+      </textarea>
+    </div>
+    </div>
+    <div class="sm:col-span-2 flex justify-between mt-2">
+      <button type="button" (click)="issueactionForm = !issueactionForm"
+      class="px-3 py-1.5 rounded-full bg-red-100 text-red-600 border-2 border-red-300 hover:text-white
+               hover:bg-red-700 transition"
+        >
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-600 border-2 border-blue-300 hover:text-white
+               hover:bg-blue-700 transition"
+      >
+       <i class="fa-solid fa-pen-to-square"></i> Update
+      </button>
+    </div>
+  </form>
 </div>

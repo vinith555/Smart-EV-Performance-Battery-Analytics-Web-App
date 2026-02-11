@@ -11,6 +11,7 @@ import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashb
 import { Information } from './personal-user-dashboard/information/information';
 import { Suerdashboard } from './service-user-dashboard/suerdashboard/suerdashboard';
 import { VehicleInfo } from './service-user-dashboard/vehicle-info/vehicle-info';
+import { Billing } from './service-user-dashboard/billing/billing';
 
 export const routes: Routes = [
     {path:'',component:HomePage,children:[
@@ -25,7 +26,8 @@ export const routes: Routes = [
     ]},
     {path:'service-user',component:ServiceUserDashboard,children:[
         {path:'',component:Suerdashboard},
-        {path:'vehicle-info',component:VehicleInfo}
+        {path:'vehicle-info',component:VehicleInfo},
+        {path:'billing',component:Billing}
     ]},
     {path:'admin-user',component:AdminDashboard}
 ];

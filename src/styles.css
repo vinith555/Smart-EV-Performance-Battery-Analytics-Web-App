@@ -10,3 +10,10 @@ background-color: #E6F4EA;
 .hide-scrollbar::-webkit-scrollbar {
   display: none;                /* Chrome, Safari */
 }
+::-webkit-scrollbar{
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-thumb{
+    background: rgb(166, 166, 166);
+}
