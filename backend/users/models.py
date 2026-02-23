@@ -60,21 +60,41 @@ class Vehicle(models.Model):
 class Trip(models.Model):
     trip_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="trips")
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    start_location = models.CharField(max_length=255)
+    end_location = models.CharField(max_length=255)
     distance = models.IntegerField()
+    duration = models.IntegerField()
+    average_speed = models.IntegerField()
+    battery_used = models.IntegerField()
+    cost= models.IntegerField()
     efficiency = models.IntegerField()
-    running_cost = models.IntegerField()
+    status = models.CharField(max_length=20)
+    notes= models.TextField(blank=True)
 
 
 class VehicleStats(models.Model):
     stats_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="stats")
-    battery_percentage = models.IntegerField(max_length=3)
-    battery_health = models.IntegerField(max_length=3)
+    battery_percentage = models.IntegerField()
+    total=models.IntegerField()
+    battery_health = models.IntegerField()
+    charging_time = models.IntegerField()
     temperature = models.IntegerField()
     battery_capacity = models.IntegerField()
+    is_charging = models.BooleanField(default=False)
     estimated_range = models.IntegerField()
     recorded_at = models.DateTimeField(auto_now_add=True)
-
+    
+class ChargeHistory(models.Model):
+    charge_id = models.AutoField(primary_key=True)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="charge_history")
+    charge_date = models.DateTimeField()
+    charge_start_time = models.DateTimeField()
+    charge_end_time = models.DateTimeField()
+    energy_added_kwh = models.IntegerField()
+    cost = models.IntegerField()
 
 class Task(models.Model):
     class Priority(models.TextChoices):
@@ -110,6 +130,11 @@ class Service(models.Model):
         PENDING = "PENDING", "Pending"
         ONGOING = "ONGOING", "Ongoing"
         COMPLETED = "COMPLETED", "Completed"
+    
+    class Priority(models.TextChoices):
+        LOW = "LOW", "Low"
+        MEDIUM = "MEDIUM", "Medium"
+        HIGH = "HIGH", "High"
 
     service_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey(
@@ -118,16 +143,20 @@ class Service(models.Model):
     serviceman = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="assigned_services"
     )
-    company = models.ForeignKey(
-        Company, on_delete=models.PROTECT, related_name="services_done"
-    )
     tasks = models.ManyToManyField(ServiceTask, related_name="services")
+    start_time = models.DateTimeField()
+    deadline = models.DateTimeField()
+    assigned_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="assigned_services_by")
+    assigned_to = models.ForeignKey(User, on_delete=models.PROTECT, related_name="assigned_services_to")
+    priority = models.CharField(
+        max_length=10, choices=Priority.choices, default=Priority.LOW)
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.PENDING
     )
-    actual_service_date = models.DateField()
-    completion_date = models.DateField()
-    rating = models.IntegerField(max_length=2)
+    sla_time = models.IntegerField()
+    sla_status = models.CharField(max_length=20)
+    notes= models.TextField(blank=True)
+    rating = models.IntegerField()
 
 
 class Issues(models.Model):
@@ -140,14 +169,18 @@ class Issues(models.Model):
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.PROTECT, related_name="issues"
     )
-    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    date_reported = models.DateTimeField(auto_now_add=True)
+    date_completed = models.DateTimeField(null=True)
+    assigned_to = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="assigned_issues")
+    assigned_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="reported_issues")
     priority = models.CharField(
         max_length=10, choices=Priority.choices, default=Priority.LOW
     )
     is_resolved = models.BooleanField(default=False)
-    completed_at = models.DateTimeField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    cost = models.IntegerField()
+    
 
 
 class Notification(models.Model):
