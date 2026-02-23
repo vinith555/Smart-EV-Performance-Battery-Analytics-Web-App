@@ -12,6 +12,7 @@ import { Information } from './personal-user-dashboard/information/information';
 import { Suerdashboard } from './service-user-dashboard/suerdashboard/suerdashboard';
 import { VehicleInfo } from './service-user-dashboard/vehicle-info/vehicle-info';
 import { Billing } from './service-user-dashboard/billing/billing';
+import { Profilepage } from './profilepage/profilepage';
 
 export const routes: Routes = [
     {path:'',component:HomePage,children:[
@@ -20,6 +21,7 @@ export const routes: Routes = [
         {path:'products',component:Products}
     ]},
     {path:'login',component:LoginPage},
+    {path:'profile',component:Profilepage},
     {path:'personal-user',component:PersonalUserDashboard,children:[
         {path:'',component:Userdashboard},
         {path:'information',component:Information}
