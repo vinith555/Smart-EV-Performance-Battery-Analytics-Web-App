@@ -6,19 +6,19 @@ import { ServiceUserDashboard } from './service-user-dashboard/service-user-dash
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { Generalhome } from './home-page/generalhome/generalhome';
 import { About } from './home-page/about/about';
-import { Products } from './home-page/products/products';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
 import { Information } from './personal-user-dashboard/information/information';
 import { Suerdashboard } from './service-user-dashboard/suerdashboard/suerdashboard';
 import { VehicleInfo } from './service-user-dashboard/vehicle-info/vehicle-info';
 import { Billing } from './service-user-dashboard/billing/billing';
 import { Profilepage } from './profilepage/profilepage';
+import { Contact } from './home-page/contact/contact';
 
 export const routes: Routes = [
     {path:'',component:HomePage,children:[
         {path:'',component:Generalhome},
         {path:'about',component:About},
-        {path:'products',component:Products}
+        {path:'contact',component:Contact}
     ]},
     {path:'login',component:LoginPage},
     {path:'profile',component:Profilepage},
