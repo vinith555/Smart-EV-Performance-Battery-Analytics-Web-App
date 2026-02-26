@@ -24,6 +24,12 @@ class ServiceDetailsView(BaseHandler):
       service_details = (
         Service.objects.filter(serviceman=request.user)
           .all()
+          .values(
+            'service_id', 'vehicle_id', 'serviceman__user_id', 'serviceman__email',
+            'start_time', 'deadline', 'assigned_by__user_id', 'assigned_by__email',
+            'assigned_to__user_id', 'assigned_to__email', 'priority', 'status',
+            'sla_time', 'sla_status', 'notes', 'rating'
+          )
       )
     
     except Exception as e:
@@ -37,7 +43,7 @@ class ServiceDetailsView(BaseHandler):
         status=500,
       )
     
-    logger.info(f"Service details fetched successfully for user {request.user.id}")
+    logger.info(f"Service details fetched successfully for user {request.user.user_id}")
     
     return JsonResponse(
       {

@@ -54,7 +54,7 @@ class RegisterView(APIView):
                         "message": "User registered successfully",
                         "icon": "success",
                         "data": {
-                            "id": str(user.id),
+                            "user_id": str(user.user_id),
                             "email": user.email,
                             "name": user.name,
                             "role": user.role,
@@ -359,3 +359,214 @@ def user_detail(request):
 def change_password(request):
     """Functional view for changing password (alternative to class-based view)."""
     return ChangePasswordView().post(request)
+
+
+class DeactivateAccountView(APIView):
+    """
+    API endpoint for deactivating/reactivating user account.
+
+    POST /api/users/auth/deactivate/
+    {
+        "action": "deactivate"  # or "reactivate"
+    }
+
+    Allows users to deactivate or reactivate their own account.
+    """
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """Deactivate or reactivate user account."""
+        try:
+            action = request.data.get("action", "").lower()
+
+            if action not in ["deactivate", "reactivate"]:
+                return Response(
+                    {
+                        "success": False,
+                        "message": 'Invalid action. Use "deactivate" or "reactivate".',
+                        "icon": "error",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user = request.user
+            from django.utils import timezone
+
+            if action == "deactivate":
+                if not user.is_active:
+                    return Response(
+                        {
+                            "success": False,
+                            "message": "Account is already deactivated",
+                            "icon": "info",
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                user.is_active = False
+                user.deactivated_at = timezone.now()
+                user.save()
+
+                logger.info(f"User account deactivated: {user.email}")
+
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Account deactivated successfully",
+                        "icon": "success",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+            elif action == "reactivate":
+                if user.is_active:
+                    return Response(
+                        {
+                            "success": False,
+                            "message": "Account is already active",
+                            "icon": "info",
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                user.is_active = True
+                user.deactivated_at = None
+                user.save()
+
+                logger.info(f"User account reactivated: {user.email}")
+
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Account reactivated successfully",
+                        "icon": "success",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+        except Exception as e:
+            logger.error(f"Error during account deactivation/reactivation: {str(e)}")
+            return Response(
+                {
+                    "success": False,
+                    "message": "An error occurred during the operation",
+                    "icon": "error",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def deactivate_account(request):
+    """Functional view for account deactivation/reactivation."""
+    return DeactivateAccountView().post(request)
+
+
+class ResetUserPasswordView(APIView):
+    """
+    API endpoint for admin to reset user password.
+
+    POST /api/users/auth/reset-password/
+    {
+        "email": "user@example.com",
+        "new_password": "NewPassword123!"
+    }
+
+    Only admins can reset other users' passwords.
+    """
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """Reset user password (admin only)."""
+        try:
+            # Check if user is admin
+            if request.user.role != "ADMIN":
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Only admins can reset user passwords",
+                        "icon": "error",
+                    },
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+
+            email = request.data.get("email")
+            new_password = request.data.get("new_password")
+
+            if not email or not new_password:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Email and new_password are required",
+                        "icon": "error",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "User not found",
+                        "icon": "error",
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            # Validate password strength
+            try:
+                validate_password(new_password, user=user)
+            except ValidationError as e:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Password validation failed",
+                        "icon": "error",
+                        "errors": list(e.messages),
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Set the new password
+            user.set_password(new_password)
+            user.save()
+
+            logger.info(
+                f"Password reset for user: {email} by admin: {request.user.email}"
+            )
+
+            return Response(
+                {
+                    "success": True,
+                    "message": f"Password reset successfully for {email}",
+                    "icon": "success",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            logger.error(f"Error during password reset: {str(e)}")
+            return Response(
+                {
+                    "success": False,
+                    "message": "An error occurred during password reset",
+                    "icon": "error",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def reset_user_password(request):
+    """Functional view for password reset."""
+    return ResetUserPasswordView().post(request)

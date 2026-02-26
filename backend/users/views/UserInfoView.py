@@ -12,40 +12,51 @@ import json
 
 logger = logging.getLogger(__name__)
 
+
 @csrf_exempt
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def UserDetailsByVehicle(request):
-  return RoleBasedUrlHandler(request, UserDetailsView())
+    return RoleBasedUrlHandler(request, UserDetailsView())
+
 
 class UserDetailsView(BaseHandler):
-  def GetUserDetailsByVehicle(self, request):
-    try:
-      user_details = (
-        Vehicle.objects.filter(owner=request.user)
-          .values("owner__id", "owner__username", "owner__email", "vehicle_model", "vehicle_colour", "registration_number")
-          .distinct()
-      )
-    
-    except Exception as e:
-      logger.error(f"Error fetching user details: {str(e)}")
-      return JsonResponse(
-        {
-          "success": False,
-          "message": "An error occurred while fetching user details.",
-          "icon": "error",
-        },
-        status=500,
-      )
-    
-    logger.info(f"User details fetched successfully for user {request.user.id}")
-    
-    return JsonResponse(
-      {
-        "success": True,
-        "message": "User details fetched successfully.",
-        "icon": "success",
-        "data": list(user_details),
-      },
-      status=200,
-    )
+    def getUserDetails(self, request):
+        try:
+            user_details = (
+                Vehicle.objects.filter(owner=request.user)
+                .values(
+                    "owner__user_id",
+                    "owner__email",
+                    "owner__name",
+                    "vehicle_model",
+                    "vehicle_colour",
+                    "registration_number",
+                )
+                .distinct()
+            )
+
+        except Exception as e:
+            logger.error(f"Error fetching user details: {str(e)}")
+            return JsonResponse(
+                {
+                    "success": False,
+                    "message": "An error occurred while fetching user details.",
+                    "icon": "error",
+                },
+                status=500,
+            )
+
+        logger.info(
+            f"User details fetched successfully for user {request.user.user_id}"
+        )
+
+        return JsonResponse(
+            {
+                "success": True,
+                "message": "User details fetched successfully.",
+                "icon": "success",
+                "data": list(user_details),
+            },
+            status=200,
+        )

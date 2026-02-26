@@ -1,5 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
@@ -42,12 +46,13 @@ class Company(models.Model):
     deactivated_at = models.DateTimeField(null=True, blank=True)
 
 
-class User(AbstractUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
         PERSONAL = "PERSONAL", "Personal User"
         SERVICE = "SERVICE", "Service User"
 
+    user_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.PERSONAL)
@@ -58,10 +63,11 @@ class User(AbstractUser, PermissionsMixin):
         validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     deactivated_at = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
-    username = None
+    USER_ID_FIELD = "user_id"
     REQUIRED_FIELDS = ["name"]
 
     objects = CustomUserManager()
@@ -153,6 +159,7 @@ class Task(models.Model):
 
 
 class ServiceTask(models.Model):
+    task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 

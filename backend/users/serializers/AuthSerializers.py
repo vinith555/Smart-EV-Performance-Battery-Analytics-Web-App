@@ -103,7 +103,7 @@ class LoginSerializer(serializers.Serializer):
         refresh = RefreshToken.for_user(user)
 
         return {
-            "id": str(user.id),
+            "user_id": str(user.user_id),
             "email": user.email,
             "name": user.name,
             "role": user.role,
@@ -118,14 +118,14 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            "id",
+            "user_id",
             "email",
             "name",
             "role",
             "is_active",
             "performance",
         )
-        read_only_fields = ("id",)
+        read_only_fields = ("user_id",)
 
 
 class LogoutSerializer(serializers.Serializer):

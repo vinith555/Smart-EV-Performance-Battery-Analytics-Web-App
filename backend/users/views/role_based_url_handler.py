@@ -138,11 +138,12 @@ class RoleBasedUrlHandler:
         if handler_class_name.endswith("View"):
             handler_class_name = handler_class_name[:-4]
 
+        # Method prefix should be lowercase (e.g., 'get', 'post')
         method_prefix = http_method.lower()
 
-        # Capitalize the first letter of handler name (without 'View')
-        # e.g., 'VehicleDetails' -> 'vehicleDetails'
-        if handler_class_name:
-            handler_class_name = handler_class_name[0].lower() + handler_class_name[1:]
+        # Ensure first letter of handler name is capitalized
+        # e.g., 'vehicleDetails' -> 'VehicleDetails'
+        if handler_class_name and len(handler_class_name) > 0:
+            handler_class_name = handler_class_name[0].upper() + handler_class_name[1:]
 
         return f"{method_prefix}{handler_class_name}"

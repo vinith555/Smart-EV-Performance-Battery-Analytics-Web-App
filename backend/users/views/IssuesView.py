@@ -24,6 +24,11 @@ class IssueDetailsView(BaseHandler):
       issue_details = (
         Issues.objects.filter(vehicle__owner=request.user)
           .all()
+          .values(
+            'issue_id', 'vehicle_id', 'category', 'description', 'date_reported',
+            'date_completed', 'assigned_to__user_id', 'assigned_to__email', 
+            'assigned_by__user_id', 'assigned_by__email', 'priority', 'is_resolved', 'cost'
+          )
       )
     
     except Exception as e:
@@ -37,7 +42,7 @@ class IssueDetailsView(BaseHandler):
         status=500,
       )
     
-    logger.info(f"Issue details fetched successfully for user {request.user.id}")
+    logger.info(f"Issue details fetched successfully for user {request.user.user_id}")
     
     return JsonResponse(
       {

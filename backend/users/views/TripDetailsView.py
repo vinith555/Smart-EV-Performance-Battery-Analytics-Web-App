@@ -24,6 +24,11 @@ class TripDetailsView(BaseHandler):
       trip_details = (
         Trip.objects.filter(vehicle__owner=request.user)
           .all()
+          .values(
+            'trip_id', 'vehicle_id', 'start_date', 'end_date', 'start_location',
+            'end_location', 'distance', 'duration', 'average_speed', 'battery_used',
+            'cost', 'efficiency', 'status', 'notes'
+          )
       )
     
     except Exception as e:
@@ -37,7 +42,7 @@ class TripDetailsView(BaseHandler):
         status=500,
       )
     
-    logger.info(f"Trip details fetched successfully for user {request.user.id}")
+    logger.info(f"Trip details fetched successfully for user {request.user.user_id}")
     
     return JsonResponse(
       {
