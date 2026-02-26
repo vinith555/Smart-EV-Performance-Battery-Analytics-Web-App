@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './home-page/home-page';
 import { LoginPage } from './login-page/login-page';
+import { RegisterPage } from './register-page/register-page';
 import { PersonalUserDashboard } from './personal-user-dashboard/personal-user-dashboard';
 import { ServiceUserDashboard } from './service-user-dashboard/service-user-dashboard';
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
@@ -16,23 +17,35 @@ import { Contact } from './home-page/contact/contact';
 import { Helpsupport } from './helpsupport/helpsupport';
 
 export const routes: Routes = [
-    {path:'',component:HomePage,children:[
-        {path:'',component:Generalhome},
-        {path:'about',component:About},
-        {path:'contact',component:Contact}
-    ]},
-    {path:'login',component:LoginPage},
-    {path:'profile',component:Profilepage},
-    {path:'personal-user',component:PersonalUserDashboard,children:[
-        {path:'',component:Userdashboard},
-        {path:'information',component:Information},
-        
-    ]},
-    {path:'service-user',component:ServiceUserDashboard,children:[
-        {path:'',component:Suerdashboard},
-        {path:'vehicle-info',component:VehicleInfo},
-        {path:'billing',component:Billing},
-    ]},
-    {path:'admin-user',component:AdminDashboard},
-    {path:'help-support',component:Helpsupport}
+  {
+    path: '',
+    component: HomePage,
+    children: [
+      { path: '', component: Generalhome },
+      { path: 'about', component: About },
+      { path: 'contact', component: Contact },
+    ],
+  },
+  { path: 'login', component: LoginPage },
+  { path: 'register', component: RegisterPage },
+  { path: 'profile', component: Profilepage },
+  {
+    path: 'personal-user-dashboard',
+    component: PersonalUserDashboard,
+    children: [
+      { path: '', component: Userdashboard },
+      { path: 'information', component: Information },
+    ],
+  },
+  {
+    path: 'service-user-dashboard',
+    component: ServiceUserDashboard,
+    children: [
+      { path: '', component: Suerdashboard },
+      { path: 'vehicle-info', component: VehicleInfo },
+      { path: 'billing', component: Billing },
+    ],
+  },
+  { path: 'admin-dashboard', component: AdminDashboard },
+  { path: 'help-support', component: Helpsupport },
 ];

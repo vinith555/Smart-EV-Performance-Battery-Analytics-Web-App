@@ -1,0 +1,317 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 p-4"
+>
+  <div class="w-full max-w-2xl">
+    <!-- Register Card -->
+    <div
+      class="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition duration-300"
+    >
+      <!-- Header -->
+      <div class="bg-[#00712D] text-white p-8 text-center">
+        <div class="mb-4">
+          <i
+            class="fas fa-user-plus text-5xl hover:scale-110 transition duration-300"
+          ></i>
+        </div>
+        <h1 class="text-3xl font-bold mb-2">Create Account</h1>
+        <p class="text-green-100">Join Smart EV Analytics Platform</p>
+      </div>
+
+      <!-- Register Form -->
+      <div class="p-8">
+        <!-- Error Message -->
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded"
+        >
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <div>
+              <p class="font-semibold">{{ errorMessage }}</p>
+              <ul *ngIf="errorDetails.length > 0" class="mt-2 text-sm">
+                <li *ngFor="let detail of errorDetails" class="ml-4">
+                  • {{ detail }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div
+          *ngIf="successMessage"
+          class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded"
+        >
+          <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span>{{ successMessage }}</span>
+          </div>
+        </div>
+
+        <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)">
+          <div class="grid md:grid-cols-2 gap-6">
+            <!-- Full Name -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-user text-[#00712D] mr-2"></i>
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                [(ngModel)]="userData.name"
+                required
+                minlength="3"
+                placeholder="Enter your full name"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition"
+                [class.border-red-500]="
+                  registerForm.submitted &&
+                  registerForm.controls['name']?.invalid
+                "
+              />
+              <p
+                *ngIf="
+                  registerForm.submitted &&
+                  registerForm.controls['name']?.invalid
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Name is required (min 3 characters)
+              </p>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-envelope text-[#00712D] mr-2"></i>
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                [(ngModel)]="userData.email"
+                required
+                email
+                placeholder="Enter your email"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition"
+                [class.border-red-500]="
+                  registerForm.submitted &&
+                  registerForm.controls['email']?.invalid
+                "
+              />
+              <p
+                *ngIf="
+                  registerForm.submitted &&
+                  registerForm.controls['email']?.invalid
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Valid email is required
+              </p>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-lock text-[#00712D] mr-2"></i>
+                Password
+              </label>
+              <div class="relative">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  name="password"
+                  [(ngModel)]="userData.password"
+                  required
+                  minlength="8"
+                  placeholder="Create a password"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition pr-12"
+                  [class.border-red-500]="
+                    registerForm.submitted &&
+                    registerForm.controls['password']?.invalid
+                  "
+                />
+                <button
+                  type="button"
+                  (click)="showPassword = !showPassword"
+                  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#00712D]"
+                >
+                  <i
+                    [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                  ></i>
+                </button>
+              </div>
+              <p
+                *ngIf="
+                  registerForm.submitted &&
+                  registerForm.controls['password']?.invalid
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Password must be at least 8 characters
+              </p>
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-lock text-[#00712D] mr-2"></i>
+                Confirm Password
+              </label>
+              <div class="relative">
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  name="password_confirm"
+                  [(ngModel)]="userData.password_confirm"
+                  required
+                  placeholder="Confirm your password"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition pr-12"
+                  [class.border-red-500]="
+                    registerForm.submitted &&
+                    userData.password !== userData.password_confirm
+                  "
+                />
+                <button
+                  type="button"
+                  (click)="showConfirmPassword = !showConfirmPassword"
+                  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#00712D] hover:scale-125 transition duration-300"
+                >
+                  <i
+                    [class]="
+                      showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                    "
+                  ></i>
+                </button>
+              </div>
+              <p
+                *ngIf="
+                  registerForm.submitted &&
+                  userData.password !== userData.password_confirm
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Passwords do not match
+              </p>
+            </div>
+
+            <!-- Role -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-user-tag text-[#00712D] mr-2"></i>
+                User Role
+              </label>
+              <select
+                name="role"
+                [(ngModel)]="userData.role"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition"
+              >
+                <option value="">Select Role</option>
+                <option value="PERSONAL">Personal User</option>
+                <option value="SERVICE">Service User</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+              <p
+                *ngIf="
+                  registerForm.submitted &&
+                  registerForm.controls['role']?.invalid
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Please select a role
+              </p>
+            </div>
+
+            <!-- Performance Rating -->
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">
+                <i class="fas fa-star text-[#00712D] mr-2"></i>
+                Performance Rating (0-10)
+              </label>
+              <input
+                type="number"
+                name="performance"
+                [(ngModel)]="userData.performance"
+                min="0"
+                max="10"
+                placeholder="Enter rating"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition"
+              />
+              <p class="text-gray-500 text-xs mt-1">
+                Optional: Rate your EV experience (0-10)
+              </p>
+            </div>
+          </div>
+
+          <!-- Terms & Conditions -->
+          <div class="mt-6">
+            <label class="flex items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="acceptTerms"
+                [(ngModel)]="acceptTerms"
+                required
+                class="w-4 h-4 mt-1 text-[#00712D] border-gray-300 rounded focus:ring-[#00712D]"
+              />
+              <span class="ml-2 text-sm text-gray-700">
+                I agree to the
+                <a
+                  href="#"
+                  class="text-[#00712D] hover:underline hover:text-green-700 transition duration-300"
+                  >Terms and Conditions</a
+                >
+                and
+                <a
+                  href="#"
+                  class="text-[#00712D] hover:underline hover:text-green-700 transition duration-300"
+                  >Privacy Policy</a
+                >
+              </span>
+            </label>
+            <p
+              *ngIf="registerForm.submitted && !acceptTerms"
+              class="text-red-500 text-sm mt-1 ml-6"
+            >
+              You must accept the terms and conditions
+            </p>
+          </div>
+
+          <!-- Register Button -->
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full mt-6 bg-[#00712D] text-white font-semibold py-3 rounded-lg hover:bg-green-700 hover:scale-105 transition duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+          >
+            <span *ngIf="!isLoading">
+              <i class="fas fa-user-plus mr-2"></i>
+              Create Account
+            </span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <i class="fas fa-spinner fa-spin mr-2"></i>
+              Creating account...
+            </span>
+          </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="text-center mt-6">
+          <p class="text-gray-600">
+            Already have an account?
+            <a
+              (click)="goToLogin()"
+              class="text-[#00712D] font-semibold hover:underline hover:text-green-700 transition duration-300 cursor-pointer"
+            >
+              Sign In
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-6 text-gray-600">
+      <p class="text-sm">
+        &copy; 2026 Smart EV Analytics. All rights reserved.
+      </p>
+    </div>
+  </div>
+</div>

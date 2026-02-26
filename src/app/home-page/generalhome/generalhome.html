@@ -1,56 +1,59 @@
 <div class="min-h-screen flex flex-col gap-y-12 py-[70px]">
-
-  <div class="h-[75vh] bg-[url('/Tata-Nexon-EV-5-jpg.webp')] bg-cover bg-center pt-12 flex flex-col gap-y-2 items-center">
-
-    <p class="text-white text-xl md:text-2xl lg:text-3xl">
-      LET'S RIDE THE
-    </p>
+  <div
+    class="h-[75vh] bg-[url('/Tata-Nexon-EV-5-jpg.webp')] bg-cover bg-center pt-12 flex flex-col gap-y-2 items-center"
+  >
+    <p class="text-white text-xl md:text-2xl lg:text-3xl">LET'S RIDE THE</p>
 
     <h1 class="font-bold text-white text-4xl md:text-5xl lg:text-6xl">
       FUTURE
     </h1>
-
   </div>
 
   <!-- CARDS -->
-<div class="flex md:flex-row flex-col w-full px-12 gap-12">
-
-   <div class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12">
-    <div class="flex flex-col gap-y-2">
-      <h3 class="md:text-2xl text-xl font-semibold">Active Users</h3>
-      <p class="md:text-3xl text-xl font-bold text-[#FF9100]">12,450+</p>
-      <p class="text-xs sm:text-md text-gray-500">Users adopted annually</p>
+  <div class="flex md:flex-row flex-col w-full px-12 gap-12">
+    <div
+      class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12 hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer"
+    >
+      <div class="flex flex-col gap-y-2">
+        <h3 class="md:text-2xl text-xl font-semibold">Active Users</h3>
+        <p class="md:text-3xl text-xl font-bold text-[#FF9100]">12,450+</p>
+        <p class="text-xs sm:text-md text-gray-500">Users adopted annually</p>
+      </div>
+      <i class="fa-solid fa-car sm:text-8xl text-6xl text-[#00712D]"></i>
     </div>
-    <i class="fa-solid fa-car sm:text-8xl text-6xl text-[#00712D]"></i>
-  </div>
-
-  <div class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12">
-    <div class="flex flex-col gap-y-2">
-      <h3 class="md:text-2xl text-xl font-semibold">Families Benefited</h3>
-      <p class="md:text-3xl text-xl font-bold text-[#FF9100]">8,300+</p>
-      <p class="text-xs sm:text-md text-gray-500">Households powered by EV mobility</p>
-    </div>
-    <i class="fa-solid fa-people-group sm:text-8xl text-6xl text-[#00712D]"></i>
-  </div>
-
-</div>
-
-<div class="w-full h-[500px] overflow-x-auto hide-scrollbar">
-  <div class="flex h-full gap-x-8 px-12">
 
     <div
-      *ngFor="let v of vehicles"
-      class="bg-cover bg-center h-full w-[800px] md:w-[60vw] flex-shrink-0
-             flex flex-col p-12 justify-end items-start rounded-lg"
-      [style.backgroundImage]="'url(' + v.img + ')'">
-
-      <h1 class="text-white text-6xl font-bold">{{ v.name }}</h1>
-      <p class="text-white text-xl">{{ v.des }}</p>
-      <button class="mt-4 bg-[#00712D] text-white px-4 py-2 rounded hover:bg-[#005a23]" (click)="navigate()">
-        Learn More
-      </button>
-
+      class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12 hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer"
+    >
+      <div class="flex flex-col gap-y-2">
+        <h3 class="md:text-2xl text-xl font-semibold">Families Benefited</h3>
+        <p class="md:text-3xl text-xl font-bold text-[#FF9100]">8,300+</p>
+        <p class="text-xs sm:text-md text-gray-500">
+          Households powered by EV mobility
+        </p>
+      </div>
+      <i
+        class="fa-solid fa-people-group sm:text-8xl text-6xl text-[#00712D]"
+      ></i>
     </div>
   </div>
-</div>
+
+  <div class="w-full h-[500px] overflow-x-auto hide-scrollbar">
+    <div class="flex h-full gap-x-8 px-12">
+      <div
+        *ngFor="let v of vehicles"
+        class="bg-cover bg-center h-full w-[800px] md:w-[60vw] flex-shrink-0 flex flex-col p-12 justify-end items-start rounded-lg hover:scale-105 transition duration-500 cursor-pointer"
+        [style.backgroundImage]="'url(' + v.img + ')'"
+      >
+        <h1 class="text-white text-6xl font-bold">{{ v.name }}</h1>
+        <p class="text-white text-xl">{{ v.des }}</p>
+        <button
+          class="mt-4 bg-[#00712D] text-white px-4 py-2 rounded hover:bg-[#005a23] hover:scale-110 transition duration-300 shadow-lg hover:shadow-xl"
+          (click)="navigate()"
+        >
+          Learn More
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
