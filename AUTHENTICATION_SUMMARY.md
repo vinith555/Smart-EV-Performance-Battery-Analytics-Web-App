@@ -315,28 +315,28 @@ backend/
 ### Using Postman
 
 1. **Register**
-   - POST: `http://localhost:8000/api/users/register/`
+   - POST: `http://localhost:8000/api/auth/register/`
    - Body: User registration data
    - Expected: 201 Created
 
 2. **Login**
-   - POST: `http://localhost:8000/api/users/login/`
+   - POST: `http://localhost:8000/api/auth/login/`
    - Body: Email + password
    - Expected: 200 OK with tokens
 
 3. **Get User**
-   - GET: `http://localhost:8000/api/users/me/`
+   - GET: `http://localhost:8000/api/auth/me/`
    - Header: `Authorization: Bearer ACCESS_TOKEN`
    - Expected: 200 OK with user data
 
 4. **Change Password**
-   - POST: `http://localhost:8000/api/users/change-password/`
+   - POST: `http://localhost:8000/api/auth/change-password/`
    - Header: `Authorization: Bearer ACCESS_TOKEN`
    - Body: Old + new password
    - Expected: 200 OK
 
 5. **Logout**
-   - POST: `http://localhost:8000/api/users/logout/`
+   - POST: `http://localhost:8000/api/auth/logout/`
    - Header: `Authorization: Bearer ACCESS_TOKEN`
    - Body: Refresh token
    - Expected: 200 OK

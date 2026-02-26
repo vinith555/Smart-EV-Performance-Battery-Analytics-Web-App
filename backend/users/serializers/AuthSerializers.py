@@ -120,7 +120,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "email",
-            "username",
             "name",
             "role",
             "is_active",

@@ -24,17 +24,9 @@ urlpatterns = [
     path("change-password/", ChangePasswordView.as_view(), name="change-password"),
     # Data endpoints
     path("get-vehicle-details/", VehicleViews.VehicleDetails, name="vehicle-details"),
-    path(
-        "get-charging-details/",
-        VehicleViews.GetChargingDetails,
-        name="charging-details",
-    ),
+    path("get-charging-details/", VehicleViews.GetChargingDetails, name="charging-details"),
     path("get-trip-details/", TripDetailsView.TripDetails, name="trip-details"),
     path("get-service-details/", ServiceView.ServiceDetails, name="service-details"),
     path("get-issue-details/", IssuesView.IssueDetails, name="issue-details"),
-    path(
-        "get-user-details-by-vehicle/",
-        UserInfoView.UserDetailsByVehicle,
-        name="user-details-by-vehicle",
-    ),
+    path("get-user-details-by-vehicle/", UserInfoView.UserDetailsByVehicle, name="user-details-by-vehicle"),
 ]
