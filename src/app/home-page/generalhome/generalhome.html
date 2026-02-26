@@ -17,9 +17,9 @@
 
    <div class="flex items-center justify-between bg-white shadow-lg flex-1 h-[200px] rounded py-6 px-12">
     <div class="flex flex-col gap-y-2">
-      <h3 class="md:text-2xl text-xl font-semibold">Vehicles Purchased</h3>
+      <h3 class="md:text-2xl text-xl font-semibold">Active Users</h3>
       <p class="md:text-3xl text-xl font-bold text-[#FF9100]">12,450+</p>
-      <p class="text-xs sm:text-md text-gray-500">Electric vehicles adopted annually</p>
+      <p class="text-xs sm:text-md text-gray-500">Users adopted annually</p>
     </div>
     <i class="fa-solid fa-car sm:text-8xl text-6xl text-[#00712D]"></i>
   </div>
@@ -46,14 +46,11 @@
 
       <h1 class="text-white text-6xl font-bold">{{ v.name }}</h1>
       <p class="text-white text-xl">{{ v.des }}</p>
-      <button class="mt-4 bg-[#00712D] text-white px-4 py-2 rounded hover:bg-[#005a23]">
+      <button class="mt-4 bg-[#00712D] text-white px-4 py-2 rounded hover:bg-[#005a23]" (click)="navigate()">
         Learn More
       </button>
 
     </div>
   </div>
 </div>
-
-
-
 </div>

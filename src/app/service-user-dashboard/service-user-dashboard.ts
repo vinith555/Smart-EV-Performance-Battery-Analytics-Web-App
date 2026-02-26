@@ -11,6 +11,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class ServiceUserDashboard {
   isNavbarCollapsed = false;
   isNotificationsVisible = false;
+  isProfileVisible = false;
 
   toggleNotifications() {
     this.isNotificationsVisible = !this.isNotificationsVisible;
