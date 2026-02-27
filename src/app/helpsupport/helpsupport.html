@@ -1,46 +1,51 @@
 <div class="min-h-screen bg-gray-50">
   <div
-    class="flex justify-between items-center px-4 sm:px-8 py-4 bg-white shadow-sm"
+    class="flex justify-between items-center px-4 sm:px-8 py-4 bg-white shadow-sm hover:shadow-md transition duration-300"
   >
     <h2
-      class="text-lg font-semibold text-[#00712D] hover:scale-105 transition duration-300 cursor-default"
+      class="text-lg font-semibold text-[#00712D] hover:scale-110 hover:text-[#005a23] transition duration-300 cursor-default"
     >
       EV Analytics Support
     </h2>
 
     <div class="flex items-center gap-6 text-sm text-gray-600">
-      <span class="hidden sm:block">Contact Support</span>
+      <span
+        class="hidden sm:block hover:text-[#00712D] transition duration-300 cursor-pointer"
+        >Contact Support</span
+      >
 
-      <span class="flex items-center gap-2 text-green-600 font-medium">
-        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+      <span
+        class="flex items-center gap-2 text-green-600 font-medium hover:scale-105 transition duration-300"
+      >
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
         All Systems Operational
       </span>
     </div>
   </div>
   <div class="max-w-5xl mx-auto px-6 py-16 text-center">
     <h1
-      class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 hover:scale-105 transition duration-300 cursor-default"
+      class="text-4xl md:text-5xl font-bold text-gray-800 mb-8 hover:scale-105 hover:text-[#00712D] transition duration-300 cursor-default"
     >
       How can we help you?
     </h1>
 
     <!-- SEARCH BAR -->
-    <div class="relative max-w-3xl mx-auto">
+    <div class="relative max-w-3xl mx-auto group">
       <input
         type="text"
         [(ngModel)]="searchText"
         placeholder="Search help articles..."
-        class="w-full border-2 border-gray-300 rounded-xl py-4 px-6 pl-12 text-lg focus:border-[#00712D] focus:outline-none shadow-sm"
+        class="w-full border-2 border-gray-300 rounded-xl py-4 px-6 pl-12 text-lg focus:border-[#00712D] focus:outline-none shadow-sm group-hover:shadow-md transition duration-300"
       />
 
       <i
-        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-hover:text-[#00712D] group-hover:scale-110 transition duration-300"
       ></i>
     </div>
   </div>
   <div class="max-w-6xl mx-auto px-6 pb-16">
     <h3
-      class="text-lg font-semibold text-gray-700 mb-6 hover:text-[#00712D] transition duration-300 cursor-default"
+      class="text-lg font-semibold text-gray-700 mb-6 hover:text-[#00712D] hover:scale-105 transition duration-300 cursor-default"
     >
       Featured Articles
     </h3>
@@ -48,37 +53,39 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div
         *ngFor="let article of searcharticle"
-        class="border-2 border-[#00712D]/20 rounded-xl p-6 bg-white hover:shadow-lg hover:border-[#00712D] transition cursor-pointer group"
+        class="border-2 border-[#00712D]/20 rounded-xl p-6 bg-white hover:shadow-xl hover:border-[#00712D] hover:-translate-y-1 transition duration-300 cursor-pointer group"
       >
         <div class="flex justify-between items-center">
           <p
-            class="text-gray-700 font-medium group-hover:text-[#00712D] transition"
+            class="text-gray-700 font-medium group-hover:text-[#00712D] group-hover:font-semibold transition duration-300"
           >
             {{ article.title }}
           </p>
 
           <i
-            class="fas fa-arrow-right text-[#00712D] group-hover:translate-x-1 transition"
+            class="fas fa-arrow-right text-[#00712D] group-hover:translate-x-2 group-hover:scale-125 transition duration-300"
           ></i>
         </div>
       </div>
     </div>
   </div>
-  <div class="bg-[#00712D] text-white py-12 mt-10">
+  <div
+    class="bg-[#00712D] text-white py-12 mt-10 hover:bg-[#005a23] transition duration-500"
+  >
     <div class="max-w-4xl mx-auto text-center px-6">
       <h3
-        class="text-2xl font-semibold mb-4 hover:scale-105 transition duration-300 cursor-default"
+        class="text-2xl font-semibold mb-4 hover:scale-110 transition duration-300 cursor-default"
       >
         Still need help?
       </h3>
 
-      <p class="text-green-100 mb-6">
+      <p class="text-green-100 mb-6 hover:text-white transition duration-300">
         Our EV support team is available 24/7 to assist you with technical
         issues and system guidance.
       </p>
 
       <button
-        class="bg-white text-[#00712D] px-6 py-3 rounded-full font-semibold hover:scale-105 transition"
+        class="bg-white text-[#00712D] px-6 py-3 rounded-full font-semibold hover:scale-110 hover:shadow-lg hover:bg-green-50 transition duration-300 active:scale-95"
         (click)="showSupportForm = true"
       >
         Contact Support
@@ -88,12 +95,12 @@
 </div>
 <div
   *ngIf="showSupportForm"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+  class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fade-in"
 >
   <form
     #supportForm="ngForm"
     (ngSubmit)="submitSupport(supportForm)"
-    class="bg-white w-full max-w-2xl rounded-xl shadow-xl p-6"
+    class="bg-white w-full max-w-2xl rounded-xl shadow-xl p-6 animate-slide-up"
   >
     <!-- Header -->
     <div class="flex justify-between items-center pb-3 mb-4">
@@ -106,7 +113,7 @@
       <button
         type="button"
         (click)="showSupportForm = false"
-        class="text-gray-500 hover:text-red-500"
+        class="text-gray-500 hover:text-red-500 hover:scale-125 hover:rotate-90 transition duration-300"
       >
         <i class="fa-solid fa-xmark text-xl"></i>
       </button>
@@ -118,35 +125,44 @@
     >
       <!-- Name -->
       <div>
-        <label class="text-sm font-semibold">Full Name</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Full Name</label
+        >
         <input
           type="text"
           name="name"
           ngModel
           required
-          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none"
+          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none hover:border-[#00712D]/50 transition duration-300"
         />
       </div>
 
       <!-- Email -->
       <div>
-        <label class="text-sm font-semibold">Email</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Email</label
+        >
         <input
           type="email"
           name="email"
           ngModel
           required
-          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none"
+          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none hover:border-[#00712D]/50 transition duration-300"
         />
       </div>
       <!-- Priority -->
       <div>
-        <label class="text-sm font-semibold">Priority</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Priority</label
+        >
         <select
           name="priority"
           ngModel
           required
-          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none"
+          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none hover:border-[#00712D]/50 transition duration-300"
         >
           <option value="">Select</option>
           <option value="Low">Low</option>
@@ -157,52 +173,61 @@
 
       <!-- Subject -->
       <div>
-        <label class="text-sm font-semibold">Subject</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Subject</label
+        >
         <input
           type="text"
           name="subject"
           ngModel
           required
-          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none"
+          class="w-full border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none hover:border-[#00712D]/50 transition duration-300"
         />
       </div>
 
       <!-- Description -->
       <div class="sm:col-span-2">
-        <label class="text-sm font-semibold">Description</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Description</label
+        >
         <textarea
           name="description"
           ngModel
           required
-          class="w-full h-28 border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none"
+          class="w-full h-28 border-2 border-gray-300 rounded p-2 focus:border-[#00712D] focus:outline-none hover:border-[#00712D]/50 transition duration-300"
         >
         </textarea>
       </div>
 
       <!-- Attachment -->
       <div class="sm:col-span-2">
-        <label class="text-sm font-semibold">Attachment (optional)</label>
+        <label
+          class="text-sm font-semibold hover:text-[#00712D] transition duration-300"
+          >Attachment (optional)</label
+        >
         <input
           type="file"
           name="attachment"
-          class="w-full border-2 border-gray-300 rounded p-2"
+          class="w-full border-2 border-gray-300 rounded p-2 hover:border-[#00712D]/50 transition duration-300 cursor-pointer"
         />
       </div>
     </div>
 
     <!-- Buttons -->
-    <div class="flex justify-between mt-6">
+    <div class="flex justify-between mt-6 gap-4">
       <button
         type="button"
         (click)="showSupportForm = false"
-        class="px-4 py-2 rounded-full bg-red-100 text-red-600 border-2 border-red-300 hover:bg-red-600 hover:text-white transition"
+        class="px-4 py-2 rounded-full bg-red-100 text-red-600 border-2 border-red-300 hover:bg-red-600 hover:text-white hover:scale-105 transition duration-300 active:scale-95"
       >
         Cancel
       </button>
 
       <button
         type="submit"
-        class="px-4 py-2 rounded-full bg-green-100 text-green-600 border-2 border-green-300 hover:bg-green-600 hover:text-white transition"
+        class="px-4 py-2 rounded-full bg-green-100 text-green-600 border-2 border-green-300 hover:bg-green-600 hover:text-white hover:scale-105 transition duration-300 active:scale-95"
       >
         Submit Ticket
       </button>
