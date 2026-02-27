@@ -1,1 +1,170 @@
-<p>login-page works!</p>
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 p-4"
+>
+  <div class="w-full max-w-md">
+    <!-- Login Card -->
+    <div
+      class="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition duration-300"
+    >
+      <!-- Header -->
+      <div class="bg-[#00712D] text-white p-8 text-center">
+        <div class="mb-4">
+          <i
+            class="fas fa-charging-station text-5xl hover:scale-110 transition duration-300"
+          ></i>
+        </div>
+        <h1 class="text-3xl font-bold mb-2">Smart EV Analytics</h1>
+        <p class="text-green-100">Sign in to your account</p>
+      </div>
+
+      <!-- Login Form -->
+      <div class="p-8">
+        <!-- Error Message -->
+        <div
+          *ngIf="errorMessage"
+          class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded"
+        >
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div
+          *ngIf="successMessage"
+          class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded"
+        >
+          <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span>{{ successMessage }}</span>
+          </div>
+        </div>
+
+        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+          <!-- Email Input -->
+          <div class="mb-6">
+            <label class="block text-gray-700 font-semibold mb-2">
+              <i class="fas fa-envelope text-[#00712D] mr-2"></i>
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              [(ngModel)]="credentials.email"
+              required
+              email
+              placeholder="Enter your email"
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition"
+              [class.border-red-500]="
+                loginForm.submitted && loginForm.controls['email']?.invalid
+              "
+            />
+            <p
+              *ngIf="
+                loginForm.submitted && loginForm.controls['email']?.invalid
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              Valid email is required
+            </p>
+          </div>
+
+          <!-- Password Input -->
+          <div class="mb-6">
+            <label class="block text-gray-700 font-semibold mb-2">
+              <i class="fas fa-lock text-[#00712D] mr-2"></i>
+              Password
+            </label>
+            <div class="relative">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                name="password"
+                [(ngModel)]="credentials.password"
+                required
+                minlength="6"
+                placeholder="Enter your password"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#00712D] focus:outline-none transition pr-12"
+                [class.border-red-500]="
+                  loginForm.submitted && loginForm.controls['password']?.invalid
+                "
+              />
+              <button
+                type="button"
+                (click)="showPassword = !showPassword"
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#00712D]"
+              >
+                <i
+                  [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                ></i>
+              </button>
+            </div>
+            <p
+              *ngIf="
+                loginForm.submitted && loginForm.controls['password']?.invalid
+              "
+              class="text-red-500 text-sm mt-1"
+            >
+              Password is required (min 6 characters)
+            </p>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="flex items-center justify-between mb-6">
+            <label class="flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                [(ngModel)]="rememberMe"
+                name="rememberMe"
+                class="w-4 h-4 text-[#00712D] border-gray-300 rounded focus:ring-[#00712D]"
+              />
+              <span class="ml-2 text-sm text-gray-700">Remember me</span>
+            </label>
+            <a
+              href="#"
+              class="text-sm text-[#00712D] hover:underline hover:text-green-700 transition duration-300"
+            >
+              Forgot password?
+            </a>
+          </div>
+
+          <!-- Login Button -->
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full bg-[#00712D] text-white font-semibold py-3 rounded-lg hover:bg-green-700 hover:scale-105 transition duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+          >
+            <span *ngIf="!isLoading">
+              <i class="fas fa-sign-in-alt mr-2"></i>
+              Sign In
+            </span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <i class="fas fa-spinner fa-spin mr-2"></i>
+              Signing in...
+            </span>
+          </button>
+        </form>
+
+        <!-- Register Link -->
+        <div class="text-center mt-6">
+          <p class="text-gray-600">
+            Don't have an account?
+            <a
+              (click)="goToRegister()"
+              class="text-[#00712D] font-semibold hover:underline cursor-pointer"
+            >
+              Sign Up
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-6 text-gray-600">
+      <p class="text-sm">
+        &copy; 2026 Smart EV Analytics. All rights reserved.
+      </p>
+    </div>
+  </div>
+</div>

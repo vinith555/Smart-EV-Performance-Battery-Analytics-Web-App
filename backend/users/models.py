@@ -1,7 +1,37 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 from django.core.validators import MinValueValidator, MaxValueValidator
-import uuid
+
+
+class CustomUserManager(BaseUserManager):
+    """Custom user manager that uses email as the unique identifier."""
+
+    def create_user(self, email, name, password=None, **extra_fields):
+        """Create and save a regular user."""
+        if not email:
+            raise ValueError("Email is required")
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, name, password=None, **extra_fields):
+        """Create and save a superuser."""
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if not extra_fields.get("is_staff"):
+            raise ValueError("Superuser must have is_staff=True")
+        if not extra_fields.get("is_superuser"):
+            raise ValueError("Superuser must have is_superuser=True")
+
+        return self.create_user(email, name, password, **extra_fields)
 
 
 class Company(models.Model):
@@ -16,13 +46,13 @@ class Company(models.Model):
     deactivated_at = models.DateTimeField(null=True, blank=True)
 
 
-class User(AbstractUser):
+class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
         PERSONAL = "PERSONAL", "Personal User"
         SERVICE = "SERVICE", "Service User"
 
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.PERSONAL)
@@ -33,7 +63,14 @@ class User(AbstractUser):
         validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     deactivated_at = models.DateTimeField(null=True, blank=True)
+
+    USERNAME_FIELD = "email"
+    USER_ID_FIELD = "user_id"
+    REQUIRED_FIELDS = ["name"]
+
+    objects = CustomUserManager()
 
 
 class Vehicle(models.Model):
@@ -68,17 +105,17 @@ class Trip(models.Model):
     duration = models.IntegerField()
     average_speed = models.IntegerField()
     battery_used = models.IntegerField()
-    cost= models.IntegerField()
+    cost = models.IntegerField()
     efficiency = models.IntegerField()
     status = models.CharField(max_length=20)
-    notes= models.TextField(blank=True)
+    notes = models.TextField(blank=True)
 
 
 class VehicleStats(models.Model):
     stats_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="stats")
     battery_percentage = models.IntegerField()
-    total=models.IntegerField()
+    total = models.IntegerField()
     battery_health = models.IntegerField()
     charging_time = models.IntegerField()
     temperature = models.IntegerField()
@@ -86,15 +123,19 @@ class VehicleStats(models.Model):
     is_charging = models.BooleanField(default=False)
     estimated_range = models.IntegerField()
     recorded_at = models.DateTimeField(auto_now_add=True)
-    
+
+
 class ChargeHistory(models.Model):
     charge_id = models.AutoField(primary_key=True)
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="charge_history")
+    vehicle = models.ForeignKey(
+        Vehicle, on_delete=models.CASCADE, related_name="charge_history"
+    )
     charge_date = models.DateTimeField()
     charge_start_time = models.DateTimeField()
     charge_end_time = models.DateTimeField()
     energy_added_kwh = models.IntegerField()
     cost = models.IntegerField()
+
 
 class Task(models.Model):
     class Priority(models.TextChoices):
@@ -118,6 +159,7 @@ class Task(models.Model):
 
 
 class ServiceTask(models.Model):
+    task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
@@ -130,7 +172,7 @@ class Service(models.Model):
         PENDING = "PENDING", "Pending"
         ONGOING = "ONGOING", "Ongoing"
         COMPLETED = "COMPLETED", "Completed"
-    
+
     class Priority(models.TextChoices):
         LOW = "LOW", "Low"
         MEDIUM = "MEDIUM", "Medium"
@@ -146,16 +188,21 @@ class Service(models.Model):
     tasks = models.ManyToManyField(ServiceTask, related_name="services")
     start_time = models.DateTimeField()
     deadline = models.DateTimeField()
-    assigned_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="assigned_services_by")
-    assigned_to = models.ForeignKey(User, on_delete=models.PROTECT, related_name="assigned_services_to")
+    assigned_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="assigned_services_by"
+    )
+    assigned_to = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="assigned_services_to"
+    )
     priority = models.CharField(
-        max_length=10, choices=Priority.choices, default=Priority.LOW)
+        max_length=10, choices=Priority.choices, default=Priority.LOW
+    )
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.PENDING
     )
     sla_time = models.IntegerField()
     sla_status = models.CharField(max_length=20)
-    notes= models.TextField(blank=True)
+    notes = models.TextField(blank=True)
     rating = models.IntegerField()
 
 
@@ -173,14 +220,17 @@ class Issues(models.Model):
     description = models.TextField(blank=True)
     date_reported = models.DateTimeField(auto_now_add=True)
     date_completed = models.DateTimeField(null=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="assigned_issues")
-    assigned_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="reported_issues")
+    assigned_to = models.ForeignKey(
+        User, on_delete=models.PROTECT, null=True, related_name="assigned_issues"
+    )
+    assigned_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, null=True, related_name="reported_issues"
+    )
     priority = models.CharField(
         max_length=10, choices=Priority.choices, default=Priority.LOW
     )
     is_resolved = models.BooleanField(default=False)
     cost = models.IntegerField()
-    
 
 
 class Notification(models.Model):

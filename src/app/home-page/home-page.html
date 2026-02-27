@@ -1,56 +1,82 @@
 <nav
-  class="fixed top-0 left-0 right-0 z-50 h-[70px] bg-[#00712D]
-         flex items-center justify-between px-6">
-
-  <h1 class="text-[#D5ED9F] text-3xl">Smart EV</h1>
+  class="fixed top-0 left-0 right-0 z-50 h-[70px] bg-[#00712D] flex items-center justify-between px-6"
+>
+  <h1
+    class="text-[#D5ED9F] text-3xl hover:scale-105 transition duration-300 cursor-pointer"
+  >
+    Smart EV
+  </h1>
 
   <div class="hidden md:flex gap-x-4 text-[#D5ED9F]">
-    <a routerLink="/" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Home</a>
-    <a routerLink="/products" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Products</a>
-    <a routerLink="/about" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">About</a>
-    <a routerLink="/contact" class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded">Contact</a>
+    <a
+      routerLink="/"
+      class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded"
+      >Home</a
+    >
+    <a
+      routerLink="/about"
+      class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded"
+      >About</a
+    >
+    <a
+      routerLink="/contact"
+      class="hover:bg-[#D5ED9F] hover:text-black px-2 py-1 rounded"
+      >Contact</a
+    >
   </div>
 
   <!-- Right Side -->
   <div class="flex items-center gap-x-4">
-
     <!-- Hamburger -->
     <button
-      class="md:hidden text-[#D5ED9F] text-3xl"
-      (click)="toggleMenu()">
+      class="md:hidden text-[#D5ED9F] text-3xl hover:scale-110 transition duration-300"
+      (click)="toggleMenu()"
+    >
       <i class="fa-solid fa-bars"></i>
     </button>
 
     <!-- User Icon (Desktop only) -->
-    <a routerLink="/login" class="hidden md:block text-2xl text-[#D5ED9F]">
+    <a
+      routerLink="/login"
+      class="hidden md:block text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
+    >
       <i class="far fa-user-circle"></i>
     </a>
-
   </div>
 </nav>
 
 <!-- Mobile / Tablet Menu -->
 <div
   *ngIf="isMenuOpen"
-  class="fixed top-[70px] right-0 w-52 bg-[#00712D]
-         flex flex-col text-[#D5ED9F] shadow-lg z-40">
+  class="fixed top-[70px] right-0 w-52 bg-[#00712D] flex flex-col text-[#D5ED9F] shadow-lg z-40"
+>
+  <a
+    routerLink="/"
+    (click)="closeMenu()"
+    class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black"
+    >Home</a
+  >
 
-  <a routerLink="/" (click)="closeMenu()"
-     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Home</a>
+  <a
+    routerLink="/about"
+    (click)="closeMenu()"
+    class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black"
+    >About</a
+  >
 
-  <a routerLink="/products" (click)="closeMenu()"
-     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Products</a>
+  <a
+    routerLink="/contact"
+    (click)="closeMenu()"
+    class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black"
+    >Contact</a
+  >
 
-  <a routerLink="/about" (click)="closeMenu()"
-     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">About</a>
-
-  <a routerLink="/contact" (click)="closeMenu()"
-     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Contact</a>
-
-  <a routerLink="/login" (click)="closeMenu()"
-     class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black">Login</a>
-
+  <a
+    routerLink="/login"
+    (click)="closeMenu()"
+    class="px-4 py-3 hover:bg-[#D5ED9F] hover:text-black"
+    >Login</a
+  >
 </div>
 
 <router-outlet></router-outlet>
-
