@@ -9,15 +9,24 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './generalhome.css',
 })
 export class Generalhome {
-   
-  constructor(private route:Router){}
+  constructor(private route: Router) {}
 
-    vehicles:{img:string,name:string,des:string}[] = [
-    {img:'',name:'User Dashboards',des:'A stylish electric vehicle UI Dashboard.'},
-    {img:'',name:'Task Management',des:'A versatile easy task management system.'},  
+  vehicles: { img: string; name: string; des: string; buttonImg: string }[] = [
+    {
+      img: '',
+      name: 'User Dashboards',
+      des: 'A stylish electric vehicle UI Dashboard.',
+      buttonImg: '/user-dashboard.jpeg',
+    },
+    {
+      img: '',
+      name: 'Task Management',
+      des: 'A versatile easy task management system.',
+      buttonImg: '/task-management.jpeg',
+    },
   ];
 
-  navigate(){
-    this.route.navigate(['about'])
+  navigate() {
+    this.route.navigate(['about']);
   }
 }
