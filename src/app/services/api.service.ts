@@ -190,6 +190,19 @@ export class ApiService {
   }
 
   /**
+   * Get notification details for a user
+   * @param userId User ID to get notifications for
+   * @returns Observable with notification data
+   */
+  getNotificationDetails(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get-notification-details/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
    * Refresh access token
    * @param refreshToken Refresh token
    * @returns Observable with new access token

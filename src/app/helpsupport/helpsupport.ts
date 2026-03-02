@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LoadingService } from '../services/loading.service';
 
 interface Article {
   article_id: number;
@@ -21,13 +22,18 @@ export class Helpsupport implements OnInit {
   articles: Article[] = [];
   showSupportForm = false;
 
+  constructor(private loadingService: LoadingService) {}
+
   ngOnInit() {
     this.loadArticles();
   }
 
   loadArticles() {
-    // Load articles from CSV file
-    const csvData = `article_id,title,answer,category
+    this.loadingService.show('Loading articles...');
+    // Simulate loading delay (remove or adjust based on actual API calls)
+    setTimeout(() => {
+      // Load articles from CSV file
+      const csvData = `article_id,title,answer,category
 1,How to monitor EV battery health?,"Monitor your EV battery health through the Battery Dashboard. Check the battery percentage, health indicator (0-100%), and temperature readings updated in real-time. Set alerts for low battery levels and receive notifications when battery health drops below 80%. Visit the Vehicle Dashboard > Battery Stats to view detailed analytics and historical trends.",Battery
 2,Managing charging stations,"Access the Charging Stations map from your dashboard. View nearby charging points, their availability, and charging speeds. You can reserve a station for up to 30 minutes. The system shows real-time availability and estimated charging time based on your vehicle's current battery level.",Charging
 3,Understanding alerts & notifications,"Alerts are prioritized messages (Low, Medium, High) about your vehicle's status. Enable notifications in Settings > Preferences. Critical alerts will be highlighted in red. Check your notification center anytime - unread alerts show a badge count. Mark alerts as read or snooze them for later.",Alerts
@@ -41,7 +47,9 @@ export class Helpsupport implements OnInit {
 11,Firmware update process,"The system auto-checks for updates weekly. When available, you'll see an 'Update Available' notification. Click to download (requires WiFi). Updates install automatically when vehicle is parked and plugged in. Don't turn off vehicle during update. Updates typically take 10-15 minutes.",Updates
 12,Troubleshooting battery overheating,"High battery temperature indicates overheating - stop charging immediately and let it cool for 30 minutes. Park in shade if possible. Check Settings > Vehicle > Temperature to view current temp. If temp exceeds 65°C, a high-priority alert will be triggered. Contact service team if problem persists.",Safety`;
 
-    this.articles = this.parseCSV(csvData);
+      this.articles = this.parseCSV(csvData);
+      this.loadingService.hide();
+    }, 1000); // 1 second delay to simulate loading
   }
 
   parseCSV(csv: string): Article[] {

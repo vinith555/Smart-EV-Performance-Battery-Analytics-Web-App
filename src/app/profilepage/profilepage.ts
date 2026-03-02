@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ApiService } from '../services/api.service';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-profilepage',
@@ -13,13 +14,13 @@ import { ApiService } from '../services/api.service';
 })
 export class Profilepage implements OnInit {
   editProfileForm = false;
-  isLoading = true;
   private hasLoadedProfile = false; // Prevent multiple loads
 
   constructor(
     private route: Router,
     private authService: AuthService,
     private apiService: ApiService,
+    private loadingService: LoadingService,
   ) {
     // Don't check authentication in constructor - let ngOnInit handle it
     // This prevents issues with timing when tokens are being set
@@ -94,6 +95,7 @@ export class Profilepage implements OnInit {
    */
   loadUserProfile(): void {
     console.log('Loading user profile...');
+    this.loadingService.show('Loading profile...');
 
     this.apiService.getUserDetail().subscribe({
       next: (response) => {
@@ -115,7 +117,7 @@ export class Profilepage implements OnInit {
             twitter: this.user.twitter,
             facebook: this.user.facebook,
           };
-          this.isLoading = false;
+          this.loadingService.hide();
           console.log('User profile loaded successfully:', this.user);
         } else {
           console.error('Invalid response structure:', response);
@@ -133,7 +135,7 @@ export class Profilepage implements OnInit {
    * Handle profile load errors
    */
   private handleProfileLoadError(error: any): void {
-    this.isLoading = false;
+    this.loadingService.hide();
     this.user.bio =
       'Failed to load user information. Please try logging in again.';
 
@@ -161,14 +163,17 @@ export class Profilepage implements OnInit {
   }
 
   logOut() {
+    this.loadingService.show('Logging out...');
     // Call logout API before navigating
     this.authService.logout().subscribe({
       next: () => {
         console.log('Logged out successfully');
+        this.loadingService.hide();
         this.route.navigate(['/login']);
       },
       error: (error) => {
         console.error('Logout error:', error);
+        this.loadingService.hide();
         // Even if logout fails, clear local storage and navigate
         this.route.navigate(['/login']);
       },
@@ -177,10 +182,16 @@ export class Profilepage implements OnInit {
 
   updateProfile(form: any) {
     if (form.valid) {
+      this.loadingService.show('Updating profile...');
       console.log('Updated User:', this.user);
       // TODO: Add API call to update user profile
       // this.apiService.updateUserProfile(this.user).subscribe(...)
-      this.editProfileForm = false;
+
+      // Simulate update (remove when API is implemented)
+      setTimeout(() => {
+        this.loadingService.hide();
+        this.editProfileForm = false;
+      }, 1000);
     }
   }
 }

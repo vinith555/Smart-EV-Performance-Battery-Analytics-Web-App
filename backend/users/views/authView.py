@@ -109,15 +109,21 @@ class LoginView(APIView):
             if serializer.is_valid():
                 logger.info(f"User logged in successfully: {request.data.get('email')}")
 
-                return Response(
-                    {
-                        "success": True,
-                        "message": "Login successful",
-                        "icon": "success",
-                        "data": serializer.validated_data,
-                    },
-                    status=status.HTTP_200_OK,
-                )
+                # Log the validated data to see what's being returned
+                print("=" * 50)
+                print("Login validated_data:", serializer.validated_data)
+                print("=" * 50)
+
+                response_data = {
+                    "success": True,
+                    "message": "Login successful",
+                    "icon": "success",
+                    "data": serializer.validated_data,
+                }
+                print("Response being sent:", response_data)
+                print("=" * 50)
+
+                return Response(response_data, status=status.HTTP_200_OK)
             else:
                 logger.warning(f"Login failed with errors: {serializer.errors}")
                 return Response(

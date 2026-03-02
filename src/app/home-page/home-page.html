@@ -36,12 +36,49 @@
     </button>
 
     <!-- User Icon (Desktop only) -->
-    <a
-      routerLink="/login"
-      class="hidden md:block text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
-    >
-      <i class="far fa-user-circle"></i>
-    </a>
+    <div class="hidden md:block relative">
+      <button
+        *ngIf="isLoggedIn"
+        (click)="goToProfile()"
+        class="text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
+        title="Go to Profile"
+      >
+        <i class="far fa-user-circle"></i>
+      </button>
+
+      <button
+        *ngIf="!isLoggedIn"
+        (click)="toggleUserDropdown()"
+        (mouseenter)="isUserDropdownOpen = true"
+        class="text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
+        title="User Menu"
+      >
+        <i class="far fa-user-circle"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div
+        *ngIf="!isLoggedIn && isUserDropdownOpen"
+        (mouseenter)="isUserDropdownOpen = true"
+        (mouseleave)="isUserDropdownOpen = false"
+        class="absolute right-0 mt-2 w-48 bg-[#00712D] rounded-lg shadow-lg z-50 border border-[#D5ED9F]"
+      >
+        <a
+          routerLink="/login"
+          (click)="closeUserDropdown()"
+          class="block px-4 py-3 text-[#D5ED9F] hover:bg-[#D5ED9F] hover:text-black rounded-t-lg transition"
+        >
+          <i class="far fa-sign-in mr-2"></i>Login
+        </a>
+        <a
+          routerLink="/help-support"
+          (click)="closeUserDropdown()"
+          class="block px-4 py-3 text-[#D5ED9F] hover:bg-[#D5ED9F] hover:text-black rounded-b-lg transition border-t border-[#D5ED9F]"
+        >
+          <i class="far fa-question-circle mr-2"></i>Help & Support
+        </a>
+      </div>
+    </div>
   </div>
 </nav>
 

@@ -6,6 +6,7 @@ from .views import (
     ServiceView,
     IssuesView,
     UserInfoView,
+    NotificationView,
 )
 from .views.authView import (
     RegisterView,
@@ -46,5 +47,10 @@ urlpatterns = [
         "get-user-details-by-vehicle/",
         UserInfoView.UserDetailsByVehicle,
         name="user-details-by-vehicle",
+    ),
+    path(
+        "get-notification-details/<int:user_id>/",
+        NotificationView.NotificationDetails,
+        name="notification-details",
     ),
 ]

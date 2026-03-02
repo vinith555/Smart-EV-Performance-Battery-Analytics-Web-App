@@ -4,7 +4,6 @@ import { LoginPage } from './login-page/login-page';
 import { RegisterPage } from './register-page/register-page';
 import { PersonalUserDashboard } from './personal-user-dashboard/personal-user-dashboard';
 import { ServiceUserDashboard } from './service-user-dashboard/service-user-dashboard';
-import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { Generalhome } from './home-page/generalhome/generalhome';
 import { About } from './home-page/about/about';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
@@ -46,6 +45,5 @@ export const routes: Routes = [
       { path: 'billing', component: Billing },
     ],
   },
-  { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'help-support', component: Helpsupport },
 ];
