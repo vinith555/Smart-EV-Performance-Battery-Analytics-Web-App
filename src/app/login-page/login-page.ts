@@ -47,31 +47,44 @@ export class LoginPage {
         .login(this.credentials.email, this.credentials.password)
         .subscribe({
           next: (response) => {
-            this.isLoading = false;
+            console.log('Login successful:', response);
             this.successMessage = 'Login successful! Redirecting...';
 
-            console.log('Login successful:', response);
+            // Load user details after login to ensure we have complete user data
+            this.authService.loadCurrentUser().subscribe({
+              next: (userResponse) => {
+                this.isLoading = false;
+                console.log('User details loaded:', userResponse);
 
-            // Redirect based on user role after a short delay
-            setTimeout(() => {
-              const currentUser = this.authService.getCurrentUser();
-              if (currentUser) {
-                switch (currentUser.role) {
-                  case 'ADMIN':
-                    this.router.navigate(['/admin-dashboard']);
-                    break;
-                  case 'SERVICE':
-                    this.router.navigate(['/service-user-dashboard']);
-                    break;
-                  case 'PERSONAL':
-                  default:
-                    this.router.navigate(['/personal-user-dashboard']);
-                    break;
+                const currentUser = this.authService.getCurrentUser();
+                console.log('Current user from service:', currentUser);
+
+                if (currentUser && currentUser.role) {
+                  // Redirect based on user role
+                  switch (currentUser.role.toUpperCase()) {
+                    case 'ADMIN':
+                      this.router.navigate(['/']);
+                      break;
+                    case 'SERVICE':
+                      this.router.navigate(['/service-user-dashboard']);
+                      break;
+                    case 'PERSONAL':
+                    default:
+                      this.router.navigate(['/personal-user-dashboard']);
+                      break;
+                  }
+                } else {
+                  console.warn('User role not found, redirecting to profile');
+                  this.router.navigate(['/profile']);
                 }
-              } else {
+              },
+              error: (userError) => {
+                this.isLoading = false;
+                console.error('Failed to load user details:', userError);
+                // Even if user details fail, redirect to profile
                 this.router.navigate(['/profile']);
-              }
-            }, 1000);
+              },
+            });
           },
           error: (error) => {
             this.isLoading = false;

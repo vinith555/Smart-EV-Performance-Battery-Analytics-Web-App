@@ -14,6 +14,8 @@ import { Billing } from './service-user-dashboard/billing/billing';
 import { Profilepage } from './profilepage/profilepage';
 import { Contact } from './home-page/contact/contact';
 import { Helpsupport } from './helpsupport/helpsupport';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -27,10 +29,17 @@ export const routes: Routes = [
   },
   { path: 'login', component: LoginPage },
   { path: 'register', component: RegisterPage },
-  { path: 'profile', component: Profilepage },
+  {
+    path: 'profile',
+    component: Profilepage,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PERSONAL', 'SERVICE', 'ADMIN'] },
+  },
   {
     path: 'personal-user-dashboard',
     component: PersonalUserDashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PERSONAL'] },
     children: [
       { path: '', component: Userdashboard },
       { path: 'information', component: Information },
@@ -39,6 +48,8 @@ export const routes: Routes = [
   {
     path: 'service-user-dashboard',
     component: ServiceUserDashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['SERVICE'] },
     children: [
       { path: '', component: Suerdashboard },
       { path: 'vehicle-info', component: VehicleInfo },
