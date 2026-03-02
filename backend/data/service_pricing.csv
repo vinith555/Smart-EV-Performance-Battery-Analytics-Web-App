@@ -1,0 +1,60 @@
+service_name,price,description
+Battery Replacement,5000.00,Complete battery pack replacement
+Brake Inspection,500.00,Full brake system inspection
+Tire Rotation,300.00,Rotate all four tires
+Software Update,200.00,Update vehicle firmware
+General Checkup,1000.00,Complete vehicle inspection
+Charging Port Repair,1500.00,Repair or replace charging port
+Battery Health Check,400.00,Comprehensive battery health diagnostics
+Motor Inspection,800.00,Electric motor performance check
+Coolant System Service,600.00,Coolant flush and system inspection
+Cabin Air Filter Replacement,150.00,Replace cabin air filter
+HVAC System Service,700.00,Heating and cooling system maintenance
+Wheel Alignment,400.00,Four-wheel alignment service
+Brake Pad Replacement,1200.00,Replace front and rear brake pads
+Brake Fluid Flush,250.00,Complete brake fluid replacement
+Suspension Inspection,500.00,Full suspension system check
+Shock Absorber Replacement,1800.00,Replace all shock absorbers
+Windshield Wiper Replacement,100.00,Replace wiper blades
+Battery Coolant Service,550.00,Battery cooling system maintenance
+Inverter Service,900.00,Power inverter inspection and service
+Transmission Fluid Change,350.00,Electric transmission fluid service
+Power Steering Service,400.00,Power steering system maintenance
+Door Lock Actuator Repair,300.00,Fix door lock mechanism
+Window Regulator Repair,450.00,Window mechanism repair
+Climate Control Repair,850.00,AC/heating system repair
+Seat Heater Repair,400.00,Repair heated seat elements
+Battery Module Replacement,3500.00,Replace individual battery modules
+Onboard Charger Service,1100.00,Diagnose and service onboard charger
+DC Fast Charging Port Service,800.00,Inspect and repair DC charging port
+Regenerative Braking Calibration,350.00,Calibrate regen braking system
+Torque Control Calibration,450.00,Motor torque system calibration
+Lighting System Repair,300.00,Headlight and taillight repair
+LED Headlight Replacement,600.00,Replace LED headlight assembly
+Wheel Bearing Replacement,900.00,Replace worn wheel bearings
+CV Joint Replacement,1200.00,Replace constant velocity joints
+Drive Axle Service,700.00,Inspect and service drive axles
+Parking Brake Adjustment,200.00,Adjust parking brake system
+Battery Vent Cleaning,250.00,Clean battery ventilation system
+High Voltage Cable Inspection,500.00,Inspect HV cable connections
+Thermal Management Service,650.00,Battery thermal management check
+Touch Screen Calibration,300.00,Recalibrate infotainment screen
+Sensor Cleaning,200.00,Clean parking and safety sensors
+Camera System Calibration,400.00,Calibrate backup and surround cameras
+Tire Pressure Sensor Replacement,180.00,Replace TPMS sensors
+Tire Balancing,250.00,Balance all four tires
+Windshield Replacement,1500.00,Replace cracked windshield
+Paint Touch-up,350.00,Minor paint scratch repair
+Dent Removal,500.00,Paintless dent removal service
+Interior Detailing,400.00,Complete interior cleaning
+Exterior Detailing,350.00,Complete exterior wash and wax
+Ceramic Coating Application,2000.00,Apply protective ceramic coating
+12V Battery Replacement,250.00,Replace auxiliary 12V battery
+Fuse Box Inspection,200.00,Check and replace blown fuses
+Wiring Harness Repair,800.00,Repair damaged wiring
+ECU Software Reset,150.00,Reset electronic control unit
+Diagnostic Scan,100.00,Full vehicle diagnostic scan
+Pre-Purchase Inspection,500.00,Comprehensive pre-buy inspection
+Safety Recall Service,0.00,Manufacturer recall repair
+Warranty Inspection,200.00,Warranty claim inspection
+Emergency Roadside Service,300.00,On-site emergency repair
