@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -42,7 +43,7 @@ interface Job {
 
 @Component({
   selector: 'app-suerdashboard',
-  imports: [NgApexchartsModule,CommonModule],
+  imports: [NgApexchartsModule,CommonModule,FormsModule],
   templateUrl: './suerdashboard.html',
   styleUrl: './suerdashboard.css',
 })
@@ -306,6 +307,16 @@ jobs: Job[] = [
   next() {
     if (this.index + this.pageSize < this.jobs.length) {
       this.index += this.pageSize;
+    }
+  }
+
+  workerActionForm = false;
+  indexAc = -1;
+
+  updateJobByWorker(form: any) {
+    if (form.valid) {
+      console.log("Updated Job:", this.jobs[this.indexAc]);
+      this.workerActionForm = false;
     }
   }
 

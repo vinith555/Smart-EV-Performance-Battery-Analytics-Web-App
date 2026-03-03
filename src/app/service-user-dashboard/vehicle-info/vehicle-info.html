@@ -6,23 +6,82 @@
       </div>
     </section>
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-        <div class="bg-white rounded-xl shadow-md p-4">
-            <h2 class="text-xl font-semibold mb-4">Owner Details</h2>
-            <div class="h-full flex flex-col">
-                <div class="h-[120px] bg-slate-100 rounded-lg relative">
-                    <img class="absolute rounded-full h-32 w-32 top-8 left-8 border-6 border-white" src="https://randomuser.me/api/portraits/men/44.jpg">
-                    <p class="text-lg font-semibold absolute top-4 right-4">John Doe</p>
-                </div>
-                <div class="mt-6 flex flex-col gap-2 text-gray-500 p-8">
-                    <p><span class="text-black font-semibold mr-4">Contact:</span> +1 (555) 234-7890</p>
-                    <p><span class="text-black font-semibold mr-4">Email:</span> johndoe@email.com</p>
-                    <p><span class="text-black font-semibold mr-4">Vehicle:</span> Tata Nexon EV Max</p>
-                    <p><span class="text-black font-semibold mr-4">Battery Warranty:</span> 8 Years / 160,000 km</p>
-                    <p><span class="text-black font-semibold mr-4">Insurance:</span> Comprehensive (Valid till Aug 2026)</p>
-                    <p><span class="text-black font-semibold mr-4">Service Package:</span> EV Care Plus (5 Years)</p>
-                </div>
+        <div class=" bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+          <div class="h-full flex flex-col md:flex-row">
+
+            <!-- LEFT SECTION -->
+            <div class="md:w-1/3 bg-slate-50 p-6 flex flex-col items-center justify-center border-r border-gray-200">
+
+              <img 
+                src="https://randomuser.me/api/portraits/men/44.jpg"
+                class="w-24 h-24 rounded-full object-cover shadow-md"
+              />
+
+              <h2 class="mt-4 text-lg font-bold text-gray-800">John Doe</h2>
+              <p class="text-sm text-gray-500">Vehicle Owner</p>
+
+              <div class="mt-4 text-center">
+                <span class="inline-block px-3 py-1 text-xs rounded-full bg-green-100 text-green-600 font-medium">
+                  Active Owner
+                </span>
+              </div>
             </div>
-         </div>
+
+            <!-- RIGHT SECTION -->
+            <div class="md:w-2/3 p-6">
+
+              <h3 class="text-md font-semibold text-gray-700 mb-4">
+                Owner Information
+              </h3>
+
+              <div class="grid grid-cols-1 gap-6 text-sm">
+
+                <div>
+                  <p class="text-gray-400">Contact Number</p>
+                  <p class="font-medium text-gray-800">+1 (555) 234-7890</p>
+                </div>
+
+                <div>
+                  <p class="text-gray-400">Email Address</p>
+                  <p class="font-medium text-gray-800 break-all">
+                    johndoe@email.com
+                  </p>
+                </div>
+
+                <div>
+                  <p class="text-gray-400">Vehicle</p>
+                  <p class="font-medium text-gray-800">
+                    Tata Nexon EV Max
+                  </p>
+                </div>
+
+                <div>
+                  <p class="text-gray-400">Battery Warranty</p>
+                  <p class="font-medium text-gray-800">
+                    8 Years / 160,000 km
+                  </p>
+                </div>
+
+                <div>
+                  <p class="text-gray-400">Insurance</p>
+                  <p class="font-medium text-green-600">
+                    Comprehensive (Valid till Aug 2026)
+                  </p>
+                </div>
+
+                <div>
+                  <p class="text-gray-400">Service Package</p>
+                  <p class="font-medium text-indigo-600">
+                    EV Care Plus (5 Years)
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
         <div class="bg-white p-4 rounded-xl shadow-md">
             <h2 class="text-xl font-semibold">Vehicle Information</h2>
             <div class="grid grid-cols-2 gap-4 place-items-center py-6">

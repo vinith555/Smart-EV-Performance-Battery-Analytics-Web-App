@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {NgApexchartsModule} from 'ng-apexcharts';
 import { ApexAxisChartSeries,ApexChart,ApexXAxis,ApexStroke,ApexDataLabels,ApexTitleSubtitle } from 'ng-apexcharts';
+import { Map } from '../../map/map';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -29,7 +30,7 @@ interface Trip {
 
 @Component({
   selector: 'app-userdashboard',
-  imports: [NgApexchartsModule,CommonModule,FormsModule],
+  imports: [NgApexchartsModule,CommonModule,FormsModule,Map],
   templateUrl: './userdashboard.html',
   styleUrl: './userdashboard.css',
 })
