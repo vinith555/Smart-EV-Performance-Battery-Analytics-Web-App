@@ -38,7 +38,7 @@ export const routes: Routes = [
   {
     path: 'personal-user-dashboard',
     component: PersonalUserDashboard,
-    canActivate: [authGuard, roleGuard],
+    // canActivate: [authGuard, roleGuard],
     data: { roles: ['PERSONAL'] },
     children: [
       { path: '', component: Userdashboard },
@@ -48,7 +48,7 @@ export const routes: Routes = [
   {
     path: 'service-user-dashboard',
     component: ServiceUserDashboard,
-    canActivate: [authGuard, roleGuard],
+    // canActivate: [authGuard, roleGuard],
     data: { roles: ['SERVICE'] },
     children: [
       { path: '', component: Suerdashboard },

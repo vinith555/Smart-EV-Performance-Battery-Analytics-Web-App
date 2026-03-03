@@ -12,7 +12,7 @@
     </button>
 
     <a
-      routerLink="/"
+      routerLink="/service-user-dashboard"
       class="text-2xl font-bold text-gray-800 hover:text-green-600 cursor-pointer transition"
       >EV Service User</a
     >
@@ -39,11 +39,12 @@
 </header>
 
 <nav
-  *ngIf="isNavbarCollapsed"
-  class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20"
+  class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20 transform transition-transform duration-300"
+  [class.translate-x-0]="isNavbarCollapsed"
+  [class.-translate-x-full]="!isNavbarCollapsed"
 >
   <a
-    routerLink="/service-user/"
+    routerLink="/service-user-dashboard"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     class="hover:text-green-600 py-1 px-2 rounded-md"
@@ -51,14 +52,14 @@
     ><i class="fa-solid fa-home mr-2"></i>Dashboard</a
   >
   <a
-    routerLink="/service-user/vehicle-info"
+    routerLink="./vehicle-info"
     routerLinkActive="active-link"
     class="hover:text-green-600 py-1 px-2 rounded-md"
     (click)="toggleNavbar()"
     ><i class="fa-solid fa-car-burst mr-2"></i>Vehicle Information</a
   >
   <a
-    routerLink="/service-user/billing"
+    routerLink="./billing"
     routerLinkActive="active-link"
     class="hover:text-green-600 py-1 px-2 rounded-md"
     (click)="toggleNavbar()"
@@ -73,8 +74,10 @@
   >
 </nav>
 <div
-  *ngIf="isNavbarCollapsed"
-  class="fixed inset-0 top-[70px] z-10 bg-black/50"
+  class="fixed inset-0 top-[70px] bg-black transition-opacity duration-300 z-10"
+  [class.opacity-50]="isNavbarCollapsed"
+  [class.opacity-0]="!isNavbarCollapsed"
+  [class.pointer-events-none]="!isNavbarCollapsed"
   (click)="toggleNavbar()"
 ></div>
 

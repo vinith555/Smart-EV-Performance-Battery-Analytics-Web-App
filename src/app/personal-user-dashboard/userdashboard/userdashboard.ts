@@ -162,15 +162,60 @@ export class Userdashboard {
   ];
 
   
+  filterValues = {
+  Date: '',
+  startLocation: '',
+  endLocation: '',
+  status: ''
+  };
+
+  get filteredTrips(): Trip[] {
+  const noFilter = Object.values(this.filterValues).every(v => !v);
+  if (noFilter) {
+    return this.trips;
+  }
+
+  return this.trips.filter(trip => {
+    const matchesDate =
+      this.filterValues.Date &&
+      new Date(trip.date).toDateString() ===
+      new Date(this.filterValues.Date).toDateString();
+
+    const matchesStartLocation =
+      this.filterValues.startLocation &&
+      trip.startLocation
+        .toLowerCase()
+        .includes(this.filterValues.startLocation.toLowerCase());
+
+    const matchesEndLocation =
+      this.filterValues.endLocation &&
+      trip.endLocation
+        .toLowerCase()
+        .includes(this.filterValues.endLocation.toLowerCase());
+
+    const matchesStatus =
+      this.filterValues.status &&
+      trip.status.toLocaleLowerCase() === this.filterValues.status.toLocaleLowerCase();
+
+    return (
+      matchesDate ||
+      matchesStartLocation ||
+      matchesEndLocation ||
+      matchesStatus
+    );
+    });
+  }
+
 
   get paginatedTrips(): Trip[] {
-    return this.trips.slice(this.index, this.index + this.pageSize);
+    return this.filteredTrips.slice(this.index, this.index + this.pageSize);
   }
 
   next() {
-    if (this.index + this.pageSize < this.trips.length) {
-      this.index += this.pageSize;
-    }
+    if (this.index + this.pageSize < this.filteredTrips.length) {
+    this.index += this.pageSize;
+  }
+    
   }
 
   previous() {
@@ -178,6 +223,11 @@ export class Userdashboard {
       this.index -= this.pageSize;
     }
   }
+
+  onFilterChange() {
+  this.index = 0;
+  }
+
   tripData(f:NgForm){
     console.log(f.value);
   }
