@@ -129,59 +129,18 @@
     </section>
     
     <section class="relative w-full rounded-lg bg-white p-4 shadow-md">
-
-      <div 
-          *ngIf="filter" 
-          class="absolute 
-                top-12 right-2 z-10
-                w-[50vw] max-w-md
-                md:w-auto
-                bg-white shadow-lg shadow-gray-300 
-                border-2 border-gray-200 
-                rounded-md p-4">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <div class="w-full">
-            <p class="font-semibold">Date</p>
-            <input type="date" class="w-full border-2 border-gray-300 rounded bg-white p-1" [(ngModel)]="filterValues.Date" (ngModelChange)="onFilterChange()">
-          </div>
-
-          <div class="w-full">
-            <p class="font-semibold">Start Location</p>
-            <input type="text" class="w-full border-2 border-gray-300 rounded bg-white p-1" [(ngModel)]="filterValues.startLocation" (ngModelChange)="onFilterChange()">
-          </div>
-
-          <div class="w-full">
-            <p class="font-semibold">End Location</p>
-            <input type="text" class="w-full border-2 border-gray-300 rounded bg-white p-1" [(ngModel)]="filterValues.endLocation" (ngModelChange)="onFilterChange()">
-          </div>
-
-          <div class="w-full">
-            <p class="font-semibold">Status</p>
-            <select class="w-full border-2 border-gray-300 rounded bg-white p-1" [(ngModel)]="filterValues.status" (ngModelChange)="onFilterChange()">
-              <option value="">None</option>
-              <option value="completed">Completed</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
-
-        </div>
-      </div>
         <div class="flex justify-between">
             <h2 class="text-xl font-semibold">Trip Summary</h2>
             <div class="flex gap-x-2 text-lg">
                 <button (click)="tripForm = !tripForm"><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button>
-                <button (click)="filter = !filter"><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
+                <!-- <button (click)="filter = !filter"><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button> -->
             </div>
         </div>
         
-        
         <div class="overflow-x-auto mt-4">
             <table class="min-w-full">
-            <thead class="text-gray-500 text-sm uppercase">
-                <tr class="border-b">
+            <thead class="text-gray-500 border-b border-gray-200">
+                <tr class="text-sm uppercase">
                 <th class="px-4 py-3 text-left">Trip ID</th>
                 <th class="px-4 py-3 text-left">Date</th>
                 <th class="px-4 py-3 text-left">Start</th>
@@ -191,6 +150,53 @@
                 <th class="px-4 py-3 text-left">Avg Speed</th>
                 <th class="px-4 py-3 text-left">Status</th>
                 <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+                <tr class="normal-case">
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.tripId" type="text" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.date" type="date" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.startLocation" type="text" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.endLocation" type="text" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.distance" type="text" 
+                            class="w-full bg-white  text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.duration" type="text" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th class="px-4 py-2">
+                        <input [(ngModel)]="filterValues.avgSpeed" type="text" 
+                            class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                    </th>
+                    <th>
+                      <select [(ngModel)]="filterValues.status" name="status" id="status" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                        <option value="">All</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </th>
+                    <th class="px-4 py-2 text-center">
+                      <button
+                        (click)="clearFilters()"
+                        class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200">
+
+                        <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
+                        Clear
+                      </button>
+                    </th>
                 </tr>
             </thead>
 

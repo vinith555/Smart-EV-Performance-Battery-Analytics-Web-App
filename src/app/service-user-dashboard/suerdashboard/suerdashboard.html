@@ -98,14 +98,12 @@
         <div class="flex justify-between">
             <h2 class="text-xl font-semibold">Job & Task Management</h2>
             <div class="flex gap-x-2 text-lg">
-                <!-- <button ><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button> -->
-                <button ><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
             </div>
         </div>
     <div class="overflow-x-auto mt-4">
         <table class="min-w-full">
-            <thead class="text-gray-500 text-sm uppercase">
-                <tr class="border-b">
+            <thead class="text-gray-500 text-sm uppercase border-b border-gray-200">
+                <tr class="">
                     <th class="px-4 py-3 text-left">Task ID</th>
                     <th class="px-4 py-3 text-left">Category</th>
                     <th class="px-4 py-3 text-left">Assigned To</th>
@@ -115,6 +113,51 @@
                     <th class="px-4 py-3 text-left">SLA</th>
                     <th class="px-4 py-3 text-left">Status</th>
                     <th class="px-4 py-3 text-center">Actions</th>
+                </tr>
+                <tr>
+                    <th class="px-4 py-2">
+                        <input type="text" [(ngModel)]="filteredJobs.taskId" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <input type="text" [(ngModel)]="filteredJobs.category" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <input type="text" [(ngModel)]="filteredJobs.assignedTo" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <input type="date" [(ngModel)]="filteredJobs.startDate" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <input type="date" [(ngModel)]="filteredJobs.endDate" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <select [(ngModel)]="filteredJobs.priority" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                            <option value="">All Priorities</option>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </th>
+                    <th class="px-4 py-2">
+                        <input type="text" [(ngModel)]="filteredJobs.slaTime" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400" />
+                    </th>
+                    <th class="px-4 py-2">
+                        <select [(ngModel)]="filteredJobs.status" class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400">
+                            <option value="">All Statuses</option>
+                            <option value="Assigned">Assigned</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </th>
+                    <th class="px-4 py-2 text-center">
+                        <button
+                        (click)="clearJobFilters()"
+                        class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200">
+
+                        <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
+                        Clear
+                    </button>
+                    </th>
                 </tr>
             </thead>
 
@@ -129,8 +172,8 @@
 
                     <td class="px-4 py-3">{{ job.category }}</td>
                     <td class="px-4 py-3">{{ job.assignedTo }}</td>
-                    <td class="px-4 py-3">{{ job.start }}</td>
-                    <td class="px-4 py-3">{{ job.deadLine }}</td>
+                    <td class="px-4 py-3">{{ job.start|date}}</td>
+                    <td class="px-4 py-3">{{ job.deadLine|date }}</td>
 
                     <!-- Priority -->
                     <td class="px-4 py-3">
@@ -154,7 +197,7 @@
                             'text-red-600': job.slaStatus === 'Breached'
                         }"
                     >
-                        {{ job.slaTime }}
+                        {{ job.slaTime}}
                     </td>
 
                     <!-- Status -->
@@ -179,9 +222,6 @@
                         <button class="text-yellow-600 hover:text-yellow-700" title="Action" (click)="indexAc = i; workerActionForm = true;">
                             <i class="fa-solid fa-user-gear"></i>
                         </button>
-                        <!-- <button class="text-red-600 hover:text-red-700" title="Escalate">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </button> -->
                     </td>
                 </tr>
             </tbody>

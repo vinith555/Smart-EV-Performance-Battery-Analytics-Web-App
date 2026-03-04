@@ -164,49 +164,84 @@ export class Userdashboard {
 
   
   filterValues = {
-  Date: '',
+  tripId: '',
+  date: '',
   startLocation: '',
   endLocation: '',
+  distance: '',
+  duration: '',
+  avgSpeed: '',
   status: ''
   };
 
   get filteredTrips(): Trip[] {
-  const noFilter = Object.values(this.filterValues).every(v => !v);
-  if (noFilter) {
-    return this.trips;
-  }
 
   return this.trips.filter(trip => {
+
+    const matchesTripId =
+      !this.filterValues.tripId ||
+      trip.tripId.toString().toLocaleLowerCase().includes(this.filterValues.tripId.toLocaleLowerCase());
+
     const matchesDate =
-      this.filterValues.Date &&
+      !this.filterValues.date ||
       new Date(trip.date).toDateString() ===
-      new Date(this.filterValues.Date).toDateString();
+      new Date(this.filterValues.date).toDateString();
 
     const matchesStartLocation =
-      this.filterValues.startLocation &&
+      !this.filterValues.startLocation ||
       trip.startLocation
         .toLowerCase()
         .includes(this.filterValues.startLocation.toLowerCase());
 
     const matchesEndLocation =
-      this.filterValues.endLocation &&
+      !this.filterValues.endLocation ||
       trip.endLocation
         .toLowerCase()
         .includes(this.filterValues.endLocation.toLowerCase());
 
+    const matchesDistance =
+      !this.filterValues.distance ||
+      trip.distance.toString().includes(this.filterValues.distance);
+
+    const matchesDuration =
+      !this.filterValues.duration ||
+      trip.duration.toString().includes(this.filterValues.duration);
+
+    const matchesAvgSpeed =
+      !this.filterValues.avgSpeed ||
+      trip.avgSpeed.toString().includes(this.filterValues.avgSpeed);
+
     const matchesStatus =
-      this.filterValues.status &&
-      trip.status.toLocaleLowerCase() === this.filterValues.status.toLocaleLowerCase();
+      !this.filterValues.status ||
+      trip.status
+        .toLowerCase()
+        .includes(this.filterValues.status.toLowerCase());
 
     return (
-      matchesDate ||
-      matchesStartLocation ||
-      matchesEndLocation ||
+      matchesTripId &&
+      matchesDate &&
+      matchesStartLocation &&
+      matchesEndLocation &&
+      matchesDistance &&
+      matchesDuration &&
+      matchesAvgSpeed &&
       matchesStatus
     );
-    });
+  });
   }
 
+  clearFilters() {
+    this.filterValues = {
+      tripId: '',
+      date: '',
+      startLocation: '',
+      endLocation: '',
+      distance: '',
+      duration: '',
+      avgSpeed: '',
+      status: ''
+    };
+  } 
 
   get paginatedTrips(): Trip[] {
     return this.filteredTrips.slice(this.index, this.index + this.pageSize);

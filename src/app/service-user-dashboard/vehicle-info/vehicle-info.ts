@@ -184,15 +184,88 @@ export class VehicleInfo {
   pageSize = 5;
   index2 = 0;
 
+  vehiclefilterValues = {
+    issueId: '',
+    vehicleNo: '',
+    Category: '',
+    description: '',
+    dateReported: '',
+    priority: '',
+    status: ''
+  }
+
+  get filteredIssues(): VehicleIssue[] {
+  return this.issues.filter(issue => {
+
+    const matchesIssueId =
+      !this.vehiclefilterValues.issueId ||
+      issue.issueId.toString().includes(this.vehiclefilterValues.issueId);
+
+    const matchesVehicleNo =
+      !this.vehiclefilterValues.vehicleNo ||
+      issue.vehicleNo
+        .toLowerCase()
+        .includes(this.vehiclefilterValues.vehicleNo.toLowerCase());
+
+    const matchesCategory =
+      !this.vehiclefilterValues.Category ||
+      issue.Category
+        .toLowerCase()
+        .includes(this.vehiclefilterValues.Category.toLowerCase());
+
+    const matchesDescription =
+      !this.vehiclefilterValues.description ||
+      issue.description
+        .toLowerCase()
+        .includes(this.vehiclefilterValues.description.toLowerCase());
+
+    const matchesDateReported =
+      !this.vehiclefilterValues.dateReported ||
+      new Date(issue.dateReported).toDateString() ===
+      new Date(this.vehiclefilterValues.dateReported).toDateString();
+
+    const matchesPriority =
+      !this.vehiclefilterValues.priority ||
+      issue.priority
+        .toLowerCase()
+        .includes(this.vehiclefilterValues.priority.toLowerCase());
+
+    const matchesStatus =
+      !this.vehiclefilterValues.status ||
+      issue.status
+        .toLowerCase()
+        .includes(this.vehiclefilterValues.status.toLowerCase());
+
+    return (
+      matchesIssueId &&
+      matchesVehicleNo &&
+      matchesCategory &&
+      matchesDescription &&
+      matchesDateReported &&
+      matchesPriority &&
+      matchesStatus
+    );
+  });
+  }
+  clearIssueFilters() {
+    this.vehiclefilterValues = {
+      issueId: '',
+      vehicleNo: '',
+      Category: '',
+      description: '',  
+      dateReported: '',
+      priority: '',
+      status: ''
+    };
+  }
   get paginatedIssues(): VehicleIssue[] {
-    return this.issues.slice(this.index2, this.index2 + this.pageSize);
+  return this.filteredIssues.slice(this.index2, this.index2 + this.pageSize);
   }
   next2() {
-    if (this.index2 + this.pageSize < this.issues.length) {
+    if (this.index2 + this.pageSize < this.filteredIssues.length) {
       this.index2 += this.pageSize;
     }
   }
-
   previous2() {
     if (this.index2 > 0) {
       this.index2 -= this.pageSize;

@@ -294,10 +294,81 @@ jobs: Job[] = [
   pageSize = 5;
   index = 0;
 
-  get paginatedJobs(): Job[] {
-    return this.jobs.slice(this.index, this.index + this.pageSize);
-  }
+  filteredJobs = {
+    taskId:'',
+    category:'',
+    assignedTo:'',
+    startDate:'',
+    endDate:'',
+    priority:'',
+    slaTime:'',
+    status:''
+  };
 
+  get filteredJobList(): Job[] {
+  return this.jobs.filter(job => {
+
+    const matchesTaskId =
+      !this.filteredJobs.taskId ||
+      job.taskId.toLowerCase().includes(this.filteredJobs.taskId.toLowerCase());
+
+    const matchesCategory =
+      !this.filteredJobs.category ||
+      job.category.toLowerCase().includes(this.filteredJobs.category.toLowerCase());
+
+    const matchesAssignedTo =
+      !this.filteredJobs.assignedTo ||
+      job.assignedTo.toLowerCase().includes(this.filteredJobs.assignedTo.toLowerCase());
+
+    const matchesStartDate =
+      !this.filteredJobs.startDate ||
+      new Date(job.start).toDateString() ===
+      new Date(this.filteredJobs.startDate).toDateString();
+
+    const matchesEndDate =
+      !this.filteredJobs.endDate ||
+      new Date(job.deadLine).toDateString() ===
+      new Date(this.filteredJobs.endDate).toDateString();
+
+    const matchesPriority =
+      !this.filteredJobs.priority ||
+      job.priority.toLowerCase() === this.filteredJobs.priority.toLowerCase();
+
+    const matchesSlaTime =
+      !this.filteredJobs.slaTime ||
+      job.slaTime.toLowerCase().includes(this.filteredJobs.slaTime.toLowerCase());
+
+    const matchesStatus =
+      !this.filteredJobs.status ||
+      job.status.toLowerCase() === this.filteredJobs.status.toLowerCase();
+
+    return (
+      matchesTaskId &&
+      matchesCategory &&
+      matchesAssignedTo &&
+      matchesStartDate &&
+      matchesEndDate &&
+      matchesPriority &&
+      matchesSlaTime &&
+      matchesStatus
+    );
+  });
+  }
+  clearJobFilters(){
+    this.filteredJobs = {
+      taskId:'',
+      category:'',
+      assignedTo:'',
+      startDate:'',
+      endDate:'',
+      priority:'',
+      slaTime:'',
+      status:''
+    };
+  }
+  get paginatedJobs(): Job[] {
+  return this.filteredJobList.slice(this.index, this.index + this.pageSize);
+  }
   previous() {
     if (this.index > 0) {
       this.index -= this.pageSize;
@@ -305,7 +376,7 @@ jobs: Job[] = [
   }
 
   next() {
-    if (this.index + this.pageSize < this.jobs.length) {
+    if (this.index + this.pageSize < this.filteredJobList.length) {
       this.index += this.pageSize;
     }
   }
