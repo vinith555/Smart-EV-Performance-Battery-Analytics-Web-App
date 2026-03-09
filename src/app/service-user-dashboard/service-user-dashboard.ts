@@ -125,6 +125,22 @@ export class ServiceUserDashboard implements OnInit {
     this.isNotificationsVisible = !this.isNotificationsVisible;
   }
 
+  deleteNotification(notificationId: number, event?: Event) {
+    event?.stopPropagation();
+    this.apiService.deleteNotification(notificationId).subscribe({
+      next: (response) => {
+        if (response?.success) {
+          this.notifications = this.notifications.filter(
+            (notification) => notification.notification_id !== notificationId,
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error deleting notification:', error);
+      },
+    });
+  }
+
   toggleNavbar() {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }

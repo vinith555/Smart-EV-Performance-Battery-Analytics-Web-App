@@ -203,6 +203,22 @@ export class ApiService {
   }
 
   /**
+   * Delete a notification by id
+   * @param notificationId Notification ID
+   * @returns Observable with delete status
+   */
+  deleteNotification(notificationId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/delete-notification/${notificationId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+  }
+
+  /**
    * Refresh access token
    * @param refreshToken Refresh token
    * @returns Observable with new access token

@@ -135,6 +135,14 @@
             {{ n.priority }}
           </p>
         </div>
+        <button
+          type="button"
+          (click)="deleteNotification(n.notification_id, $event)"
+          class="flex-shrink-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg p-2 transition duration-300"
+          title="Delete notification"
+        >
+          <i class="fa-solid fa-trash-can text-sm"></i>
+        </button>
       </div>
     </div>
   </div>

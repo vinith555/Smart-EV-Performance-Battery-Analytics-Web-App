@@ -48,9 +48,15 @@ urlpatterns = [
         UserInfoView.UserDetailsByVehicle,
         name="user-details-by-vehicle",
     ),
+    # notification endpoints
     path(
         "get-notification-details/<int:user_id>/",
         NotificationView.NotificationDetails,
         name="notification-details",
+    ),
+    path(
+        "delete-notification/<int:notification_id>/",
+        NotificationView.DeleteNotification,
+        name="delete-notification",
     ),
 ]
