@@ -68,22 +68,8 @@ function checkRoleAccess(
       `Access denied. Required roles: ${expectedRoles}, User role: ${userRole}`,
     );
 
-    // Redirect based on actual role
-    switch (normalizedUserRole) {
-      case 'ADMIN':
-        router.navigate(['/']);
-        break;
-      case 'SERVICE':
-        router.navigate(['/service-user-dashboard']);
-        break;
-      case 'PERSONAL':
-        router.navigate(['/personal-user-dashboard']);
-        break;
-      default:
-        console.error('Unknown role:', userRole);
-        router.navigate(['/login']);
-        break;
-    }
+    // Redirect to 404 page when user tries to access unauthorized route
+    router.navigate(['/404']);
     return false;
   }
 

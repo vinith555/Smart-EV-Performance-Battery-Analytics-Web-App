@@ -14,6 +14,7 @@ import { Billing } from './service-user-dashboard/billing/billing';
 import { Profilepage } from './profilepage/profilepage';
 import { Contact } from './home-page/contact/contact';
 import { Helpsupport } from './helpsupport/helpsupport';
+import { NotFoundPage } from './not-found/not-found';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 
@@ -38,7 +39,7 @@ export const routes: Routes = [
   {
     path: 'personal-user-dashboard',
     component: PersonalUserDashboard,
-    // canActivate: [authGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['PERSONAL'] },
     children: [
       { path: '', component: Userdashboard },
@@ -48,7 +49,7 @@ export const routes: Routes = [
   {
     path: 'service-user-dashboard',
     component: ServiceUserDashboard,
-    // canActivate: [authGuard, roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['SERVICE'] },
     children: [
       { path: '', component: Suerdashboard },
@@ -57,4 +58,6 @@ export const routes: Routes = [
     ],
   },
   { path: 'help-support', component: Helpsupport },
+  { path: '404', component: NotFoundPage },
+  { path: '**', redirectTo: '/404' },
 ];
