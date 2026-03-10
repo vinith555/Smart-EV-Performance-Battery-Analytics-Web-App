@@ -16,9 +16,7 @@ export class RegisterPage {
     name: '',
     email: '',
     password: '',
-    password_confirm: '',
-    role: '',
-    performance: 0,
+    password_confirm: ''
   };
 
   showPassword = false;
