@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
@@ -108,12 +108,5 @@ export class LoginPage {
     } else {
       this.errorMessage = 'Please fill in all required fields correctly';
     }
-  }
-
-  /**
-   * Navigate to register page
-   */
-  goToRegister(): void {
-    this.router.navigate(['/register']);
   }
 }

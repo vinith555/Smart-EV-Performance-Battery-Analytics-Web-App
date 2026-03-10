@@ -21,12 +21,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(
         write_only=True, required=True, help_text="Confirm password must match password"
     )
-    role = serializers.ChoiceField(
-        choices=User.Role.choices,
-        default=User.Role.PERSONAL,
-        required=False,
-        help_text="User role: PERSONAL, SERVICE, or ADMIN",
-    )
 
     class Meta:
         model = User
@@ -35,12 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             "name",
             "password",
             "password_confirm",
-            "role",
-            "performance",
         )
         extra_kwargs = {
             "name": {"required": True, "help_text": "Full name of the user"},
-            "performance": {"required": False, "help_text": "Performance rating 0-10"},
         }
 
     def validate(self, data):
@@ -68,8 +59,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             name=validated_data["name"],
             password=validated_data["password"],
-            role=validated_data.get("role", User.Role.PERSONAL),
-            performance=validated_data.get("performance", 0),
         )
         return user
 

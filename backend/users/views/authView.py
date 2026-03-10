@@ -27,9 +27,7 @@ class RegisterView(APIView):
         "email": "user@example.com",
         "name": "John Doe",
         "password": "SecurePass123!",
-        "password_confirm": "SecurePass123!",
-        "role": "PERSONAL",
-        "performance": 5
+        "password_confirm": "SecurePass123!"
     }
 
     Returns JWT tokens and user details.

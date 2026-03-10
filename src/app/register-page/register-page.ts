@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register-page.html',
   styleUrls: ['./register-page.css'],
 })
@@ -16,7 +16,7 @@ export class RegisterPage {
     name: '',
     email: '',
     password: '',
-    password_confirm: ''
+    password_confirm: '',
   };
 
   showPassword = false;
@@ -116,12 +116,5 @@ export class RegisterPage {
         }
       },
     });
-  }
-
-  /**
-   * Navigate to login page
-   */
-  goToLogin(): void {
-    this.router.navigate(['/login']);
   }
 }
