@@ -10,6 +10,7 @@ from users.serializers.AuthSerializers import (
     LoginSerializer,
     RegisterSerializer,
     UserDetailSerializer,
+    UserUpdateSerializer,
     LogoutSerializer,
     PasswordChangeSerializer,
 )
@@ -247,6 +248,62 @@ class UserDetailView(APIView):
                 {
                     "success": False,
                     "message": "An error occurred while retrieving user details",
+                    "icon": "error",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class UpdateUserView(APIView):
+    """
+    API endpoint to update current user's profile details.
+
+    PATCH /api/auth/update-profile/
+    {
+        "name": "New Name",
+        "email": "newemail@example.com"
+    }
+
+    Requires JWT authentication.
+    """
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        """Update user profile details."""
+        try:
+            serializer = UserUpdateSerializer(
+                request.user, data=request.data, partial=True
+            )
+            if serializer.is_valid():
+                serializer.save()
+                logger.info(f"User profile updated: {request.user.email}")
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Profile updated successfully",
+                        "icon": "success",
+                        "data": UserDetailSerializer(request.user).data,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "Validation failed",
+                        "icon": "error",
+                        "errors": serializer.errors,
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        except Exception as e:
+            logger.error(f"Error updating user profile: {str(e)}")
+            return Response(
+                {
+                    "success": False,
+                    "message": "An error occurred while updating profile",
                     "icon": "error",
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

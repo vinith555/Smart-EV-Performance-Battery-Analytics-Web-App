@@ -63,6 +63,19 @@ export class ApiService {
   }
 
   /**
+   * Update current user's profile details (name, email)
+   * @param data Object with name and/or email fields
+   * @returns Observable with updated user data
+   */
+  updateUserProfile(data: { name?: string; email?: string; phone?: string; linkedin?: string; twitter?: string; facebook?: string; bio?: string }): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/auth/update-profile/`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
    * Change password
    * @param data Old and new password data
    * @returns Observable

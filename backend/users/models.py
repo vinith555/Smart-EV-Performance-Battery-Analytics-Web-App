@@ -65,6 +65,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     performance = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(10)], default=0
     )
+    phone = models.CharField(max_length=20, blank=True, default='')
+    linkedin = models.URLField(max_length=500, blank=True, default='')
+    twitter = models.URLField(max_length=500, blank=True, default='')
+    facebook = models.URLField(max_length=500, blank=True, default='')
+    bio = models.TextField(blank=True, default='')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     deactivated_at = models.DateTimeField(null=True, blank=True)

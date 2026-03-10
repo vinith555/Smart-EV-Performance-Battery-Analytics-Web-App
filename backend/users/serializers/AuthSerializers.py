@@ -113,6 +113,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "performance",
+            "phone",
+            "linkedin",
+            "twitter",
+            "facebook",
+            "bio",
         )
         read_only_fields = ("user_id",)
 
@@ -123,6 +128,21 @@ class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField(
         required=True, help_text="Refresh token to blacklist"
     )
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for updating user profile details."""
+
+    class Meta:
+        model = User
+        fields = ("name", "email", "phone", "linkedin", "twitter", "facebook", "bio")
+
+    def validate_email(self, value):
+        """Ensure email is not already taken by another user."""
+        user = self.instance
+        if User.objects.filter(email=value).exclude(pk=user.pk).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
 
 
 class PasswordChangeSerializer(serializers.Serializer):
