@@ -7,6 +7,7 @@ from .views import (
     IssuesView,
     UserInfoView,
     NotificationView,
+    BillViews,
 )
 from .views.authView import (
     RegisterView,
@@ -34,29 +35,27 @@ urlpatterns = [
         "auth/reset-password/", ResetUserPasswordView.as_view(), name="reset-password"
     ),
     # Data endpoints
-    
-    #Vehicle endpoints
+    # Vehicle endpoints
     path("get-vehicle-details/", VehicleViews.VehicleDetails, name="vehicle-details"),
-    
     # Charging endpoints
     path(
         "get-charging-details/",
         VehicleViews.GetChargingDetails,
         name="charging-details",
     ),
-    
     # Trip endpoints
     path("get-trip-details/", TripDetailsView.TripDetails, name="trip-details"),
-    
     # Service and Issue endpoints
     path("get-service-details/", ServiceView.ServiceDetails, name="service-details"),
     path("get-issue-details/", IssuesView.IssueDetails, name="issue-details"),
+    path("delete-issue/<int:issue_id>/", IssuesView.DeleteIssue, name="delete-issue"),
     path(
         "get-user-details-by-vehicle/",
         UserInfoView.UserDetailsByVehicle,
         name="user-details-by-vehicle",
     ),
-    
+    # Bill endpoints
+    path("get-bill-details/", BillViews.BillDetails, name="bill-details"),
     # notification endpoints
     path(
         "get-notification-details/<int:user_id>/",

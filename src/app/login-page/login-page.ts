@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   credentials = {
     email: '',
     password: '',
@@ -21,15 +21,35 @@ export class LoginPage {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  sessionExpiredMessage = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     // Check if already logged in
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/profile']);
     }
+  }
+
+  ngOnInit(): void {
+    // Check if redirected due to session expiry
+    this.route.queryParams.subscribe((params) => {
+      if (params['sessionExpired'] === 'true') {
+        this.sessionExpiredMessage =
+          'Your session has expired. Please log in again.';
+
+        // Clear the query parameter from URL
+        setTimeout(() => {
+          this.router.navigate([], {
+            queryParams: {},
+            replaceUrl: true,
+          });
+        }, 100);
+      }
+    });
   }
 
   /**
@@ -39,6 +59,7 @@ export class LoginPage {
     // Clear previous messages
     this.errorMessage = '';
     this.successMessage = '';
+    this.sessionExpiredMessage = '';
 
     if (form.valid) {
       this.isLoading = true;

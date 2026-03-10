@@ -5,6 +5,7 @@ from . import ServiceView
 from . import TripDetailsView
 from . import UserInfoView
 from . import NotificationView
+from . import BillViews
 from . import authView
 from .role_based_url_handler import RoleBasedUrlHandler, BaseHandler
 
@@ -17,6 +18,7 @@ __all__ = [
     "TripDetailsView",
     "UserInfoView",
     "NotificationView",
+    "BillViews",
     "authView",
     "RoleBasedUrlHandler",
     "BaseHandler",

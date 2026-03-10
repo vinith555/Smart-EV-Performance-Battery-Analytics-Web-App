@@ -178,6 +178,31 @@ export class ApiService {
   }
 
   /**
+   * Delete an issue by id
+   * @param issueId Issue ID to delete
+   * @returns Observable with delete status
+   */
+  deleteIssue(issueId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-issue/${issueId}/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
+   * Get bill details for current user
+   * @returns Observable with bill data
+   */
+  getBillDetails(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get-bill-details/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
    * Get user details by vehicle
    * @returns Observable with user and vehicle details
    */

@@ -19,6 +19,17 @@
 
       <!-- Login Form -->
       <div class="p-8">
+        <!-- Session Expired Message -->
+        <div
+          *ngIf="sessionExpiredMessage"
+          class="bg-amber-50 border-l-4 border-amber-500 text-amber-800 p-4 mb-6 rounded"
+        >
+          <div class="flex items-center">
+            <i class="fas fa-clock mr-2"></i>
+            <span>{{ sessionExpiredMessage }}</span>
+          </div>
+        </div>
+
         <!-- Error Message -->
         <div
           *ngIf="errorMessage"
