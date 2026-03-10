@@ -8,7 +8,9 @@
         <i class="fa-solid fa-list-check text-2xl text-emerald-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">5</p>
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : newTasksCount }}
+        </p>
         <div class="w-32">
           <apx-chart
             [series]="newTasksChartOptions.series!"
@@ -33,7 +35,9 @@
         <i class="fa-solid fa-spinner text-2xl text-blue-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">8</p>
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : inProgressCount }}
+        </p>
         <div class="w-32">
           <apx-chart
             [series]="inProgressChartOptions.series!"
@@ -58,7 +62,9 @@
         <i class="fa-solid fa-ban text-2xl text-yellow-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">2</p>
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : blockedCount }}
+        </p>
         <div class="w-32">
           <apx-chart
             [series]="blockedChartOptions.series!"
@@ -83,7 +89,9 @@
         <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">3</p>
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : overdueCount }}
+        </p>
         <div class="w-32">
           <apx-chart
             [series]="overdueChartOptions.series!"
@@ -112,11 +120,10 @@
           <tr class="">
             <th class="px-4 py-3 text-left">Task ID</th>
             <th class="px-4 py-3 text-left">Category</th>
-            <th class="px-4 py-3 text-left">Assigned To</th>
             <th class="px-4 py-3 text-left">Start</th>
             <th class="px-4 py-3 text-left">Deadline</th>
             <th class="px-4 py-3 text-left">Priority</th>
-            <th class="px-4 py-3 text-left">SLA</th>
+            <th class="px-4 py-3 text-left">SLA Status</th>
             <th class="px-4 py-3 text-left">Status</th>
             <th class="px-4 py-3 text-center">Actions</th>
           </tr>
@@ -132,13 +139,6 @@
               <input
                 type="text"
                 [(ngModel)]="filteredJobs.category"
-                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-              />
-            </th>
-            <th class="px-4 py-2">
-              <input
-                type="text"
-                [(ngModel)]="filteredJobs.assignedTo"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </th>
@@ -168,11 +168,7 @@
               </select>
             </th>
             <th class="px-4 py-2">
-              <input
-                type="text"
-                [(ngModel)]="filteredJobs.slaTime"
-                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-              />
+              <!-- No filter for SLA Status -->
             </th>
             <th class="px-4 py-2">
               <select
@@ -207,9 +203,8 @@
             </td>
 
             <td class="px-4 py-3">{{ job.category }}</td>
-            <td class="px-4 py-3">{{ job.assignedTo }}</td>
-            <td class="px-4 py-3">{{ job.start | date }}</td>
-            <td class="px-4 py-3">{{ job.deadLine | date }}</td>
+            <td class="px-4 py-3">{{ job.start | date : 'short' }}</td>
+            <td class="px-4 py-3">{{ job.deadLine | date : 'short' }}</td>
 
             <!-- Priority -->
             <td class="px-4 py-3">
@@ -221,23 +216,28 @@
                   'border-yellow-500 bg-yellow-100 text-yellow-700':
                     job.priority === 'Medium',
                   'border-green-500 bg-green-100 text-green-700':
-                    job.priority === 'Low',
+                    job.priority === 'Low'
                 }"
               >
                 {{ job.priority }}
               </span>
             </td>
 
-            <!-- SLA -->
-            <td
-              class="px-4 py-3 font-semibold"
-              [ngClass]="{
-                'text-green-600': job.slaStatus === 'On Track',
-                'text-yellow-600': job.slaStatus === 'At Risk',
-                'text-red-600': job.slaStatus === 'Breached',
-              }"
-            >
-              {{ job.slaTime }}
+            <!-- SLA Status -->
+            <td class="px-4 py-3">
+              <span
+                class="px-2 py-1 text-sm border rounded font-semibold"
+                [ngClass]="{
+                  'border-green-500 bg-green-100 text-green-700':
+                    job.slaStatus === 'On Track',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    job.slaStatus === 'At Risk',
+                  'border-red-500 bg-red-100 text-red-700':
+                    job.slaStatus === 'Breached'
+                }"
+              >
+                {{ job.slaStatus }}
+              </span>
             </td>
 
             <!-- Status -->
@@ -250,7 +250,7 @@
                   'border-yellow-500 bg-yellow-100 text-yellow-700':
                     job.status === 'In Progress',
                   'border-green-500 bg-green-100 text-green-700':
-                    job.status === 'Completed',
+                    job.status === 'Completed'
                 }"
               >
                 {{ job.status }}
@@ -291,7 +291,7 @@
       <button
         class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
         (click)="next()"
-        [disabled]="index >= jobs.length - pageSize"
+        [disabled]="index >= filteredJobList.length - pageSize"
       >
         Next <i class="fa-solid fa-caret-right"></i>
       </button>
@@ -340,10 +340,10 @@
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Start
+            Start Time
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].start }}
+            {{ formatDateTime(jobs[jobViewIndex].start) }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -351,7 +351,7 @@
             Deadline
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].deadLine }}
+            {{ formatDateTime(jobs[jobViewIndex].deadLine) }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -364,10 +364,10 @@
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Assigned To
+            Vehicle ID
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].assignedTo }}
+            {{ jobs[jobViewIndex].vehicleId }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -418,19 +418,19 @@
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
             SLA Status
           </p>
-          <p class="mt-1 text-sm font-semibold text-slate-800">
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-green-500 bg-green-100 text-green-700':
+                jobs[jobViewIndex].slaStatus === 'On Track',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                jobs[jobViewIndex].slaStatus === 'At Risk',
+              'border-red-500 bg-red-100 text-red-700':
+                jobs[jobViewIndex].slaStatus === 'Breached'
+            }"
+          >
             {{ jobs[jobViewIndex].slaStatus }}
-          </p>
-        </div>
-        <div
-          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2"
-        >
-          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Attachment
-          </p>
-          <p class="mt-1 text-sm font-semibold text-slate-800 break-all">
-            {{ jobs[jobViewIndex].attachment }}
-          </p>
+          </span>
         </div>
         <div
           class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2"
