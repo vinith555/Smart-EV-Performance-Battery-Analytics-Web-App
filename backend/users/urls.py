@@ -34,13 +34,21 @@ urlpatterns = [
         "auth/reset-password/", ResetUserPasswordView.as_view(), name="reset-password"
     ),
     # Data endpoints
+    
+    #Vehicle endpoints
     path("get-vehicle-details/", VehicleViews.VehicleDetails, name="vehicle-details"),
+    
+    # Charging endpoints
     path(
         "get-charging-details/",
         VehicleViews.GetChargingDetails,
         name="charging-details",
     ),
+    
+    # Trip endpoints
     path("get-trip-details/", TripDetailsView.TripDetails, name="trip-details"),
+    
+    # Service and Issue endpoints
     path("get-service-details/", ServiceView.ServiceDetails, name="service-details"),
     path("get-issue-details/", IssuesView.IssueDetails, name="issue-details"),
     path(
@@ -48,6 +56,7 @@ urlpatterns = [
         UserInfoView.UserDetailsByVehicle,
         name="user-details-by-vehicle",
     ),
+    
     # notification endpoints
     path(
         "get-notification-details/<int:user_id>/",

@@ -1,552 +1,767 @@
 <div class="flex flex-col gap-y-8">
-    <section class="sticky top-24 z-5 flex gap-x-4 justify-center w-full">
-      <div class="w-1/2 h-12 relative">
-        <input type="search" class="rounded-l-full h-full px-6 w-full bg-white shadow focus:outline-none focus:ring-2 focus:ring-green-200" placeholder="Enter The Vehicle Number">
-        <button class="absolute top-0 bottom-0 rounded-r-full bg-green-500 w-12"><i class="text-white font-semibold fa-solid fa-magnifying-glass search-icon"></i></button>
-      </div>
-    </section>
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-        <div class=" bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-          <div class="h-full flex flex-col md:flex-row">
+  <section class="sticky top-24 z-5 flex gap-x-4 justify-center w-full">
+    <div class="w-1/2 h-12 relative">
+      <input
+        type="search"
+        class="rounded-l-full h-full px-6 w-full bg-white shadow focus:outline-none focus:ring-2 focus:ring-green-200"
+        placeholder="Enter The Vehicle Number"
+      />
+      <button class="absolute top-0 bottom-0 rounded-r-full bg-green-500 w-12">
+        <i
+          class="text-white font-semibold fa-solid fa-magnifying-glass search-icon"
+        ></i>
+      </button>
+    </div>
+  </section>
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+    >
+      <div class="h-full flex flex-col md:flex-row">
+        <!-- LEFT SECTION -->
+        <div
+          class="md:w-1/3 bg-slate-50 p-6 flex flex-col items-center justify-center border-r border-gray-200"
+        >
+          <img
+            src="https://randomuser.me/api/portraits/men/44.jpg"
+            class="w-24 h-24 rounded-full object-cover shadow-md"
+          />
 
-            <!-- LEFT SECTION -->
-            <div class="md:w-1/3 bg-slate-50 p-6 flex flex-col items-center justify-center border-r border-gray-200">
+          <h2 class="mt-4 text-lg font-bold text-gray-800">John Doe</h2>
+          <p class="text-sm text-gray-500">Vehicle Owner</p>
 
-              <img 
-                src="https://randomuser.me/api/portraits/men/44.jpg"
-                class="w-24 h-24 rounded-full object-cover shadow-md"
-              />
-
-              <h2 class="mt-4 text-lg font-bold text-gray-800">John Doe</h2>
-              <p class="text-sm text-gray-500">Vehicle Owner</p>
-
-              <div class="mt-4 text-center">
-                <span class="inline-block px-3 py-1 text-xs rounded-full bg-green-100 text-green-600 font-medium">
-                  Active Owner
-                </span>
-              </div>
-            </div>
-
-            <!-- RIGHT SECTION -->
-            <div class="md:w-2/3 p-6">
-
-              <h3 class="text-md font-semibold text-gray-700 mb-4">
-                Owner Information
-              </h3>
-
-              <div class="grid grid-cols-1 gap-6 text-sm">
-
-                <div>
-                  <p class="text-gray-400">Contact Number</p>
-                  <p class="font-medium text-gray-800">+1 (555) 234-7890</p>
-                </div>
-
-                <div>
-                  <p class="text-gray-400">Email Address</p>
-                  <p class="font-medium text-gray-800 break-all">
-                    johndoe@email.com
-                  </p>
-                </div>
-
-                <div>
-                  <p class="text-gray-400">Vehicle</p>
-                  <p class="font-medium text-gray-800">
-                    Tata Nexon EV Max
-                  </p>
-                </div>
-
-                <div>
-                  <p class="text-gray-400">Battery Warranty</p>
-                  <p class="font-medium text-gray-800">
-                    8 Years / 160,000 km
-                  </p>
-                </div>
-
-                <div>
-                  <p class="text-gray-400">Insurance</p>
-                  <p class="font-medium text-green-600">
-                    Comprehensive (Valid till Aug 2026)
-                  </p>
-                </div>
-
-                <div>
-                  <p class="text-gray-400">Service Package</p>
-                  <p class="font-medium text-indigo-600">
-                    EV Care Plus (5 Years)
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-
+          <div class="mt-4 text-center">
+            <span
+              class="inline-block px-3 py-1 text-xs rounded-full bg-green-100 text-green-600 font-medium"
+            >
+              Active Owner
+            </span>
           </div>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-md">
-            <h2 class="text-xl font-semibold">Vehicle Information</h2>
-            <div class="grid grid-cols-2 gap-4 place-items-center py-6">
 
-                <div
-                class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start
-                        transition-all hover:-translate-y-1 hover:shadow-xl"
-                >
-                <i class="fa-solid fa-id-card text-slate-700"></i>
-                <p class="text-sm font-medium text-gray-500">Vehicle Number</p>
-                <p class="text-lg font-semibold text-slate-700">VH-10234</p>
-                </div>
+        <!-- RIGHT SECTION -->
+        <div class="md:w-2/3 p-6">
+          <h3 class="text-md font-semibold text-gray-700 mb-4">
+            Owner Information
+          </h3>
 
-                <div class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-car text-green-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Model</p>
-                    <p class="text-lg font-semibold text-green-500">Demo Cars</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-battery-half text-blue-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Battery Capacity</p>
-                    <p class="text-lg font-semibold text-blue-500">50 kWh</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-road text-purple-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Range</p>
-                    <p class="text-lg font-semibold text-purple-500">250 miles</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-charging-station text-orange-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Charging Time</p>
-                    <p class="text-lg font-semibold text-orange-500">8 hours (Level 2)</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fa-solid fa-palette text-teal-600"></i>
-                    <p class="text-sm font-medium text-gray-500">Color</p>
-                    <p class="text-lg font-semibold text-teal-500">Red</p>
-                </div>
-
+          <div class="grid grid-cols-1 gap-6 text-sm">
+            <div>
+              <p class="text-gray-400">Contact Number</p>
+              <p class="font-medium text-gray-800">+1 (555) 234-7890</p>
             </div>
 
-        </div>
-         <div class="bg-white rounded-xl shadow-md p-4">
-            <h2 class="text-xl font-semibold">EV Status</h2>
-            <div class="grid grid-cols-2 gap-4 place-items-center py-6">
-
-                <div
-                class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start
-                        transition-all hover:-translate-y-1 hover:shadow-xl"
-                >
-                <i class="fa-solid fa-battery-half text-slate-700"></i>
-                <p class="text-sm font-medium text-gray-500">Battery Percentage %</p>
-                <p class="text-lg font-semibold text-slate-700">75%</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-gauge text-green-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Odometer Reading</p>
-                    <p class="text-lg font-semibold text-green-500">12345 km</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-truck text-blue-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Tire Pressure</p>
-                    <p class="text-lg font-semibold text-blue-500">50 psi</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-thermometer text-purple-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Battery Temperature</p>
-                    <p class="text-lg font-semibold text-purple-500">34 *c</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fas fa-bolt text-orange-600 text-xl"></i>
-                    <p class="text-sm font-medium text-gray-500">Enery Consumption</p>
-                    <p class="text-lg font-semibold text-orange-500">15 kwh/100 km</p>
-                </div>
-
-                <div class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl">
-                    <i class="fa-solid fa-shield-alt text-teal-600"></i>
-                    <p class="text-sm font-medium text-gray-500">Security Status</p>
-                    <p class="text-lg font-semibold text-teal-500">Armed</p>
-                </div>
-
+            <div>
+              <p class="text-gray-400">Email Address</p>
+              <p class="font-medium text-gray-800 break-all">
+                johndoe@email.com
+              </p>
             </div>
-         </div>
-    </section>
-    <section class="w-full rounded-lg bg-white p-4 shadow-md">
-      <h2 class="text-xl font-semibold">Vehicle Issues & Faults</h2>
 
-      <div class="overflow-x-auto mt-4">
-        <table class="min-w-full">
-          <thead class="text-gray-500 text-sm uppercase border-b border-gray-200">
-            <tr class="">
-              <th class="px-4 py-3 text-left">Issue ID</th>
-              <th class="px-4 py-3 text-left">Vehicle No</th>
-              <th class="px-4 py-3 text-left">Category</th>
-              <th class="px-4 py-3 text-left">Description</th>
-              <th class="px-4 py-3 text-left">Detected On</th>
-              <th class="px-4 py-3 text-left">Priority</th>
-              <th class="px-4 py-3 text-left">Status</th>
-              <th class="px-4 py-3 text-center">Actions</th>
-            </tr>
-            <tr class="normal-case">
-              <th class="px-4 py-2">
-                <input
-                  [(ngModel)]="vehiclefilterValues.issueId"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2">
-                <input
-                  [(ngModel)]="vehiclefilterValues.vehicleNo"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2">
-                <input
-                  [(ngModel)]="vehiclefilterValues.Category"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2">
-                <input
-                  [(ngModel)]="vehiclefilterValues.description"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2">
-                <input
-                  [(ngModel)]="vehiclefilterValues.dateReported"
-                  type="date"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2">
-                <select
-                  [(ngModel)]="vehiclefilterValues.priority"
-                  name="priorityFilter"
-                  id="priorityFilter"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                >
-                  <option value="">All Priorities</option>
-                  <option value="Low">Low</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
-                </select>
-              </th>
-              <th class="px-4 py-2">
-                <select
-                  [(ngModel)]="vehiclefilterValues.status"
-                  name="statusFilter"
-                  id="statusFilter"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                >
-                  <option value="">All Statuses</option>
-                  <option value="Open">Open</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Resolved">Resolved</option>
-                </select>
-              </th>
-              <th class="px-4 py-2 text-center">
-                <button
-                        (click)="clearIssueFilters()"
-                        class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200">
+            <div>
+              <p class="text-gray-400">Vehicle</p>
+              <p class="font-medium text-gray-800">Tata Nexon EV Max</p>
+            </div>
 
-                        <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
-                        Clear
-                    </button>
-              </th>
-            </tr>
-          </thead>
+            <div>
+              <p class="text-gray-400">Battery Warranty</p>
+              <p class="font-medium text-gray-800">8 Years / 160,000 km</p>
+            </div>
 
-          <tbody class="divide-y">
-            <tr
-              *ngFor="let issue of paginatedIssues; let i = index"
-              class="hover:bg-gray-50 border-b border-gray-200"
-            >
-              <td class="px-4 py-3 text-blue-600 font-medium">
-                {{ issue.issueId }}
-              </td>
+            <div>
+              <p class="text-gray-400">Insurance</p>
+              <p class="font-medium text-green-600">
+                Comprehensive (Valid till Aug 2026)
+              </p>
+            </div>
 
-              <td class="px-4 py-3">{{ issue.vehicleNo }}</td>
-              <td class="px-4 py-3 font-mono">{{ issue.Category }}</td>
-
-              <td class="px-4 py-3 max-w-xs truncate" title="{{ issue.description }}">
-                {{ issue.description }}
-              </td>
-
-              <td class="px-4 py-3">{{ issue.dateReported }}</td>
-
-              <td class="px-4 py-3">
-                <span
-                  class="px-2 py-1 text-sm border rounded"
-                  [ngClass]="{
-                    'border-red-500 bg-red-100 text-red-700': issue.priority === 'High',
-                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.priority === 'Medium',
-                    'border-green-500 bg-green-100 text-green-700': issue.priority === 'Low'
-                  }"
-                >
-                  {{ issue.priority }}
-                </span>
-              </td>
-
-              <td class="px-4 py-3">
-                <span
-                  class="px-2 py-1 text-sm border rounded"
-                  [ngClass]="{
-                    'border-green-500 bg-green-100 text-green-700': issue.status === 'Resolved',
-                    'border-yellow-500 bg-yellow-100 text-yellow-700': issue.status === 'In Progress',
-                    'border-red-500 bg-red-100 text-red-700': issue.status === 'Open'
-                  }"
-                >
-                  {{ issue.status }}
-                </span>
-              </td>
-
-              <td class="px-4 py-3 text-center space-x-2">
-                <button class="text-blue-600 hover:text-blue-700" title="View" (click)="issueViewIndex = i; issueViewBox = true;">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-                <button class="text-orange-600 hover:text-orange-700" title="Action" (click)="issueActionindex = i; issueactionForm = true;">
-                  <i class="fa-solid fa-screwdriver-wrench"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <div>
+              <p class="text-gray-400">Service Package</p>
+              <p class="font-medium text-indigo-600">EV Care Plus (5 Years)</p>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- Pagination -->
-      <div class="flex justify-between my-4">
-        <button
-          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-          (click)="previous2()"
-          [disabled]="index2 <= 0"
-        >
-          <i class="fa-solid fa-caret-left"></i> Prev
-        </button>
-
-        <button
-          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-          (click)="next2()"
-          [disabled]="index2 + pageSize >= filteredIssues.length"
-        >
-          Next <i class="fa-solid fa-caret-right"></i>
-        </button>
-      </div>
-    </section>
-</div>
-<div *ngIf="issueViewBox" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
-    <div class="overflow-x-auto flex flex-col gap-y-1 bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4">
-        <div class="flex justify-start">
-            <button (click)="issueViewBox = !issueViewBox" class="border-2 border-gray-300 hover:border-gray-700 rounded"><i class="text-gray-500 fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="min-w-[350px] w-auto">
-        <div class="flex justify-between">
-            <p>Issue ID:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].issueId}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Vehicle NO:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].vehicleNo}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Category:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].Category}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Description:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].description}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Date Reported:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].dateReported}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Date Completed:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].dateCompleted}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Assigned To:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].assignedTo}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Assigned By:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].assignedBy}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Priority:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].priority}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Status:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].status}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Cost Of Issue:</p><p class="ml-4 font-semibold">{{issues[issueViewIndex].costofIssue}}</p>
-        </div>
-        <div>
-            <p>Notes:</p>
-            <textarea name="" id="" class="w-full border-2 border-gray-500 rounded p-2">{{issues[issueViewIndex].notes}}</textarea>
-        </div>
-        </div>
     </div>
+    <div class="bg-white p-4 rounded-xl shadow-md">
+      <h2 class="text-xl font-semibold">Vehicle Information</h2>
+      <div class="grid grid-cols-2 gap-4 place-items-center py-6">
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fa-solid fa-id-card text-slate-700"></i>
+          <p class="text-sm font-medium text-gray-500">Vehicle Number</p>
+          <p class="text-lg font-semibold text-slate-700">VH-10234</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-car text-green-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Model</p>
+          <p class="text-lg font-semibold text-green-500">Demo Cars</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-battery-half text-blue-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Battery Capacity</p>
+          <p class="text-lg font-semibold text-blue-500">50 kWh</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-road text-purple-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Range</p>
+          <p class="text-lg font-semibold text-purple-500">250 miles</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-charging-station text-orange-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Charging Time</p>
+          <p class="text-lg font-semibold text-orange-500">8 hours (Level 2)</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fa-solid fa-palette text-teal-600"></i>
+          <p class="text-sm font-medium text-gray-500">Color</p>
+          <p class="text-lg font-semibold text-teal-500">Red</p>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <h2 class="text-xl font-semibold">EV Status</h2>
+      <div class="grid grid-cols-2 gap-4 place-items-center py-6">
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fa-solid fa-battery-half text-slate-700"></i>
+          <p class="text-sm font-medium text-gray-500">Battery Percentage %</p>
+          <p class="text-lg font-semibold text-slate-700">75%</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-gauge text-green-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Odometer Reading</p>
+          <p class="text-lg font-semibold text-green-500">12345 km</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-truck text-blue-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Tire Pressure</p>
+          <p class="text-lg font-semibold text-blue-500">50 psi</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-thermometer text-purple-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Battery Temperature</p>
+          <p class="text-lg font-semibold text-purple-500">34 *c</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fas fa-bolt text-orange-600 text-xl"></i>
+          <p class="text-sm font-medium text-gray-500">Enery Consumption</p>
+          <p class="text-lg font-semibold text-orange-500">15 kwh/100 km</p>
+        </div>
+
+        <div
+          class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+        >
+          <i class="fa-solid fa-shield-alt text-teal-600"></i>
+          <p class="text-sm font-medium text-gray-500">Security Status</p>
+          <p class="text-lg font-semibold text-teal-500">Armed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="w-full rounded-lg bg-white p-4 shadow-md">
+    <h2 class="text-xl font-semibold">Vehicle Issues & Faults</h2>
+
+    <div class="overflow-x-auto mt-4">
+      <table class="min-w-full">
+        <thead class="text-gray-500 text-sm uppercase border-b border-gray-200">
+          <tr class="">
+            <th class="px-4 py-3 text-left">Issue ID</th>
+            <th class="px-4 py-3 text-left">Vehicle No</th>
+            <th class="px-4 py-3 text-left">Category</th>
+            <th class="px-4 py-3 text-left">Description</th>
+            <th class="px-4 py-3 text-left">Detected On</th>
+            <th class="px-4 py-3 text-left">Priority</th>
+            <th class="px-4 py-3 text-left">Status</th>
+            <th class="px-4 py-3 text-center">Actions</th>
+          </tr>
+          <tr class="normal-case">
+            <th class="px-4 py-2">
+              <input
+                [(ngModel)]="vehiclefilterValues.issueId"
+                type="text"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2">
+              <input
+                [(ngModel)]="vehiclefilterValues.vehicleNo"
+                type="text"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2">
+              <input
+                [(ngModel)]="vehiclefilterValues.Category"
+                type="text"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2">
+              <input
+                [(ngModel)]="vehiclefilterValues.description"
+                type="text"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2">
+              <input
+                [(ngModel)]="vehiclefilterValues.dateReported"
+                type="date"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2">
+              <select
+                [(ngModel)]="vehiclefilterValues.priority"
+                name="priorityFilter"
+                id="priorityFilter"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              >
+                <option value="">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </th>
+            <th class="px-4 py-2">
+              <select
+                [(ngModel)]="vehiclefilterValues.status"
+                name="statusFilter"
+                id="statusFilter"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              >
+                <option value="">All Statuses</option>
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </th>
+            <th class="px-4 py-2 text-center">
+              <button
+                (click)="clearIssueFilters()"
+                class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
+                Clear
+              </button>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y">
+          <tr
+            *ngFor="let issue of paginatedIssues; let i = index"
+            class="hover:bg-gray-50 border-b border-gray-200"
+          >
+            <td class="px-4 py-3 text-blue-600 font-medium">
+              {{ issue.issueId }}
+            </td>
+
+            <td class="px-4 py-3">{{ issue.vehicleNo }}</td>
+            <td class="px-4 py-3 font-mono">{{ issue.Category }}</td>
+
+            <td
+              class="px-4 py-3 max-w-xs truncate"
+              title="{{ issue.description }}"
+            >
+              {{ issue.description }}
+            </td>
+
+            <td class="px-4 py-3">{{ issue.dateReported }}</td>
+
+            <td class="px-4 py-3">
+              <span
+                class="px-2 py-1 text-sm border rounded"
+                [ngClass]="{
+                  'border-red-500 bg-red-100 text-red-700':
+                    issue.priority === 'High',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    issue.priority === 'Medium',
+                  'border-green-500 bg-green-100 text-green-700':
+                    issue.priority === 'Low',
+                }"
+              >
+                {{ issue.priority }}
+              </span>
+            </td>
+
+            <td class="px-4 py-3">
+              <span
+                class="px-2 py-1 text-sm border rounded"
+                [ngClass]="{
+                  'border-green-500 bg-green-100 text-green-700':
+                    issue.status === 'Resolved',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    issue.status === 'In Progress',
+                  'border-red-500 bg-red-100 text-red-700':
+                    issue.status === 'Open',
+                }"
+              >
+                {{ issue.status }}
+              </span>
+            </td>
+
+            <td class="px-4 py-3 text-center space-x-2">
+              <button
+                class="text-blue-600 hover:text-blue-700"
+                title="View"
+                (click)="issueViewIndex = i; issueViewBox = true"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button
+                class="text-orange-600 hover:text-orange-700"
+                title="Action"
+                (click)="issueActionindex = i; issueactionForm = true"
+              >
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between my-4">
+      <button
+        class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+        (click)="previous2()"
+        [disabled]="index2 <= 0"
+      >
+        <i class="fa-solid fa-caret-left"></i> Prev
+      </button>
+
+      <button
+        class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+        (click)="next2()"
+        [disabled]="index2 + pageSize >= filteredIssues.length"
+      >
+        Next <i class="fa-solid fa-caret-right"></i>
+      </button>
+    </div>
+  </section>
 </div>
-<div *ngIf="issueactionForm" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
-    <form
+<div
+  *ngIf="issueViewBox"
+  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-slate-900/55 backdrop-blur-sm z-30 p-4"
+>
+  <div
+    class="w-full max-w-3xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden"
+  >
+    <div
+      class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-emerald-50 to-teal-50"
+    >
+      <div>
+        <h3 class="text-lg font-semibold text-slate-800">
+          Vehicle Issue Details
+        </h3>
+        <p class="text-xs text-slate-500">
+          Complete fault record for this vehicle
+        </p>
+      </div>
+      <button
+        (click)="issueViewBox = !issueViewBox"
+        class="h-9 w-9 rounded-full border border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400 hover:bg-white transition"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-5 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Issue ID
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].issueId }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Vehicle No
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].vehicleNo }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Category
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].Category }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Cost of Issue
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].costofIssue }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Date Reported
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].dateReported }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Date Completed
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].dateCompleted }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Assigned To
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].assignedTo }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Assigned By
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ issues[issueViewIndex].assignedBy }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Priority
+          </p>
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-red-500 bg-red-100 text-red-700':
+                issues[issueViewIndex].priority === 'High',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                issues[issueViewIndex].priority === 'Medium',
+              'border-green-500 bg-green-100 text-green-700':
+                issues[issueViewIndex].priority === 'Low',
+            }"
+          >
+            {{ issues[issueViewIndex].priority }}
+          </span>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Status
+          </p>
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-green-500 bg-green-100 text-green-700':
+                issues[issueViewIndex].status === 'Resolved',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                issues[issueViewIndex].status === 'In Progress',
+              'border-red-500 bg-red-100 text-red-700':
+                issues[issueViewIndex].status === 'Open',
+            }"
+          >
+            {{ issues[issueViewIndex].status }}
+          </span>
+        </div>
+        <div
+          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2"
+        >
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Description
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800 break-words">
+            {{ issues[issueViewIndex].description }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p
+          class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-2"
+        >
+          Notes
+        </p>
+        <textarea
+          name=""
+          id=""
+          readonly
+          class="w-full min-h-24 border border-slate-300 rounded-lg p-3 bg-white text-slate-700 focus:outline-none"
+          >{{ issues[issueViewIndex].notes }}</textarea
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="issueactionForm"
+  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-slate-900/55 backdrop-blur-sm z-30 p-4"
+>
+  <form
     #form="ngForm"
     (ngSubmit)="issueUpdatedData(form)"
-    class="bg-white
-           shadow shadow-gray-300 border-2 border-gray-200
-           rounded-md p-4"
+    class="w-full max-w-3xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden"
+  >
+    <div
+      class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-emerald-50 to-teal-50"
     >
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 w-full max-w-md sm:max-w-xl h-96 overflow-y-auto">
-    <div>
-      <p class="font-semibold">Issue ID</p>
-      <input
-        type="text"
-        name="issueId"
-        [(ngModel)] = "issues[issueActionindex].issueId"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Vehicle NO</p>
-      <input
-        type="text"
-        name="vehicleNo"
-        [(ngModel)] = "issues[issueActionindex].vehicleNo"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Category</p>
-      <input
-        type="text"
-        name="Category"
-        [(ngModel)] = "issues[issueActionindex].Category"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Description</p>
-      <input
-        type="text"
-        name="description"
-        [(ngModel)] = "issues[issueActionindex].description"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Date Reported</p>
-      <input
-        type="date"
-        name="startDate"
-        [(ngModel)] = "issues[issueActionindex].dateReported"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Date Completed</p>
-      <input
-        type="date"
-        name="endDate"
-        [(ngModel)] = "issues[issueActionindex].dateCompleted"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Assigned To</p>
-      <input
-        type="text"
-        name="assignedTo"
-        [(ngModel)] = "issues[issueActionindex].assignedTo"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Assigned By</p>
-      <input
-        type="text"
-        name="assignedBy"
-        [(ngModel)] = "issues[issueActionindex].assignedBy"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Priority</p>
-      <select
-        name="priority"
-        [(ngModel)] = "issues[issueActionindex].priority"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+      <div>
+        <h3 class="text-lg font-semibold text-slate-800">Edit Vehicle Issue</h3>
+        <p class="text-xs text-slate-500">Update fault details and progress</p>
+      </div>
+      <button
+        type="button"
+        (click)="issueactionForm = !issueactionForm"
+        class="h-9 w-9 rounded-full border border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400 hover:bg-white transition"
       >
-        <option value="">Select</option>
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
 
-    <div>
-      <p class="font-semibold">Status</p>
-      <select
-        name="status"
-        [(ngModel)] = "issues[issueActionindex].status"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
+    <div class="p-5 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Issue ID
+          </p>
+          <input
+            type="text"
+            name="issueId"
+            [(ngModel)]="issues[issueActionindex].issueId"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Vehicle NO
+          </p>
+          <input
+            type="text"
+            name="vehicleNo"
+            [(ngModel)]="issues[issueActionindex].vehicleNo"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Category
+          </p>
+          <input
+            type="text"
+            name="Category"
+            [(ngModel)]="issues[issueActionindex].Category"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Description
+          </p>
+          <input
+            type="text"
+            name="description"
+            [(ngModel)]="issues[issueActionindex].description"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Date Reported
+          </p>
+          <input
+            type="date"
+            name="startDate"
+            [(ngModel)]="issues[issueActionindex].dateReported"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Date Completed
+          </p>
+          <input
+            type="date"
+            name="endDate"
+            [(ngModel)]="issues[issueActionindex].dateCompleted"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Assigned To
+          </p>
+          <input
+            type="text"
+            name="assignedTo"
+            [(ngModel)]="issues[issueActionindex].assignedTo"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Assigned By
+          </p>
+          <input
+            type="text"
+            name="assignedBy"
+            [(ngModel)]="issues[issueActionindex].assignedBy"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Priority
+          </p>
+          <select
+            name="priority"
+            [(ngModel)]="issues[issueActionindex].priority"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          >
+            <option value="">Select</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Status
+          </p>
+          <select
+            name="status"
+            [(ngModel)]="issues[issueActionindex].status"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          >
+            <option value="">Select</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Cost Of Issue
+          </p>
+          <input
+            type="number"
+            name="costofIssue"
+            [(ngModel)]="issues[issueActionindex].costofIssue"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          />
+        </div>
+
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Attachment
+          </p>
+          <input
+            type="file"
+            name="attachment"
+            [(ngModel)]="issues[issueActionindex].attachment"
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none"
+          />
+        </div>
+
+        <div class="sm:col-span-2">
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Notes
+          </p>
+          <textarea
+            name="notes"
+            [(ngModel)]="issues[issueActionindex].notes"
+            class="w-full h-24 border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
+          >
+          </textarea>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex justify-end gap-3 px-5 py-4 border-t border-slate-200 bg-slate-50"
+    >
+      <button
+        type="button"
+        (click)="issueactionForm = !issueactionForm"
+        class="px-4 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
       >
-        <option value="">Select</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Resolved">Resolved</option>
-      </select>
-    </div>
-
-    <div>
-      <p class="font-semibold">Cost Of Issue</p>
-      <input
-        type="number"
-        name="costofIssue"
-        [(ngModel)] = "issues[issueActionindex].costofIssue"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div>
-      <p class="font-semibold">Attachment</p>
-      <input
-        type="file"
-        name="attachment"
-        [(ngModel)] = "issues[issueActionindex].attachment"
-        class="w-full border-2 border-gray-300 rounded bg-white p-1"
-      />
-    </div>
-
-    <div class="sm:col-span-2">
-      <p class="font-semibold">Notes</p>
-      <textarea
-        name="notes"
-        [(ngModel)] = "issues[issueActionindex].notes"
-        class="w-full h-24 border-2 border-gray-300 rounded bg-white p-1"
-      >
-      </textarea>
-    </div>
-    </div>
-    <div class="sm:col-span-2 flex justify-between mt-2">
-      <button type="button" (click)="issueactionForm = !issueactionForm"
-      class="px-3 py-1.5 rounded-full bg-red-100 text-red-600 border-2 border-red-300 hover:text-white
-               hover:bg-red-700 transition"
-        >
         <i class="fa-solid fa-xmark"></i> Cancel
       </button>
       <button
         type="submit"
-        class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-600 border-2 border-blue-300 hover:text-white
-               hover:bg-blue-700 transition"
+        class="px-4 py-2 rounded-lg bg-emerald-600 text-white border border-emerald-700 hover:bg-emerald-700 transition"
       >
-       <i class="fa-solid fa-pen-to-square"></i> Update
+        <i class="fa-solid fa-pen-to-square"></i> Update
       </button>
     </div>
   </form>
