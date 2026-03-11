@@ -115,48 +115,58 @@
       <div class="flex gap-x-2 text-lg"></div>
     </div>
     <div class="overflow-x-auto mt-4">
-      <table class="min-w-full">
-        <thead class="text-gray-500 text-sm uppercase border-b border-gray-200">
-          <tr class="">
-            <th class="px-4 py-3 text-left">Task ID</th>
-            <th class="px-4 py-3 text-left">Category</th>
-            <th class="px-4 py-3 text-left">Start</th>
-            <th class="px-4 py-3 text-left">Deadline</th>
-            <th class="px-4 py-3 text-left">Priority</th>
-            <th class="px-4 py-3 text-left">SLA Status</th>
-            <th class="px-4 py-3 text-left">Status</th>
-            <th class="px-4 py-3 text-center">Actions</th>
+      <table class="w-full min-w-[1100px] table-auto">
+        <thead class="text-gray-500 border-b border-gray-200">
+          <tr class="text-sm uppercase">
+            <th class="px-4 py-3 text-left w-[110px]">Task ID</th>
+            <th class="px-4 py-3 text-left w-[160px]">Vehicle</th>
+            <th class="px-4 py-3 text-left w-[120px]">Reg No</th>
+            <th class="px-4 py-3 text-left w-[130px]">Start</th>
+            <th class="px-4 py-3 text-left w-[130px]">Deadline</th>
+            <th class="px-4 py-3 text-left w-[100px]">Priority</th>
+            <th class="px-4 py-3 text-left w-[110px]">SLA Status</th>
+            <th class="px-4 py-3 text-left w-[110px]">Status</th>
+            <th class="px-4 py-3 text-center w-[90px]">Actions</th>
           </tr>
-          <tr>
-            <th class="px-4 py-2">
+          <tr class="normal-case">
+            <th class="px-4 py-2 w-[110px]">
               <input
                 type="text"
                 [(ngModel)]="filteredJobs.taskId"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[160px]">
               <input
                 type="text"
                 [(ngModel)]="filteredJobs.category"
+                placeholder="Search model..."
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[120px]">
+              <input
+                type="text"
+                [(ngModel)]="filteredJobs.registrationNumber"
+                placeholder="Search reg no..."
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[130px]">
               <input
                 type="date"
                 [(ngModel)]="filteredJobs.startDate"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[130px]">
               <input
                 type="date"
                 [(ngModel)]="filteredJobs.endDate"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[100px]">
               <select
                 [(ngModel)]="filteredJobs.priority"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
@@ -167,10 +177,10 @@
                 <option value="High">High</option>
               </select>
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[110px]">
               <!-- No filter for SLA Status -->
             </th>
-            <th class="px-4 py-2">
+            <th class="px-4 py-2 w-[110px]">
               <select
                 [(ngModel)]="filteredJobs.status"
                 class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
@@ -181,7 +191,7 @@
                 <option value="Completed">Completed</option>
               </select>
             </th>
-            <th class="px-4 py-2 text-center">
+            <th class="px-4 py-2 w-[90px] text-center">
               <button
                 (click)="clearJobFilters()"
                 class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200"
@@ -193,30 +203,42 @@
           </tr>
         </thead>
 
-        <tbody class="divide-y">
+        <tbody class="divide-y text-sm">
           <tr
             *ngFor="let job of paginatedJobs; let i = index"
             class="hover:bg-gray-50 border-b border-gray-200"
           >
-            <td class="px-4 py-3 text-blue-600 font-medium">
+            <td class="px-4 py-2.5 text-blue-600 font-medium whitespace-nowrap">
               {{ job.taskId }}
             </td>
 
-            <td class="px-4 py-3">{{ job.category }}</td>
-            <td class="px-4 py-3">{{ job.start | date : 'short' }}</td>
-            <td class="px-4 py-3">{{ job.deadLine | date : 'short' }}</td>
+            <td
+              class="px-4 py-2.5 max-w-[10rem] truncate"
+              [title]="job.vehicleModel"
+            >
+              {{ job.vehicleModel }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap font-mono">
+              {{ job.registrationNumber }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap">
+              {{ job.start | date: "short" }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap">
+              {{ job.deadLine | date: "short" }}
+            </td>
 
             <!-- Priority -->
-            <td class="px-4 py-3">
+            <td class="px-4 py-2.5">
               <span
-                class="px-2 py-1 text-sm border rounded"
+                class="px-2 py-1 text-xs border rounded whitespace-nowrap"
                 [ngClass]="{
                   'border-red-500 bg-red-100 text-red-700':
                     job.priority === 'High',
                   'border-yellow-500 bg-yellow-100 text-yellow-700':
                     job.priority === 'Medium',
                   'border-green-500 bg-green-100 text-green-700':
-                    job.priority === 'Low'
+                    job.priority === 'Low',
                 }"
               >
                 {{ job.priority }}
@@ -224,16 +246,16 @@
             </td>
 
             <!-- SLA Status -->
-            <td class="px-4 py-3">
+            <td class="px-4 py-2.5">
               <span
-                class="px-2 py-1 text-sm border rounded font-semibold"
+                class="px-2 py-1 text-xs border rounded font-semibold whitespace-nowrap"
                 [ngClass]="{
                   'border-green-500 bg-green-100 text-green-700':
                     job.slaStatus === 'On Track',
                   'border-yellow-500 bg-yellow-100 text-yellow-700':
                     job.slaStatus === 'At Risk',
                   'border-red-500 bg-red-100 text-red-700':
-                    job.slaStatus === 'Breached'
+                    job.slaStatus === 'Breached',
                 }"
               >
                 {{ job.slaStatus }}
@@ -241,16 +263,16 @@
             </td>
 
             <!-- Status -->
-            <td class="px-4 py-3">
+            <td class="px-4 py-2.5">
               <span
-                class="px-2 py-1 text-sm border rounded"
+                class="px-2 py-1 text-xs border rounded whitespace-nowrap"
                 [ngClass]="{
                   'border-blue-500 bg-blue-100 text-blue-700':
                     job.status === 'Assigned',
                   'border-yellow-500 bg-yellow-100 text-yellow-700':
                     job.status === 'In Progress',
                   'border-green-500 bg-green-100 text-green-700':
-                    job.status === 'Completed'
+                    job.status === 'Completed',
                 }"
               >
                 {{ job.status }}
@@ -258,18 +280,18 @@
             </td>
 
             <!-- Actions -->
-            <td class="px-4 py-3 text-center space-x-2">
+            <td class="px-4 py-2.5 text-center space-x-2">
               <button
                 class="text-blue-600 hover:text-blue-700"
                 title="View"
-                (click)="jobViewIndex = i; jobViewBox = true"
+                (click)="selectedViewJob = job; jobViewBox = true"
               >
                 <i class="fa-solid fa-eye"></i>
               </button>
               <button
                 class="text-yellow-600 hover:text-yellow-700"
                 title="Action"
-                (click)="indexAc = i; workerActionForm = true"
+                (click)="openWorkerAction(job)"
               >
                 <i class="fa-solid fa-user-gear"></i>
               </button>
@@ -327,15 +349,23 @@
             Task ID
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].taskId }}
+            {{ selectedViewJob?.taskId }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Category
+            Vehicle
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].category }}
+            {{ selectedViewJob?.vehicleModel }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Registration No.
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800 font-mono">
+            {{ selectedViewJob?.registrationNumber }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -343,7 +373,7 @@
             Start Time
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ formatDateTime(jobs[jobViewIndex].start) }}
+            {{ formatDateTime(selectedViewJob?.start ?? "") }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -351,7 +381,7 @@
             Deadline
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ formatDateTime(jobs[jobViewIndex].deadLine) }}
+            {{ formatDateTime(selectedViewJob?.deadLine ?? "") }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -359,17 +389,10 @@
             Assigned By
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].assignedBy }}
+            {{ selectedViewJob?.assignedBy }}
           </p>
         </div>
-        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Vehicle ID
-          </p>
-          <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].vehicleId }}
-          </p>
-        </div>
+
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
           <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
             Priority
@@ -378,14 +401,14 @@
             class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
             [ngClass]="{
               'border-red-500 bg-red-100 text-red-700':
-                jobs[jobViewIndex].priority === 'High',
+                selectedViewJob?.priority === 'High',
               'border-yellow-500 bg-yellow-100 text-yellow-700':
-                jobs[jobViewIndex].priority === 'Medium',
+                selectedViewJob?.priority === 'Medium',
               'border-green-500 bg-green-100 text-green-700':
-                jobs[jobViewIndex].priority === 'Low',
+                selectedViewJob?.priority === 'Low',
             }"
           >
-            {{ jobs[jobViewIndex].priority }}
+            {{ selectedViewJob?.priority }}
           </span>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -396,14 +419,14 @@
             class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
             [ngClass]="{
               'border-blue-500 bg-blue-100 text-blue-700':
-                jobs[jobViewIndex].status === 'Assigned',
+                selectedViewJob?.status === 'Assigned',
               'border-yellow-500 bg-yellow-100 text-yellow-700':
-                jobs[jobViewIndex].status === 'In Progress',
+                selectedViewJob?.status === 'In Progress',
               'border-green-500 bg-green-100 text-green-700':
-                jobs[jobViewIndex].status === 'Completed',
+                selectedViewJob?.status === 'Completed',
             }"
           >
-            {{ jobs[jobViewIndex].status }}
+            {{ selectedViewJob?.status }}
           </span>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -411,7 +434,7 @@
             SLA Time
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800">
-            {{ jobs[jobViewIndex].slaTime }}
+            {{ selectedViewJob?.slaTime }}
           </p>
         </div>
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
@@ -422,14 +445,14 @@
             class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
             [ngClass]="{
               'border-green-500 bg-green-100 text-green-700':
-                jobs[jobViewIndex].slaStatus === 'On Track',
+                selectedViewJob?.slaStatus === 'On Track',
               'border-yellow-500 bg-yellow-100 text-yellow-700':
-                jobs[jobViewIndex].slaStatus === 'At Risk',
+                selectedViewJob?.slaStatus === 'At Risk',
               'border-red-500 bg-red-100 text-red-700':
-                jobs[jobViewIndex].slaStatus === 'Breached'
+                selectedViewJob?.slaStatus === 'Breached',
             }"
           >
-            {{ jobs[jobViewIndex].slaStatus }}
+            {{ selectedViewJob?.slaStatus }}
           </span>
         </div>
         <div
@@ -439,7 +462,7 @@
             Description
           </p>
           <p class="mt-1 text-sm font-semibold text-slate-800 break-words">
-            {{ jobs[jobViewIndex].description }}
+            {{ selectedViewJob?.description }}
           </p>
         </div>
       </div>
@@ -455,7 +478,7 @@
           id=""
           readonly
           class="w-full min-h-24 border border-slate-300 rounded-lg p-3 bg-white text-slate-700 focus:outline-none"
-          >{{ jobs[jobViewIndex].notes }}</textarea
+          >{{ selectedViewJob?.notes }}</textarea
         >
       </div>
     </div>
@@ -463,78 +486,131 @@
 </div>
 <div
   *ngIf="workerActionForm"
-  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30"
+  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-slate-900/55 backdrop-blur-sm z-30 p-4"
 >
   <form
     #form="ngForm"
     (ngSubmit)="updateJobByWorker(form)"
-    class="bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4"
+    class="w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden"
   >
-    <div class="grid grid-cols-1 gap-3 p-5 w-full max-w-md sm:max-w-lg">
-      <!-- Job ID (Readonly) -->
+    <div
+      class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-blue-50 to-cyan-50"
+    >
       <div>
-        <p class="font-semibold">Job ID</p>
-        <input
-          type="text"
-          name="taskId"
-          [(ngModel)]="jobs[indexAc].taskId"
-          readonly
-          class="w-full border-2 border-gray-300 rounded bg-gray-100 p-1"
-        />
+        <h3 class="text-lg font-semibold text-slate-800">
+          Update Service Task
+        </h3>
+        <p class="text-xs text-slate-500">
+          Update the status of this service task
+        </p>
       </div>
+      <button
+        type="button"
+        (click)="workerActionForm = false"
+        class="h-9 w-9 rounded-full border border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400 hover:bg-white transition"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
 
-      <!-- Status -->
-      <div>
-        <p class="font-semibold">Status</p>
-        <select
-          name="status"
-          [(ngModel)]="jobs[indexAc].status"
-          required
-          class="w-full border-2 border-gray-300 rounded bg-white p-1"
+    <div class="p-5 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Service ID (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Service ID
+          </p>
+          <input
+            type="text"
+            name="taskId"
+            [ngModel]="selectedJob?.taskId"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm focus:outline-none"
+          />
+        </div>
+
+        <!-- Vehicle (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Vehicle
+          </p>
+          <input
+            type="text"
+            name="vehicleModel"
+            [ngModel]="selectedJob?.vehicleModel"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm focus:outline-none"
+          />
+        </div>
+
+        <!-- Registration Number (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Registration No.
+          </p>
+          <input
+            type="text"
+            name="registrationNumber"
+            [ngModel]="selectedJob?.registrationNumber"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm font-mono focus:outline-none"
+          />
+        </div>
+
+        <!-- Status (Editable) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Status
+          </p>
+          <select
+            name="status"
+            [(ngModel)]="selectedServiceStatus"
+            required
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+          >
+            <option value="PENDING">Assigned</option>
+            <option value="ONGOING">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <!-- Error message -->
+        <div
+          *ngIf="serviceUpdateError"
+          class="sm:col-span-2 text-red-600 text-sm"
         >
-          <option value="">Select</option>
-          <option value="Assigned">Assigned</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </div>
-
-      <!-- Attachment -->
-      <div>
-        <p class="font-semibold">Attachment</p>
-        <input
-          type="file"
-          class="w-full border-2 border-gray-300 rounded bg-white p-1"
-        />
-      </div>
-
-      <!-- Notes -->
-      <div>
-        <p class="font-semibold">Notes</p>
-        <textarea
-          name="notes"
-          [(ngModel)]="jobs[indexAc].notes"
-          rows="4"
-          class="w-full border-2 border-gray-300 rounded bg-white p-1"
-        ></textarea>
+          {{ serviceUpdateError }}
+        </div>
       </div>
     </div>
 
     <!-- Buttons -->
-    <div class="flex justify-between mt-3">
+    <div
+      class="flex justify-end gap-3 px-5 py-4 border-t border-slate-200 bg-slate-50"
+    >
       <button
         type="button"
         (click)="workerActionForm = false"
-        class="px-3 py-1.5 rounded-full bg-red-100 text-red-600 border-2 border-red-300 hover:text-white hover:bg-red-700 transition"
+        class="px-4 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
       >
         <i class="fa-solid fa-xmark"></i> Cancel
       </button>
 
       <button
         type="submit"
-        class="px-3 py-1.5 rounded-full bg-blue-100 text-blue-600 border-2 border-blue-300 hover:text-white hover:bg-blue-700 transition"
+        [disabled]="isUpdatingServiceStatus"
+        class="px-4 py-2 rounded-lg bg-blue-600 text-white border border-blue-700 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <i class="fa-solid fa-pen-to-square"></i> Update
+        <i class="fa-solid fa-pen-to-square"></i>
+        {{ isUpdatingServiceStatus ? "Updating..." : "Update Status" }}
       </button>
     </div>
   </form>

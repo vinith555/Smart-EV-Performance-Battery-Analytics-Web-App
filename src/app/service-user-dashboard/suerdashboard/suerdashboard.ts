@@ -27,8 +27,11 @@ export type ChartOptions = {
 };
 
 interface Job {
+  serviceId: number;
   taskId: string;
   category: string;
+  vehicleModel: string;
+  registrationNumber: string;
   description: string;
   start: string;
   deadLine: string;
@@ -49,7 +52,7 @@ interface Job {
 })
 export class Suerdashboard implements OnInit {
   jobViewBox: boolean = false;
-  jobViewIndex: number = -1;
+  selectedViewJob: Job | null = null;
   isLoadingServiceStats: boolean = true;
   serviceStatsError: string = '';
   serviceData: any[] = [];
@@ -253,8 +256,14 @@ export class Suerdashboard implements OnInit {
 
   get jobs(): Job[] {
     return this.serviceData.map((service) => ({
+      serviceId: service.service_id,
       taskId: `SRV-${service.service_id}`,
-      category: 'Vehicle Service',
+      category: service.vehicle__vehicle_model
+        ? `${service.vehicle__vehicle_model} (${service.vehicle__registration_number || service.vehicle_id})`
+        : `Vehicle #${service.vehicle_id}`,
+      vehicleModel:
+        service.vehicle__vehicle_model || `Vehicle #${service.vehicle_id}`,
+      registrationNumber: service.vehicle__registration_number || 'N/A',
       description: service.notes || 'Service task',
       start: service.start_time,
       deadLine: service.deadline,
@@ -315,6 +324,7 @@ export class Suerdashboard implements OnInit {
   filteredJobs = {
     taskId: '',
     category: '',
+    registrationNumber: '',
     startDate: '',
     endDate: '',
     priority: '',
@@ -331,9 +341,15 @@ export class Suerdashboard implements OnInit {
 
       const matchesCategory =
         !this.filteredJobs.category ||
-        job.category
+        job.vehicleModel
           .toLowerCase()
           .includes(this.filteredJobs.category.toLowerCase());
+
+      const matchesRegistration =
+        !this.filteredJobs.registrationNumber ||
+        job.registrationNumber
+          .toLowerCase()
+          .includes(this.filteredJobs.registrationNumber.toLowerCase());
 
       const matchesStartDate =
         !this.filteredJobs.startDate ||
@@ -356,6 +372,7 @@ export class Suerdashboard implements OnInit {
       return (
         matchesTaskId &&
         matchesCategory &&
+        matchesRegistration &&
         matchesStartDate &&
         matchesEndDate &&
         matchesPriority &&
@@ -367,6 +384,7 @@ export class Suerdashboard implements OnInit {
     this.filteredJobs = {
       taskId: '',
       category: '',
+      registrationNumber: '',
       startDate: '',
       endDate: '',
       priority: '',
@@ -389,12 +407,45 @@ export class Suerdashboard implements OnInit {
   }
 
   workerActionForm = false;
-  indexAc = -1;
+  selectedJob: Job | null = null;
+  selectedServiceStatus: 'PENDING' | 'ONGOING' | 'COMPLETED' = 'PENDING';
+  isUpdatingServiceStatus = false;
+  serviceUpdateError = '';
+
+  openWorkerAction(job: Job): void {
+    this.selectedJob = job;
+    if (job.status === 'Assigned') this.selectedServiceStatus = 'PENDING';
+    else if (job.status === 'In Progress')
+      this.selectedServiceStatus = 'ONGOING';
+    else this.selectedServiceStatus = 'COMPLETED';
+    this.serviceUpdateError = '';
+    this.workerActionForm = true;
+  }
 
   updateJobByWorker(form: any) {
-    if (form.valid) {
-      console.log('Updated Job:', this.jobs[this.indexAc]);
-      this.workerActionForm = false;
+    if (form.valid && this.selectedJob) {
+      this.isUpdatingServiceStatus = true;
+      this.serviceUpdateError = '';
+      this.apiService
+        .updateServiceStatus(
+          this.selectedJob.serviceId,
+          this.selectedServiceStatus,
+        )
+        .subscribe({
+          next: () => {
+            const raw = this.serviceData.find(
+              (s) => s.service_id === this.selectedJob!.serviceId,
+            );
+            if (raw) raw.status = this.selectedServiceStatus;
+            this.isUpdatingServiceStatus = false;
+            this.workerActionForm = false;
+          },
+          error: () => {
+            this.serviceUpdateError =
+              'Failed to update status. Please try again.';
+            this.isUpdatingServiceStatus = false;
+          },
+        });
     }
   }
 

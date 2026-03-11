@@ -67,7 +67,15 @@ export class ApiService {
    * @param data Object with name and/or email fields
    * @returns Observable with updated user data
    */
-  updateUserProfile(data: { name?: string; email?: string; phone?: string; linkedin?: string; twitter?: string; facebook?: string; bio?: string }): Observable<any> {
+  updateUserProfile(data: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    linkedin?: string;
+    twitter?: string;
+    facebook?: string;
+    bio?: string;
+  }): Observable<any> {
     return this.http.patch(`${this.apiUrl}/auth/update-profile/`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -204,6 +212,27 @@ export class ApiService {
   }
 
   /**
+   * Update issue status (service user only)
+   * @param issueId Issue ID to update
+   * @param status New status value
+   * @returns Observable with update status
+   */
+  updateIssueStatus(
+    issueId: number,
+    status: 'Open' | 'In Progress' | 'Resolved',
+  ): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/update-issue-status/${issueId}/`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+  }
+
+  /**
    * Get bill details for current user
    * @returns Observable with bill data
    */
@@ -213,6 +242,39 @@ export class ApiService {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
+  }
+
+  /**
+   * Get billing form seed data (records + pricing catalog)
+   * @returns Observable with billing form data
+   */
+  getBillingFormData(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get-billing-form-data/`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
+   * Register billing items into Issues table for tracking
+   */
+  registerBillingItemsAsIssues(data: {
+    vehicle_id: number;
+    service_id?: number | null;
+    payment_method?: 'CASH' | 'CARD' | 'UPI' | 'NET_BANKING' | 'WALLET';
+    place?: string;
+    items: Array<{ name: string; qty: number; rate: number; tax: number }>;
+  }): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/register-billing-items-as-issues/`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
   }
 
   /**
@@ -248,6 +310,26 @@ export class ApiService {
   deleteNotification(notificationId: number): Observable<any> {
     return this.http.delete(
       `${this.apiUrl}/delete-notification/${notificationId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
+  }
+
+  /**
+   * Update service task status (SERVICE role only)
+   * @param serviceId - Service record ID
+   * @param status - New status: PENDING | ONGOING | COMPLETED
+   */
+  updateServiceStatus(
+    serviceId: number,
+    status: 'PENDING' | 'ONGOING' | 'COMPLETED',
+  ): Observable<any> {
+    return this.http.patch(
+      `${this.apiUrl}/update-service-status/${serviceId}/`,
+      { status },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

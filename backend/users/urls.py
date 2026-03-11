@@ -49,7 +49,17 @@ urlpatterns = [
     path("get-trip-details/", TripDetailsView.TripDetails, name="trip-details"),
     # Service and Issue endpoints
     path("get-service-details/", ServiceView.ServiceDetails, name="service-details"),
+    path(
+        "update-service-status/<int:service_id>/",
+        ServiceView.UpdateServiceStatus,
+        name="update-service-status",
+    ),
     path("get-issue-details/", IssuesView.IssueDetails, name="issue-details"),
+    path(
+        "update-issue-status/<int:issue_id>/",
+        IssuesView.UpdateIssueStatus,
+        name="update-issue-status",
+    ),
     path("delete-issue/<int:issue_id>/", IssuesView.DeleteIssue, name="delete-issue"),
     path(
         "get-user-details-by-vehicle/",
@@ -58,6 +68,16 @@ urlpatterns = [
     ),
     # Bill endpoints
     path("get-bill-details/", BillViews.BillDetails, name="bill-details"),
+    path(
+        "get-billing-form-data/",
+        BillViews.BillingFormData,
+        name="billing-form-data",
+    ),
+    path(
+        "register-billing-items-as-issues/",
+        BillViews.RegisterBillingItemsAsIssues,
+        name="register-billing-items-as-issues",
+    ),
     # notification endpoints
     path(
         "get-notification-details/<int:user_id>/",
