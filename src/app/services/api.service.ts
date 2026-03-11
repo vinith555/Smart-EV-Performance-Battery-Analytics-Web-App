@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = 'https://smart-ev-performance-battery-analytics.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
