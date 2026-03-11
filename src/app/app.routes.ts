@@ -4,7 +4,6 @@ import { LoginPage } from './login-page/login-page';
 import { RegisterPage } from './register-page/register-page';
 import { PersonalUserDashboard } from './personal-user-dashboard/personal-user-dashboard';
 import { ServiceUserDashboard } from './service-user-dashboard/service-user-dashboard';
-import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { Generalhome } from './home-page/generalhome/generalhome';
 import { About } from './home-page/about/about';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
@@ -15,6 +14,9 @@ import { Billing } from './service-user-dashboard/billing/billing';
 import { Profilepage } from './profilepage/profilepage';
 import { Contact } from './home-page/contact/contact';
 import { Helpsupport } from './helpsupport/helpsupport';
+import { NotFoundPage } from './not-found/not-found';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -28,10 +30,17 @@ export const routes: Routes = [
   },
   { path: 'login', component: LoginPage },
   { path: 'register', component: RegisterPage },
-  { path: 'profile', component: Profilepage },
+  {
+    path: 'profile',
+    component: Profilepage,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PERSONAL', 'SERVICE', 'ADMIN'] },
+  },
   {
     path: 'personal-user-dashboard',
     component: PersonalUserDashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PERSONAL'] },
     children: [
       { path: '', component: Userdashboard },
       { path: 'information', component: Information },
@@ -40,12 +49,15 @@ export const routes: Routes = [
   {
     path: 'service-user-dashboard',
     component: ServiceUserDashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['SERVICE'] },
     children: [
       { path: '', component: Suerdashboard },
       { path: 'vehicle-info', component: VehicleInfo },
       { path: 'billing', component: Billing },
     ],
   },
-  { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'help-support', component: Helpsupport },
+  { path: '404', component: NotFoundPage },
+  { path: '**', redirectTo: '/404' },
 ];

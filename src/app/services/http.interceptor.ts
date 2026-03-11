@@ -4,13 +4,19 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
 @Injectable()
 export class HttpAuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -36,6 +42,43 @@ export class HttpAuthInterceptor implements HttpInterceptor {
       );
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.log('HttpInterceptor: Error caught:', error.status);
+
+        // Handle 401 Unauthorized errors
+        if (error.status === 401) {
+          console.log(
+            'HttpInterceptor: 401 Unauthorized - Token expired or invalid',
+          );
+
+          // Clear tokens and user data
+          this.authService.logout().subscribe({
+            next: () => {
+              console.log(
+                'HttpInterceptor: Logout successful, redirecting to login',
+              );
+            },
+            error: (logoutError) => {
+              console.log(
+                'HttpInterceptor: Logout API failed, clearing local data anyway',
+              );
+            },
+            complete: () => {
+              // Always clear local storage and redirect regardless of API response
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+
+              // Redirect to login page
+              this.router.navigate(['/login'], {
+                queryParams: { sessionExpired: 'true' },
+              });
+            },
+          });
+        }
+
+        return throwError(() => error);
+      }),
+    );
   }
 }

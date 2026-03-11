@@ -12,7 +12,7 @@
     </button>
 
     <a
-      routerLink="/"
+      routerLink="/service-user-dashboard"
       class="text-2xl font-bold text-gray-800 hover:text-green-600 cursor-pointer transition"
       >EV Service User</a
     >
@@ -39,11 +39,12 @@
 </header>
 
 <nav
-  *ngIf="isNavbarCollapsed"
-  class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20"
+  class="fixed left-0 bottom-0 top-0 mt-[70px] flex flex-col gap-4 p-4 bg-white shadow-md text-lg z-20 transform transition-transform duration-300"
+  [class.translate-x-0]="isNavbarCollapsed"
+  [class.-translate-x-full]="!isNavbarCollapsed"
 >
   <a
-    routerLink="/service-user/"
+    routerLink="/service-user-dashboard"
     routerLinkActive="active-link"
     [routerLinkActiveOptions]="{ exact: true }"
     class="hover:text-green-600 py-1 px-2 rounded-md"
@@ -51,14 +52,14 @@
     ><i class="fa-solid fa-home mr-2"></i>Dashboard</a
   >
   <a
-    routerLink="/service-user/vehicle-info"
+    routerLink="./vehicle-info"
     routerLinkActive="active-link"
     class="hover:text-green-600 py-1 px-2 rounded-md"
     (click)="toggleNavbar()"
     ><i class="fa-solid fa-car-burst mr-2"></i>Vehicle Information</a
   >
   <a
-    routerLink="/service-user/billing"
+    routerLink="./billing"
     routerLinkActive="active-link"
     class="hover:text-green-600 py-1 px-2 rounded-md"
     (click)="toggleNavbar()"
@@ -73,51 +74,144 @@
   >
 </nav>
 <div
-  *ngIf="isNavbarCollapsed"
-  class="fixed inset-0 top-[70px] z-10 bg-black/50"
+  class="fixed inset-0 top-[70px] bg-black transition-opacity duration-300 z-10"
+  [class.opacity-50]="isNavbarCollapsed"
+  [class.opacity-0]="!isNavbarCollapsed"
+  [class.pointer-events-none]="!isNavbarCollapsed"
   (click)="toggleNavbar()"
 ></div>
 
 <div
   *ngIf="isNotificationsVisible"
-  class="flex flex-col gap-y-4 fixed top-[70px] right-4 w-64 h-80 overflow-y-auto bg-white shadow-lg rounded-md p-4 z-30"
+  class="flex flex-col gap-y-3 fixed top-[90px] right-6 w-96 max-h-[500px] overflow-y-auto bg-gradient-to-br from-white to-gray-50 shadow-2xl rounded-2xl p-6 z-30 border border-gray-100 animate-fade-in"
 >
-  <div class="flex justify-between">
-    <h2>Notification</h2>
-    <button class="text-red-500 cursor-pointer">Clear all</button>
+  <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+    <div class="flex items-center gap-3">
+      <div class="bg-green-100 rounded-full p-2.5">
+        <i class="fa-regular fa-bell text-green-600 text-lg"></i>
+      </div>
+      <h2 class="font-bold text-gray-900 text-lg">Notifications</h2>
+    </div>
+    <button
+      (click)="toggleNotifications()"
+      class="text-gray-400 hover:text-red-500 hover:scale-110 transition duration-300 rounded-lg hover:bg-red-50 p-2"
+      title="Close"
+    >
+      <i class="fa-solid fa-xmark text-xl"></i>
+    </button>
   </div>
-  <!-- <div >
-    <p *ngFor="let n of notifications" class="text-sm text-gray-600 hover:text-green-500 hover:bg-green-100 rounded px-4 py-2">{{n}}</p>
-  </div> -->
+  <div class="flex flex-col gap-3">
+    <p
+      *ngIf="notifications.length === 0"
+      class="text-sm text-gray-500 text-center py-8"
+    >
+      No notifications yet
+    </p>
+    <div
+      *ngFor="let n of notifications"
+      class="text-sm text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-xl px-4 py-3 transition duration-300 border border-transparent hover:border-green-200 cursor-pointer group"
+    >
+      <div class="flex items-start gap-3 w-full">
+        <div
+          [ngClass]="{
+            'text-green-600': n.priority === 'LOW',
+            'text-yellow-600': n.priority === 'MEDIUM',
+            'text-red-600': n.priority === 'HIGH',
+          }"
+          class="mt-0.5 group-hover:scale-110 transition flex-shrink-0"
+        >
+          <i
+            [ngClass]="{
+              'fa-circle-check': n.priority === 'LOW',
+              'fa-exclamation-circle': n.priority === 'MEDIUM',
+              'fa-triangle-exclamation': n.priority === 'HIGH',
+            }"
+            class="fa-solid text-sm"
+          ></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="break-words">{{ n.message }}</p>
+          <p class="text-xs text-gray-400 mt-1">
+            {{ n.priority }}
+          </p>
+        </div>
+        <button
+          type="button"
+          (click)="deleteNotification(n.notification_id, $event)"
+          class="flex-shrink-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg p-2 transition duration-300"
+          title="Delete notification"
+        >
+          <i class="fa-solid fa-trash-can text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <div
+  *ngIf="isNotificationsVisible"
+  class="fixed inset-0 top-[70px] z-20 bg-black/30 backdrop-blur-sm animate-fade-in"
+  (click)="toggleNotifications()"
+></div>
+
+<div
   *ngIf="isProfileVisible"
-  class="flex flex-col gap-y-4 fixed top-[70px] right-0 w-64 h-64 overflow-y-auto bg-white shadow-lg p-4 z-30"
+  class="flex flex-col gap-y-1 fixed top-[90px] right-6 w-72 bg-gradient-to-br from-white to-gray-50 shadow-2xl rounded-2xl p-6 z-30 border border-gray-100 animate-fade-in"
 >
-  <div class="flex gap-x-4 items-center mb-6">
-    <img
-      class="border-2 border-green-200 h-14 w-14 rounded-full"
-      src=""
-      alt="profile image"
-    />
-    <div class="flex flex-col">
-      <h3 class="font-semibold text-lg">VINITH M S</h3>
-      <p class="text-gray-600 text-sm">User</p>
+  <!-- Profile Header -->
+  <div class="flex gap-x-4 items-center mb-6 pb-6 border-b border-gray-200">
+    <div class="relative">
+      <div
+        class="border-4 border-green-200 h-14 w-14 rounded-full bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center hover:scale-110 transition duration-300 cursor-pointer"
+      >
+        <i class="fa-solid fa-user text-green-700 text-lg"></i>
+      </div>
+      <div
+        class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white"
+      ></div>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h3 class="font-bold text-gray-900 text-base">{{ userName }}</h3>
+      <p class="text-gray-500 text-xs font-medium uppercase tracking-wider">
+        {{ userRole }}
+      </p>
     </div>
   </div>
 
-  <a routerLink="/profile" class="text-lg text-gray-600 hover:text-green-600"
-    ><i class="fa-solid fa-user-pen mr-4"></i>Profile Settings</a
-  >
-  <a href="" class="text-lg text-gray-600 hover:text-green-600"
-    ><i class="fa-solid fa-key mr-4"></i>Change Password</a
-  >
+  <!-- Menu Items -->
   <a
-    (click)="logout()"
-    class="text-lg text-gray-600 hover:text-green-600 cursor-pointer"
-    ><i class="fa-solid fa-right-from-bracket mr-4"></i>LogOut</a
+    routerLink="/profile"
+    (click)="isProfileVisible = false"
+    class="flex items-center gap-3 text-gray-700 hover:text-green-600 hover:bg-green-50 py-3 px-4 rounded-xl transition duration-300 group"
   >
+    <i
+      class="fa-solid fa-user-pen text-lg group-hover:scale-110 transition"
+    ></i>
+    <span class="font-medium">Profile Settings</span>
+  </a>
+  <a
+    href=""
+    class="flex items-center gap-3 text-gray-700 hover:text-green-600 hover:bg-green-50 py-3 px-4 rounded-xl transition duration-300 group"
+  >
+    <i class="fa-solid fa-key text-lg group-hover:scale-110 transition"></i>
+    <span class="font-medium">Change Password</span>
+  </a>
+
+  <!-- Logout Button -->
+  <button
+    (click)="logout()"
+    class="flex items-center gap-3 text-gray-700 hover:text-red-600 hover:bg-red-50 py-3 px-4 rounded-xl transition duration-300 group mt-2 border border-transparent hover:border-red-200 w-full"
+  >
+    <i
+      class="fa-solid fa-right-from-bracket text-lg group-hover:scale-110 transition"
+    ></i>
+    <span class="font-medium">Logout</span>
+  </button>
 </div>
+<div
+  *ngIf="isProfileVisible"
+  class="fixed inset-0 top-[70px] z-20 bg-black/30 backdrop-blur-sm animate-fade-in"
+  (click)="isProfileVisible = false"
+></div>
 
 <div class="mt-[70px] p-4">
   <router-outlet></router-outlet>

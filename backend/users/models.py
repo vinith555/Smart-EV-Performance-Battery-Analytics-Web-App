@@ -45,6 +45,9 @@ class Company(models.Model):
     is_active = models.BooleanField(default=True)
     deactivated_at = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.company_name} ({self.company_id})"
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
@@ -60,8 +63,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         Company, on_delete=models.SET_NULL, null=True, blank=True, related_name="users"
     )
     performance = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(10)]
+        validators=[MinValueValidator(0), MaxValueValidator(10)], default=0
     )
+    phone = models.CharField(max_length=20, blank=True, default='')
+    linkedin = models.URLField(max_length=500, blank=True, default='')
+    twitter = models.URLField(max_length=500, blank=True, default='')
+    facebook = models.URLField(max_length=500, blank=True, default='')
+    bio = models.TextField(blank=True, default='')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     deactivated_at = models.DateTimeField(null=True, blank=True)
@@ -71,6 +79,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["name"]
 
     objects = CustomUserManager()
+
+    def __str__(self):
+        return f"{self.name} <{self.email}>"
 
 
 class Vehicle(models.Model):
@@ -93,6 +104,9 @@ class Vehicle(models.Model):
     is_active = models.BooleanField(default=True)
     deactivated_at = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return f"{self.vehicle_model} ({self.registration_number})"
+
 
 class Trip(models.Model):
     trip_id = models.AutoField(primary_key=True)
@@ -110,6 +124,9 @@ class Trip(models.Model):
     status = models.CharField(max_length=20)
     notes = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"Trip {self.trip_id} - Vehicle {self.vehicle_id}"
+
 
 class VehicleStats(models.Model):
     stats_id = models.AutoField(primary_key=True)
@@ -124,17 +141,23 @@ class VehicleStats(models.Model):
     estimated_range = models.IntegerField()
     recorded_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Stats {self.stats_id} - Vehicle {self.vehicle_id}"
+
 
 class ChargeHistory(models.Model):
     charge_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey(
         Vehicle, on_delete=models.CASCADE, related_name="charge_history"
     )
-    charge_date = models.DateTimeField()
-    charge_start_time = models.DateTimeField()
-    charge_end_time = models.DateTimeField()
+    charge_date = models.DateField()
+    charge_start_time = models.TimeField()
+    charge_end_time = models.TimeField()
     energy_added_kwh = models.IntegerField()
     cost = models.IntegerField()
+
+    def __str__(self):
+        return f"Charge {self.charge_id} - Vehicle {self.vehicle_id}"
 
 
 class Task(models.Model):
@@ -154,14 +177,23 @@ class Task(models.Model):
         max_length=10, choices=Priority.choices, default=Priority.LOW
     )
     is_completed = models.BooleanField(default=False)
-    completed_at = models.DateTimeField(null=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.priority})"
 
 
 class ServiceTask(models.Model):
     task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    vehicle = models.ForeignKey(
+        Vehicle, on_delete=models.CASCADE, related_name="service_tasks"
+    )
+    serviceman = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="service_tasks"
+    )
 
     def __str__(self):
         return self.task_name
@@ -205,6 +237,9 @@ class Service(models.Model):
     notes = models.TextField(blank=True)
     rating = models.IntegerField()
 
+    def __str__(self):
+        return f"Service {self.service_id} - Vehicle {self.vehicle_id}"
+
 
 class Issues(models.Model):
     class Priority(models.TextChoices):
@@ -219,7 +254,7 @@ class Issues(models.Model):
     category = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     date_reported = models.DateTimeField(auto_now_add=True)
-    date_completed = models.DateTimeField(null=True)
+    date_completed = models.DateTimeField(null=True, blank=True)
     assigned_to = models.ForeignKey(
         User, on_delete=models.PROTECT, null=True, related_name="assigned_issues"
     )
@@ -231,6 +266,9 @@ class Issues(models.Model):
     )
     is_resolved = models.BooleanField(default=False)
     cost = models.IntegerField()
+
+    def __str__(self):
+        return f"Issue {self.issue_id} - {self.category}"
 
 
 class Notification(models.Model):
@@ -251,3 +289,55 @@ class Notification(models.Model):
     )
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification {self.notification_id} - {self.priority}"
+
+
+class Bill(models.Model):
+    class PaymentStatus(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        PAID = "PAID", "Paid"
+        OVERDUE = "OVERDUE", "Overdue"
+        CANCELLED = "CANCELLED", "Cancelled"
+
+    class PaymentMethod(models.TextChoices):
+        CASH = "CASH", "Cash"
+        CARD = "CARD", "Card"
+        UPI = "UPI", "UPI"
+        NET_BANKING = "NET_BANKING", "Net Banking"
+        WALLET = "WALLET", "Wallet"
+
+    bill_id = models.AutoField(primary_key=True)
+    service = models.ForeignKey(
+        Service, on_delete=models.PROTECT, null=True, blank=True, related_name="bills"
+    )
+    issue = models.ForeignKey(
+        Issues, on_delete=models.PROTECT, null=True, blank=True, related_name="bills"
+    )
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT, related_name="bills")
+    customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="bills")
+    bill_date = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField()
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    tax_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=18.00)
+    tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(
+        max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING
+    )
+    payment_method = models.CharField(
+        max_length=20, choices=PaymentMethod.choices, null=True, blank=True
+    )
+    payment_date = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Bill {self.bill_id} - {self.customer.name} - ₹{self.total_amount}"
+
+    def calculate_totals(self):
+        """Calculate tax and total amount based on subtotal."""
+        self.tax_amount = (self.subtotal * self.tax_percentage) / 100
+        self.total_amount = self.subtotal + self.tax_amount - self.discount
+        return self.total_amount

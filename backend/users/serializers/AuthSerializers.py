@@ -21,12 +21,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     password_confirm = serializers.CharField(
         write_only=True, required=True, help_text="Confirm password must match password"
     )
-    role = serializers.ChoiceField(
-        choices=User.Role.choices,
-        default=User.Role.PERSONAL,
-        required=False,
-        help_text="User role: PERSONAL, SERVICE, or ADMIN",
-    )
 
     class Meta:
         model = User
@@ -35,12 +29,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             "name",
             "password",
             "password_confirm",
-            "role",
-            "performance",
         )
         extra_kwargs = {
             "name": {"required": True, "help_text": "Full name of the user"},
-            "performance": {"required": False, "help_text": "Performance rating 0-10"},
         }
 
     def validate(self, data):
@@ -68,8 +59,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             name=validated_data["name"],
             password=validated_data["password"],
-            role=validated_data.get("role", User.Role.PERSONAL),
-            performance=validated_data.get("performance", 0),
         )
         return user
 
@@ -124,6 +113,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "role",
             "is_active",
             "performance",
+            "phone",
+            "linkedin",
+            "twitter",
+            "facebook",
+            "bio",
         )
         read_only_fields = ("user_id",)
 
@@ -134,6 +128,21 @@ class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField(
         required=True, help_text="Refresh token to blacklist"
     )
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for updating user profile details."""
+
+    class Meta:
+        model = User
+        fields = ("name", "email", "phone", "linkedin", "twitter", "facebook", "bio")
+
+    def validate_email(self, value):
+        """Ensure email is not already taken by another user."""
+        user = self.instance
+        if User.objects.filter(email=value).exclude(pk=user.pk).exists():
+            raise serializers.ValidationError("This email is already in use.")
+        return value
 
 
 class PasswordChangeSerializer(serializers.Serializer):

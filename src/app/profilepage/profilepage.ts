@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ApiService } from '../services/api.service';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-profilepage',
@@ -13,146 +14,155 @@ import { ApiService } from '../services/api.service';
 })
 export class Profilepage implements OnInit {
   editProfileForm = false;
-  isLoading = true;
-  private hasLoadedProfile = false; // Prevent multiple loads
+  private hasLoadedProfile = false;
 
   constructor(
     private route: Router,
     private authService: AuthService,
     private apiService: ApiService,
-  ) {
-    // Don't check authentication in constructor - let ngOnInit handle it
-    // This prevents issues with timing when tokens are being set
-  }
+    private loadingService: LoadingService,
+  ) {}
 
   user = {
+    userId: 0,
     name: '',
     role: '',
     email: '',
-    phone: '+91 9876543210',
+    phone: '',
     username: '',
-    created: '01 Oct, 2023',
-    lastLogin: '24 Apr, 2024',
+    created: '',
+    lastLogin: '',
     status: 'Active',
-    bio: `Loading user information...`,
+    bio: '',
+    performance: 0,
     linkedin: '',
     twitter: '',
     facebook: '',
   };
 
-  notification: { msg: string; severity: 'High' | 'Medium' | 'Low' }[] = [
-    {
-      msg: 'Battery temperature exceeded safe limit at Station 3',
-      severity: 'High',
-    },
-    {
-      msg: 'Charging session interrupted due to voltage fluctuation',
-      severity: 'High',
-    },
-    {
-      msg: 'New firmware update available for Battery Pack A12',
-      severity: 'Medium',
-    },
-    { msg: 'Charging station 5 is under maintenance', severity: 'Medium' },
-    { msg: 'Vehicle BMS communication delay detected', severity: 'Medium' },
-    {
-      msg: 'Low battery health detected in Vehicle TN-09-EV-4582',
-      severity: 'High',
-    },
-    {
-      msg: 'Scheduled system diagnostic completed successfully',
-      severity: 'Low',
-    },
-    { msg: 'New user registered in the EV monitoring system', severity: 'Low' },
-    {
-      msg: 'Charging efficiency dropped below 85% at Station 2',
-      severity: 'Medium',
-    },
-    {
-      msg: 'Backup power supply activated during grid outage',
-      severity: 'High',
-    },
-  ];
+  notifications: { message: string; priority: 'HIGH' | 'MEDIUM' | 'LOW'; created_at: string }[] = [];
+  notificationsLoading = true;
+  vehicleDetails: { vehicle_model: string; vehicle_colour: string; registration_number: string }[] = [];
+  vehiclesLoading = true;
+
+  get initials(): string {
+    if (!this.user.name) return '?';
+    return this.user.name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0].toUpperCase())
+      .join('');
+  }
+
+  get avatarGradient(): string {
+    const role = this.user.role?.toUpperCase();
+    if (role === 'SERVICE') return 'from-blue-500 to-blue-700';
+    if (role === 'ADMIN') return 'from-purple-500 to-purple-700';
+    return 'from-[#00712D] to-green-700';
+  }
+
+  get performanceStars(): number[] {
+    return Array.from({ length: 10 }, (_, i) => i + 1);
+  }
 
   ngOnInit(): void {
-    // Check if user is authenticated first
     if (!this.authService.isAuthenticated()) {
-      console.log('Not authenticated, redirecting to login');
       this.route.navigate(['/login']);
       return;
     }
-
-    // Only load if hasn't been loaded yet
     if (!this.hasLoadedProfile) {
       this.hasLoadedProfile = true;
       this.loadUserProfile();
     }
   }
 
-  /**
-   * Load user profile from backend API
-   */
   loadUserProfile(): void {
-    console.log('Loading user profile...');
-
+    this.loadingService.show('Loading profile...');
     this.apiService.getUserDetail().subscribe({
       next: (response) => {
-        console.log('Profile API response:', response);
-
         if (response.success && response.data) {
-          // Map backend response to user object
+          const d = response.data;
           this.user = {
-            name: response.data.name || 'N/A',
-            role: response.data.role || 'N/A',
-            email: response.data.email || 'N/A',
-            phone: this.user.phone, // Keep existing phone (not in backend)
-            username: response.data.email?.split('@')[0] || 'N/A',
-            created: this.user.created, // Keep existing created date
-            lastLogin: this.user.lastLogin, // Keep existing last login
-            status: response.data.is_active ? 'Active' : 'Inactive',
-            bio: `I'm a ${response.data.role} user with performance rating ${response.data.performance}/10`,
-            linkedin: this.user.linkedin,
-            twitter: this.user.twitter,
-            facebook: this.user.facebook,
+            userId: d.user_id || 0,
+            name: d.name || 'Unknown User',
+            role: d.role || 'N/A',
+            email: d.email || 'N/A',
+            phone: d.phone || '',
+            username: d.email?.split('@')[0] || 'N/A',
+            created: this.user.created || '',
+            lastLogin: this.user.lastLogin || '',
+            status: d.is_active ? 'Active' : 'Inactive',
+            bio: d.bio || '',
+            performance: d.performance || 0,
+            linkedin: d.linkedin || '',
+            twitter: d.twitter || '',
+            facebook: d.facebook || '',
           };
-          this.isLoading = false;
-          console.log('User profile loaded successfully:', this.user);
+          this.loadingService.hide();
+          this.loadVehicleDetails();
+          if (this.user.userId) {
+            this.loadNotifications();
+          } else {
+            this.notificationsLoading = false;
+          }
         } else {
-          console.error('Invalid response structure:', response);
           this.handleProfileLoadError('Invalid response from server');
         }
       },
-      error: (error) => {
-        console.error('Failed to load user profile:', error);
-        this.handleProfileLoadError(error);
+      error: (error) => this.handleProfileLoadError(error),
+    });
+  }
+
+  loadNotifications(): void {
+    this.notificationsLoading = true;
+    this.apiService.getNotificationDetails(this.user.userId).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.notifications = response.data;
+        }
+        this.notificationsLoading = false;
+      },
+      error: () => {
+        this.notificationsLoading = false;
       },
     });
   }
 
-  /**
-   * Handle profile load errors
-   */
-  private handleProfileLoadError(error: any): void {
-    this.isLoading = false;
-    this.user.bio =
-      'Failed to load user information. Please try logging in again.';
+  loadVehicleDetails(): void {
+    this.vehiclesLoading = true;
+    this.apiService.getVehicleDetails().subscribe({
+      next: (response) => {
+        if (response.success && response.data?.vehicle) {
+          this.vehicleDetails = response.data.vehicle;
+        }
+        this.vehiclesLoading = false;
+      },
+      error: () => {
+        this.vehiclesLoading = false;
+      },
+    });
+  }
 
-    // Only clear storage and redirect if it's an authentication error
-    // Don't clear storage for other types of errors
+  private handleProfileLoadError(error: any): void {
+    this.loadingService.hide();
+    this.notificationsLoading = false;
+    this.vehiclesLoading = false;
     if (error.status === 401 || error.status === 403) {
-      console.log(
-        'Authentication error (401/403), clearing tokens and redirecting to login',
-      );
-      // Clear tokens and redirect
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      setTimeout(() => {
-        this.route.navigate(['/login']);
-      }, 1000);
+      setTimeout(() => this.route.navigate(['/login']), 1000);
+    }
+  }
+
+  navigateToDashboard(): void {
+    const role = this.user.role?.toUpperCase();
+    if (role === 'SERVICE') {
+      this.route.navigate(['/service-user-dashboard']);
+    } else if (role === 'PERSONAL') {
+      this.route.navigate(['/personal-user-dashboard']);
     } else {
-      // For other errors, just log them - don't clear storage
-      console.error('Non-authentication error occurred:', error);
-      this.user.bio = 'Error loading profile. Your session is still active.';
+      this.route.navigate(['/']);
     }
   }
 
@@ -161,15 +171,14 @@ export class Profilepage implements OnInit {
   }
 
   logOut() {
-    // Call logout API before navigating
+    this.loadingService.show('Logging out...');
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Logged out successfully');
+        this.loadingService.hide();
         this.route.navigate(['/login']);
       },
-      error: (error) => {
-        console.error('Logout error:', error);
-        // Even if logout fails, clear local storage and navigate
+      error: () => {
+        this.loadingService.hide();
         this.route.navigate(['/login']);
       },
     });
@@ -177,10 +186,36 @@ export class Profilepage implements OnInit {
 
   updateProfile(form: any) {
     if (form.valid) {
-      console.log('Updated User:', this.user);
-      // TODO: Add API call to update user profile
-      // this.apiService.updateUserProfile(this.user).subscribe(...)
-      this.editProfileForm = false;
+      this.loadingService.show('Updating profile...');
+      this.apiService.updateUserProfile({
+        name: this.user.name,
+        email: this.user.email,
+        phone: this.user.phone,
+        linkedin: this.user.linkedin,
+        twitter: this.user.twitter,
+        facebook: this.user.facebook,
+        bio: this.user.bio,
+      }).subscribe({
+        next: (response) => {
+          this.loadingService.hide();
+          if (response.success && response.data) {
+            const d = response.data;
+            this.user.name = d.name || this.user.name;
+            this.user.email = d.email || this.user.email;
+            this.user.username = d.email?.split('@')[0] || this.user.username;
+            this.user.phone = d.phone ?? this.user.phone;
+            this.user.linkedin = d.linkedin ?? this.user.linkedin;
+            this.user.twitter = d.twitter ?? this.user.twitter;
+            this.user.facebook = d.facebook ?? this.user.facebook;
+            this.user.bio = d.bio ?? this.user.bio;
+          }
+          this.editProfileForm = false;
+        },
+        error: () => {
+          this.loadingService.hide();
+          this.editProfileForm = false;
+        },
+      });
     }
   }
 }

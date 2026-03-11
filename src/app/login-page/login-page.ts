@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   credentials = {
     email: '',
     password: '',
@@ -21,15 +21,35 @@ export class LoginPage {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  sessionExpiredMessage = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     // Check if already logged in
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/profile']);
     }
+  }
+
+  ngOnInit(): void {
+    // Check if redirected due to session expiry
+    this.route.queryParams.subscribe((params) => {
+      if (params['sessionExpired'] === 'true') {
+        this.sessionExpiredMessage =
+          'Your session has expired. Please log in again.';
+
+        // Clear the query parameter from URL
+        setTimeout(() => {
+          this.router.navigate([], {
+            queryParams: {},
+            replaceUrl: true,
+          });
+        }, 100);
+      }
+    });
   }
 
   /**
@@ -39,6 +59,7 @@ export class LoginPage {
     // Clear previous messages
     this.errorMessage = '';
     this.successMessage = '';
+    this.sessionExpiredMessage = '';
 
     if (form.valid) {
       this.isLoading = true;
@@ -47,31 +68,44 @@ export class LoginPage {
         .login(this.credentials.email, this.credentials.password)
         .subscribe({
           next: (response) => {
-            this.isLoading = false;
+            console.log('Login successful:', response);
             this.successMessage = 'Login successful! Redirecting...';
 
-            console.log('Login successful:', response);
+            // Load user details after login to ensure we have complete user data
+            this.authService.loadCurrentUser().subscribe({
+              next: (userResponse) => {
+                this.isLoading = false;
+                console.log('User details loaded:', userResponse);
 
-            // Redirect based on user role after a short delay
-            setTimeout(() => {
-              const currentUser = this.authService.getCurrentUser();
-              if (currentUser) {
-                switch (currentUser.role) {
-                  case 'ADMIN':
-                    this.router.navigate(['/admin-dashboard']);
-                    break;
-                  case 'SERVICE':
-                    this.router.navigate(['/service-user-dashboard']);
-                    break;
-                  case 'PERSONAL':
-                  default:
-                    this.router.navigate(['/personal-user-dashboard']);
-                    break;
+                const currentUser = this.authService.getCurrentUser();
+                console.log('Current user from service:', currentUser);
+
+                if (currentUser && currentUser.role) {
+                  // Redirect based on user role
+                  switch (currentUser.role.toUpperCase()) {
+                    case 'ADMIN':
+                      this.router.navigate(['/']);
+                      break;
+                    case 'SERVICE':
+                      this.router.navigate(['/service-user-dashboard']);
+                      break;
+                    case 'PERSONAL':
+                    default:
+                      this.router.navigate(['/personal-user-dashboard']);
+                      break;
+                  }
+                } else {
+                  console.warn('User role not found, redirecting to profile');
+                  this.router.navigate(['/profile']);
                 }
-              } else {
+              },
+              error: (userError) => {
+                this.isLoading = false;
+                console.error('Failed to load user details:', userError);
+                // Even if user details fail, redirect to profile
                 this.router.navigate(['/profile']);
-              }
-            }, 1000);
+              },
+            });
           },
           error: (error) => {
             this.isLoading = false;
@@ -95,12 +129,5 @@ export class LoginPage {
     } else {
       this.errorMessage = 'Please fill in all required fields correctly';
     }
-  }
-
-  /**
-   * Navigate to register page
-   */
-  goToRegister(): void {
-    this.router.navigate(['/register']);
   }
 }

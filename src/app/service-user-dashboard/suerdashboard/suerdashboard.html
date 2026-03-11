@@ -1,259 +1,617 @@
 <div class="flex flex-col gap-y-8 mx-6">
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
-        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between">
-                <h2 class="text-md font-semibold text-gray-600">New Tasks</h2>
-                <i class="fa-solid fa-list-check text-2xl text-emerald-500"></i>
-            </div>
-            <div class="flex items-center justify-between">
-                <p class="text-6xl font-semibold">5</p>
-                <div class="w-32">
-                <apx-chart
-                [series]="newTasksChartOptions.series!"
-                [chart]="newTasksChartOptions.chart!"
-                [xaxis]="newTasksChartOptions.xaxis!"
-                [yaxis]="newTasksChartOptions.yaxis!"
-                [grid]="newTasksChartOptions.grid!"
-                [stroke]="newTasksChartOptions.stroke!"
-                [tooltip]="newTasksChartOptions.tooltip!"
-                [dataLabels]="newTasksChartOptions.dataLabels!"
-                [colors]="newTasksChartOptions.colors!"
-                ></apx-chart>
-                </div>
-            </div>
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+    <div
+      class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition"
+    >
+      <div class="flex items-center justify-between">
+        <h2 class="text-md font-semibold text-gray-600">New Tasks</h2>
+        <i class="fa-solid fa-list-check text-2xl text-emerald-500"></i>
+      </div>
+      <div class="flex items-center justify-between">
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : newTasksCount }}
+        </p>
+        <div class="w-32">
+          <apx-chart
+            [series]="newTasksChartOptions.series!"
+            [chart]="newTasksChartOptions.chart!"
+            [xaxis]="newTasksChartOptions.xaxis!"
+            [yaxis]="newTasksChartOptions.yaxis!"
+            [grid]="newTasksChartOptions.grid!"
+            [stroke]="newTasksChartOptions.stroke!"
+            [tooltip]="newTasksChartOptions.tooltip!"
+            [dataLabels]="newTasksChartOptions.dataLabels!"
+            [colors]="newTasksChartOptions.colors!"
+          ></apx-chart>
         </div>
-        <!-- In Progress -->
-        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between">
-                <h2 class="text-md font-semibold text-gray-600">In Progress</h2>
-                <i class="fa-solid fa-spinner text-2xl text-blue-500"></i>
-            </div>
-            <div class="flex items-center justify-between">
-                <p class="text-6xl font-semibold">8</p>
-                <div class="w-32">
-                    <apx-chart
-                        [series]="inProgressChartOptions.series!"
-                        [chart]="inProgressChartOptions.chart!"
-                        [xaxis]="inProgressChartOptions.xaxis!"
-                        [yaxis]="inProgressChartOptions.yaxis!"
-                        [grid]="inProgressChartOptions.grid!"
-                        [stroke]="inProgressChartOptions.stroke!"
-                        [tooltip]="inProgressChartOptions.tooltip!"
-                        [dataLabels]="inProgressChartOptions.dataLabels!"
-                        [colors]="inProgressChartOptions.colors!"
-                    ></apx-chart>
-                </div>
-            </div>
-        </div>
+      </div>
+    </div>
 
-        <!-- Blocked -->
-        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between">
-                <h2 class="text-md font-semibold text-gray-600">Blocked</h2>
-                <i class="fa-solid fa-ban text-2xl text-yellow-500"></i>
-            </div>
-            <div class="flex items-center justify-between">
-                <p class="text-6xl font-semibold">2</p>
-                <div class="w-32">
-                    <apx-chart
-                        [series]="blockedChartOptions.series!"
-                        [chart]="blockedChartOptions.chart!"
-                        [xaxis]="blockedChartOptions.xaxis!"
-                        [yaxis]="blockedChartOptions.yaxis!"
-                        [grid]="blockedChartOptions.grid!"
-                        [stroke]="blockedChartOptions.stroke!"
-                        [tooltip]="blockedChartOptions.tooltip!"
-                        [dataLabels]="blockedChartOptions.dataLabels!"
-                        [colors]="blockedChartOptions.colors!"
-                    ></apx-chart>
-                </div>
-            </div>
+    <div
+      class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition"
+    >
+      <div class="flex items-center justify-between">
+        <h2 class="text-md font-semibold text-gray-600">In Progress</h2>
+        <i class="fa-solid fa-spinner text-2xl text-blue-500"></i>
+      </div>
+      <div class="flex items-center justify-between">
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : inProgressCount }}
+        </p>
+        <div class="w-32">
+          <apx-chart
+            [series]="inProgressChartOptions.series!"
+            [chart]="inProgressChartOptions.chart!"
+            [xaxis]="inProgressChartOptions.xaxis!"
+            [yaxis]="inProgressChartOptions.yaxis!"
+            [grid]="inProgressChartOptions.grid!"
+            [stroke]="inProgressChartOptions.stroke!"
+            [tooltip]="inProgressChartOptions.tooltip!"
+            [dataLabels]="inProgressChartOptions.dataLabels!"
+            [colors]="inProgressChartOptions.colors!"
+          ></apx-chart>
         </div>
+      </div>
+    </div>
 
-        <!-- Overdue -->
-        <div class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition">
-            <div class="flex items-center justify-between">
-                <h2 class="text-md font-semibold text-gray-600">Overdue</h2>
-                <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500"></i>
-            </div>
-            <div class="flex items-center justify-between">
-                <p class="text-6xl font-semibold">3</p>
-                <div class="w-32">
-                    <apx-chart
-                        [series]="overdueChartOptions.series!"
-                        [chart]="overdueChartOptions.chart!"
-                        [xaxis]="overdueChartOptions.xaxis!"
-                        [yaxis]="overdueChartOptions.yaxis!"
-                        [grid]="overdueChartOptions.grid!"
-                        [stroke]="overdueChartOptions.stroke!"
-                        [tooltip]="overdueChartOptions.tooltip!"
-                        [dataLabels]="overdueChartOptions.dataLabels!"
-                        [colors]="overdueChartOptions.colors!"
-                    ></apx-chart>
-                </div>
-            </div>
+    <div
+      class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition"
+    >
+      <div class="flex items-center justify-between">
+        <h2 class="text-md font-semibold text-gray-600">Blocked</h2>
+        <i class="fa-solid fa-ban text-2xl text-yellow-500"></i>
+      </div>
+      <div class="flex items-center justify-between">
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : blockedCount }}
+        </p>
+        <div class="w-32">
+          <apx-chart
+            [series]="blockedChartOptions.series!"
+            [chart]="blockedChartOptions.chart!"
+            [xaxis]="blockedChartOptions.xaxis!"
+            [yaxis]="blockedChartOptions.yaxis!"
+            [grid]="blockedChartOptions.grid!"
+            [stroke]="blockedChartOptions.stroke!"
+            [tooltip]="blockedChartOptions.tooltip!"
+            [dataLabels]="blockedChartOptions.dataLabels!"
+            [colors]="blockedChartOptions.colors!"
+          ></apx-chart>
         </div>
-    </section>
-    <section class="w-full rounded-lg bg-white p-4 shadow-md">
-        <div class="flex justify-between">
-            <h2 class="text-xl font-semibold">Job & Task Management</h2>
-            <div class="flex gap-x-2 text-lg">
-                <!-- <button ><i class="text-green-500 fa-solid fa-plus" title="Add new Trip"></i></button> -->
-                <button ><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button>
-            </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col gap-y-4 rounded-2xl bg-white p-6 shadow-md hover:shadow-lg transition"
+    >
+      <div class="flex items-center justify-between">
+        <h2 class="text-md font-semibold text-gray-600">Overdue</h2>
+        <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500"></i>
+      </div>
+      <div class="flex items-center justify-between">
+        <p class="text-6xl font-semibold">
+          {{ isLoadingServiceStats ? "--" : overdueCount }}
+        </p>
+        <div class="w-32">
+          <apx-chart
+            [series]="overdueChartOptions.series!"
+            [chart]="overdueChartOptions.chart!"
+            [xaxis]="overdueChartOptions.xaxis!"
+            [yaxis]="overdueChartOptions.yaxis!"
+            [grid]="overdueChartOptions.grid!"
+            [stroke]="overdueChartOptions.stroke!"
+            [tooltip]="overdueChartOptions.tooltip!"
+            [dataLabels]="overdueChartOptions.dataLabels!"
+            [colors]="overdueChartOptions.colors!"
+          ></apx-chart>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="w-full rounded-lg bg-white p-4 shadow-md">
+    <div class="flex justify-between">
+      <h2 class="text-xl font-semibold">Job & Task Management</h2>
+      <div class="flex gap-x-2 text-lg"></div>
+    </div>
     <div class="overflow-x-auto mt-4">
-        <table class="min-w-full">
-            <thead class="text-gray-500 text-sm uppercase">
-                <tr class="border-b">
-                    <th class="px-4 py-3 text-left">Task ID</th>
-                    <th class="px-4 py-3 text-left">Category</th>
-                    <th class="px-4 py-3 text-left">Assigned To</th>
-                    <th class="px-4 py-3 text-left">Start</th>
-                    <th class="px-4 py-3 text-left">Deadline</th>
-                    <th class="px-4 py-3 text-left">Priority</th>
-                    <th class="px-4 py-3 text-left">SLA</th>
-                    <th class="px-4 py-3 text-left">Status</th>
-                    <th class="px-4 py-3 text-center">Actions</th>
-                </tr>
-            </thead>
+      <table class="w-full min-w-[1100px] table-auto">
+        <thead class="text-gray-500 border-b border-gray-200">
+          <tr class="text-sm uppercase">
+            <th class="px-4 py-3 text-left w-[110px]">Task ID</th>
+            <th class="px-4 py-3 text-left w-[160px]">Vehicle</th>
+            <th class="px-4 py-3 text-left w-[120px]">Reg No</th>
+            <th class="px-4 py-3 text-left w-[130px]">Start</th>
+            <th class="px-4 py-3 text-left w-[130px]">Deadline</th>
+            <th class="px-4 py-3 text-left w-[100px]">Priority</th>
+            <th class="px-4 py-3 text-left w-[110px]">SLA Status</th>
+            <th class="px-4 py-3 text-left w-[110px]">Status</th>
+            <th class="px-4 py-3 text-center w-[90px]">Actions</th>
+          </tr>
+          <tr class="normal-case">
+            <th class="px-4 py-2 w-[110px]">
+              <input
+                type="text"
+                [(ngModel)]="filteredJobs.taskId"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[160px]">
+              <input
+                type="text"
+                [(ngModel)]="filteredJobs.category"
+                placeholder="Search model..."
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[120px]">
+              <input
+                type="text"
+                [(ngModel)]="filteredJobs.registrationNumber"
+                placeholder="Search reg no..."
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[130px]">
+              <input
+                type="date"
+                [(ngModel)]="filteredJobs.startDate"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[130px]">
+              <input
+                type="date"
+                [(ngModel)]="filteredJobs.endDate"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </th>
+            <th class="px-4 py-2 w-[100px]">
+              <select
+                [(ngModel)]="filteredJobs.priority"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              >
+                <option value="">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+            </th>
+            <th class="px-4 py-2 w-[110px]">
+              <!-- No filter for SLA Status -->
+            </th>
+            <th class="px-4 py-2 w-[110px]">
+              <select
+                [(ngModel)]="filteredJobs.status"
+                class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+              >
+                <option value="">All Statuses</option>
+                <option value="Assigned">Assigned</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </th>
+            <th class="px-4 py-2 w-[90px] text-center">
+              <button
+                (click)="clearJobFilters()"
+                class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200"
+              >
+                <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
+                Clear
+              </button>
+            </th>
+          </tr>
+        </thead>
 
-            <tbody class="divide-y">
-                <tr
-                    *ngFor="let job of paginatedJobs;let i = index"
-                    class="hover:bg-gray-50 border-b border-gray-200"
-                >
-                    <td class="px-4 py-3 text-blue-600 font-medium">
-                        {{ job.taskId }}
-                    </td>
+        <tbody class="divide-y text-sm">
+          <tr
+            *ngFor="let job of paginatedJobs; let i = index"
+            class="hover:bg-gray-50 border-b border-gray-200"
+          >
+            <td class="px-4 py-2.5 text-blue-600 font-medium whitespace-nowrap">
+              {{ job.taskId }}
+            </td>
 
-                    <td class="px-4 py-3">{{ job.category }}</td>
-                    <td class="px-4 py-3">{{ job.assignedTo }}</td>
-                    <td class="px-4 py-3">{{ job.start }}</td>
-                    <td class="px-4 py-3">{{ job.deadLine }}</td>
+            <td
+              class="px-4 py-2.5 max-w-[10rem] truncate"
+              [title]="job.vehicleModel"
+            >
+              {{ job.vehicleModel }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap font-mono">
+              {{ job.registrationNumber }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap">
+              {{ job.start | date: "short" }}
+            </td>
+            <td class="px-4 py-2.5 whitespace-nowrap">
+              {{ job.deadLine | date: "short" }}
+            </td>
 
-                    <!-- Priority -->
-                    <td class="px-4 py-3">
-                        <span
-                            class="px-2 py-1 text-sm border rounded"
-                            [ngClass]="{
-                                'border-red-500 bg-red-100 text-red-700': job.priority === 'High',
-                                'border-yellow-500 bg-yellow-100 text-yellow-700': job.priority === 'Medium',
-                                'border-green-500 bg-green-100 text-green-700': job.priority === 'Low'
-                            }"
-                        >
-                            {{ job.priority }}
-                        </span>
-                    </td>
+            <!-- Priority -->
+            <td class="px-4 py-2.5">
+              <span
+                class="px-2 py-1 text-xs border rounded whitespace-nowrap"
+                [ngClass]="{
+                  'border-red-500 bg-red-100 text-red-700':
+                    job.priority === 'High',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    job.priority === 'Medium',
+                  'border-green-500 bg-green-100 text-green-700':
+                    job.priority === 'Low',
+                }"
+              >
+                {{ job.priority }}
+              </span>
+            </td>
 
-                    <!-- SLA -->
-                    <td class="px-4 py-3 font-semibold"
-                        [ngClass]="{
-                            'text-green-600': job.slaStatus === 'On Track',
-                            'text-yellow-600': job.slaStatus === 'At Risk',
-                            'text-red-600': job.slaStatus === 'Breached'
-                        }"
-                    >
-                        {{ job.slaTime }}
-                    </td>
+            <!-- SLA Status -->
+            <td class="px-4 py-2.5">
+              <span
+                class="px-2 py-1 text-xs border rounded font-semibold whitespace-nowrap"
+                [ngClass]="{
+                  'border-green-500 bg-green-100 text-green-700':
+                    job.slaStatus === 'On Track',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    job.slaStatus === 'At Risk',
+                  'border-red-500 bg-red-100 text-red-700':
+                    job.slaStatus === 'Breached',
+                }"
+              >
+                {{ job.slaStatus }}
+              </span>
+            </td>
 
-                    <!-- Status -->
-                    <td class="px-4 py-3">
-                        <span
-                            class="px-2 py-1 text-sm border rounded"
-                            [ngClass]="{
-                                'border-blue-500 bg-blue-100 text-blue-700': job.status === 'Assigned',
-                                'border-yellow-500 bg-yellow-100 text-yellow-700': job.status === 'In Progress',
-                                'border-green-500 bg-green-100 text-green-700': job.status === 'Completed'
-                            }"
-                        >
-                            {{ job.status }}
-                        </span>
-                    </td>
+            <!-- Status -->
+            <td class="px-4 py-2.5">
+              <span
+                class="px-2 py-1 text-xs border rounded whitespace-nowrap"
+                [ngClass]="{
+                  'border-blue-500 bg-blue-100 text-blue-700':
+                    job.status === 'Assigned',
+                  'border-yellow-500 bg-yellow-100 text-yellow-700':
+                    job.status === 'In Progress',
+                  'border-green-500 bg-green-100 text-green-700':
+                    job.status === 'Completed',
+                }"
+              >
+                {{ job.status }}
+              </span>
+            </td>
 
-                    <!-- Actions -->
-                    <td class="px-4 py-3 text-center space-x-2">
-                        <button class="text-blue-600 hover:text-blue-700" title="View" (click)="jobViewIndex = i; jobViewBox = true;">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                        <button class="text-yellow-600 hover:text-yellow-700" title="Reassign">
-                            <i class="fa-solid fa-user-gear"></i>
-                        </button>
-                        <button class="text-red-600 hover:text-red-700" title="Escalate">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- Actions -->
+            <td class="px-4 py-2.5 text-center space-x-2">
+              <button
+                class="text-blue-600 hover:text-blue-700"
+                title="View"
+                (click)="selectedViewJob = job; jobViewBox = true"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button
+                class="text-yellow-600 hover:text-yellow-700"
+                title="Action"
+                (click)="openWorkerAction(job)"
+              >
+                <i class="fa-solid fa-user-gear"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="flex justify-between my-4">
-        <button
-            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-            (click)="previous()"
-            [disabled]="index <= 0"
-        >
-            <i class="fa-solid fa-caret-left"></i> Prev
-        </button>
+      <button
+        class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+        (click)="previous()"
+        [disabled]="index <= 0"
+      >
+        <i class="fa-solid fa-caret-left"></i> Prev
+      </button>
 
-        <button
-            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-            (click)="next()"
-            [disabled]="index >= jobs.length - pageSize"
-        >
-            Next <i class="fa-solid fa-caret-right"></i>
-        </button>
+      <button
+        class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+        (click)="next()"
+        [disabled]="index >= filteredJobList.length - pageSize"
+      >
+        Next <i class="fa-solid fa-caret-right"></i>
+      </button>
     </div>
-    </section>
+  </section>
 </div>
-<div *ngIf="jobViewBox" class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-black/40 z-30">
-    <div class="overflow-x-auto flex flex-col gap-y-1 w-auto bg-white shadow shadow-gray-300 border-2 border-gray-200 rounded-md p-4">
-        <div class="flex justify-start">
-            <button (click)="jobViewBox = !jobViewBox" class="border-2 border-gray-300 hover:border-gray-700 rounded"><i class="text-gray-500 fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="min-w-[350px] w-auto">
-        <div class="flex justify-between">
-            <p>Task ID:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].taskId}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Category:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].category}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Description:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].description}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Start:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].start}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Deadline:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].deadLine}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Assigned By:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].assignedBy}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Assigned To:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].assignedTo}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Priority:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].priority}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Status:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].status}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>SLA Time:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].slaTime}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>SLA Status:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].slaStatus}}</p>
-        </div>
-        <div class="flex justify-between">
-            <p>Attachment:</p><p class="ml-4 font-semibold">{{jobs[jobViewIndex].attachment}}</p>
-        </div>
-        
-        <div>
-            <p>Notes:</p>
-            <textarea name="" id="" class="w-full border-2 border-gray-500 rounded p-2">{{jobs[jobViewIndex].notes}}</textarea>
-        </div>
-        </div>
+<div
+  *ngIf="jobViewBox"
+  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-slate-900/55 backdrop-blur-sm z-30 p-4"
+>
+  <div
+    class="w-full max-w-3xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden"
+  >
+    <div
+      class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-cyan-50 to-blue-50"
+    >
+      <div>
+        <h3 class="text-lg font-semibold text-slate-800">Task Details</h3>
+        <p class="text-xs text-slate-500">Job and SLA information</p>
+      </div>
+      <button
+        (click)="jobViewBox = !jobViewBox"
+        class="h-9 w-9 rounded-full border border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400 hover:bg-white transition"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
+
+    <div class="p-5 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Task ID
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ selectedViewJob?.taskId }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Vehicle
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ selectedViewJob?.vehicleModel }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Registration No.
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800 font-mono">
+            {{ selectedViewJob?.registrationNumber }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Start Time
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ formatDateTime(selectedViewJob?.start ?? "") }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Deadline
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ formatDateTime(selectedViewJob?.deadLine ?? "") }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Assigned By
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ selectedViewJob?.assignedBy }}
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Priority
+          </p>
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-red-500 bg-red-100 text-red-700':
+                selectedViewJob?.priority === 'High',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                selectedViewJob?.priority === 'Medium',
+              'border-green-500 bg-green-100 text-green-700':
+                selectedViewJob?.priority === 'Low',
+            }"
+          >
+            {{ selectedViewJob?.priority }}
+          </span>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Status
+          </p>
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-blue-500 bg-blue-100 text-blue-700':
+                selectedViewJob?.status === 'Assigned',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                selectedViewJob?.status === 'In Progress',
+              'border-green-500 bg-green-100 text-green-700':
+                selectedViewJob?.status === 'Completed',
+            }"
+          >
+            {{ selectedViewJob?.status }}
+          </span>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            SLA Time
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800">
+            {{ selectedViewJob?.slaTime }}
+          </p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            SLA Status
+          </p>
+          <span
+            class="mt-1 inline-flex px-2.5 py-1 text-xs font-semibold border rounded-full"
+            [ngClass]="{
+              'border-green-500 bg-green-100 text-green-700':
+                selectedViewJob?.slaStatus === 'On Track',
+              'border-yellow-500 bg-yellow-100 text-yellow-700':
+                selectedViewJob?.slaStatus === 'At Risk',
+              'border-red-500 bg-red-100 text-red-700':
+                selectedViewJob?.slaStatus === 'Breached',
+            }"
+          >
+            {{ selectedViewJob?.slaStatus }}
+          </span>
+        </div>
+        <div
+          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 sm:col-span-2"
+        >
+          <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Description
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-800 break-words">
+            {{ selectedViewJob?.description }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p
+          class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-2"
+        >
+          Notes
+        </p>
+        <textarea
+          name=""
+          id=""
+          readonly
+          class="w-full min-h-24 border border-slate-300 rounded-lg p-3 bg-white text-slate-700 focus:outline-none"
+          >{{ selectedViewJob?.notes }}</textarea
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="workerActionForm"
+  class="min-h-screen w-full fixed inset-0 flex items-center justify-center bg-slate-900/55 backdrop-blur-sm z-30 p-4"
+>
+  <form
+    #form="ngForm"
+    (ngSubmit)="updateJobByWorker(form)"
+    class="w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden"
+  >
+    <div
+      class="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-blue-50 to-cyan-50"
+    >
+      <div>
+        <h3 class="text-lg font-semibold text-slate-800">
+          Update Service Task
+        </h3>
+        <p class="text-xs text-slate-500">
+          Update the status of this service task
+        </p>
+      </div>
+      <button
+        type="button"
+        (click)="workerActionForm = false"
+        class="h-9 w-9 rounded-full border border-slate-300 text-slate-500 hover:text-slate-700 hover:border-slate-400 hover:bg-white transition"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-5 max-h-[75vh] overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Service ID (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Service ID
+          </p>
+          <input
+            type="text"
+            name="taskId"
+            [ngModel]="selectedJob?.taskId"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm focus:outline-none"
+          />
+        </div>
+
+        <!-- Vehicle (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Vehicle
+          </p>
+          <input
+            type="text"
+            name="vehicleModel"
+            [ngModel]="selectedJob?.vehicleModel"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm focus:outline-none"
+          />
+        </div>
+
+        <!-- Registration Number (Readonly) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Registration No.
+          </p>
+          <input
+            type="text"
+            name="registrationNumber"
+            [ngModel]="selectedJob?.registrationNumber"
+            readonly
+            class="w-full border border-slate-300 rounded-lg bg-slate-100 px-3 py-2 text-sm font-mono focus:outline-none"
+          />
+        </div>
+
+        <!-- Status (Editable) -->
+        <div>
+          <p
+            class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1"
+          >
+            Status
+          </p>
+          <select
+            name="status"
+            [(ngModel)]="selectedServiceStatus"
+            required
+            class="w-full border border-slate-300 rounded-lg bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+          >
+            <option value="PENDING">Assigned</option>
+            <option value="ONGOING">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <!-- Error message -->
+        <div
+          *ngIf="serviceUpdateError"
+          class="sm:col-span-2 text-red-600 text-sm"
+        >
+          {{ serviceUpdateError }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div
+      class="flex justify-end gap-3 px-5 py-4 border-t border-slate-200 bg-slate-50"
+    >
+      <button
+        type="button"
+        (click)="workerActionForm = false"
+        class="px-4 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
+      >
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </button>
+
+      <button
+        type="submit"
+        [disabled]="isUpdatingServiceStatus"
+        class="px-4 py-2 rounded-lg bg-blue-600 text-white border border-blue-700 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <i class="fa-solid fa-pen-to-square"></i>
+        {{ isUpdatingServiceStatus ? "Updating..." : "Update Status" }}
+      </button>
+    </div>
+  </form>
 </div>

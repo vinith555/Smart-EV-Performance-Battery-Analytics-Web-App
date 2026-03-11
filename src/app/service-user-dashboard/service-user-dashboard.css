@@ -1,6 +1,22 @@
-.active-link{
-  color: #2E7D32; 
+.active-link {
+  color: #2e7d32;
   border-left-width: 5px;
   border-left-style: solid;
-  border-left-color: #22c55e;          /* terminal green */
+  border-left-color: #22c55e; /* terminal green */
+}
+
+/* Animation for smooth fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn ease-out;
 }

@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -8,8 +10,8 @@ import {
   ApexDataLabels,
   ApexTooltip,
   ApexStroke,
-  NgApexchartsModule
-} from "ng-apexcharts";
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -25,278 +27,373 @@ export type ChartOptions = {
 };
 
 interface Job {
+  serviceId: number;
   taskId: string;
   category: string;
-  description:string;
-  start:string;
-  deadLine:string;
-  assignedBy:string;
-  assignedTo: string;
-  priority:'Low' | 'Medium' | 'High';
+  vehicleModel: string;
+  registrationNumber: string;
+  description: string;
+  start: string;
+  deadLine: string;
+  assignedBy: string;
+  priority: 'Low' | 'Medium' | 'High';
   status: 'Assigned' | 'In Progress' | 'Completed';
   slaTime: string;
   slaStatus: 'On Track' | 'At Risk' | 'Breached';
-  attachment:string;
-  notes:string;
+  notes: string;
+  vehicleId: number;
 }
 
 @Component({
   selector: 'app-suerdashboard',
-  imports: [NgApexchartsModule,CommonModule],
+  imports: [NgApexchartsModule, CommonModule, FormsModule],
   templateUrl: './suerdashboard.html',
   styleUrl: './suerdashboard.css',
 })
-export class Suerdashboard {
-jobViewBox:boolean = false;
-jobViewIndex:number = -1;
-public newTasksChartOptions!: Partial<ChartOptions>;
-public inProgressChartOptions!: Partial<ChartOptions>;
-public blockedChartOptions!: Partial<ChartOptions>;
-public overdueChartOptions!: Partial<ChartOptions>;
+export class Suerdashboard implements OnInit {
+  jobViewBox: boolean = false;
+  selectedViewJob: Job | null = null;
+  isLoadingServiceStats: boolean = true;
+  serviceStatsError: string = '';
+  serviceData: any[] = [];
 
-constructor() {
+  public newTasksChartOptions!: Partial<ChartOptions>;
+  public inProgressChartOptions!: Partial<ChartOptions>;
+  public blockedChartOptions!: Partial<ChartOptions>;
+  public overdueChartOptions!: Partial<ChartOptions>;
 
-  // New Tasks (default / neutral)
-  this.newTasksChartOptions = this.getBaseChartOptions(
-    [0, 0, 2, 6, 3, 8, 4, 5, 7, 9, 1],
-    "#10B981"
-
-  );
-
-  // In Progress (blue)
-  this.inProgressChartOptions = this.getBaseChartOptions(
-    [1, 2, 3, 5, 4, 6, 7, 6, 8, 9, 10],
-    "#3B82F6"
-  );
-
-  // Blocked (yellow/orange)
-  this.blockedChartOptions = this.getBaseChartOptions(
-    [5, 4, 4, 3, 3, 2, 2, 1, 2, 1, 0],
-    "#F59E0B"
-  );
-
-  // Overdue (red)
-  this.overdueChartOptions = this.getBaseChartOptions(
-    [1, 3, 5, 7, 6, 8, 9, 10, 9, 11, 12],
-    "#EF4444"
-  );
-}
-
-private getBaseChartOptions(data: number[], color: string): Partial<ChartOptions> {
-  return {
-    series: [
-      {
-        name: "Tasks",
-        data: data
-      }
-    ],
-    chart: {
-      height: 70,
-      type: "area",
-      sparkline: {
-        enabled: true
-      },
-      toolbar: {
-        show: false
-      }
-    },
-    colors: [color],
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: "smooth",
-      width: 2
-    },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shadeIntensity: 0.5,
-        opacityFrom: 0.6,
-        opacityTo: 0.1
-      }
-    },
-    xaxis: {
-      labels: { show: false },
-      axisBorder: { show: false },
-      axisTicks: { show: false }
-    },
-    yaxis: {
-      labels: { show: false },
-      axisBorder: { show: false },
-      axisTicks: { show: false }
-    },
-    grid: {
-      show: false
-    },
-    tooltip: {
-      x: {
-        show: false
-      }
-    }
-  };
-}
-
-jobs: Job[] = [
-  {
-    taskId: "TASK-001",
-    category: "IT Support",
-    description: "Fix login issue for internal portal",
-    start: "2026-02-01T09:00:00Z",
-    deadLine: "2026-02-02T17:00:00Z",
-    assignedBy: "Alice Johnson",
-    assignedTo: "Mark Lee",
-    priority: "High",
-    status: "In Progress",
-    slaTime: "24h",
-    slaStatus: "At Risk",
-    attachment: "login-error-screenshot.png",
-    notes: "User reports intermittent failures"
-  },
-  {
-    taskId: "TASK-002",
-    category: "HR",
-    description: "Prepare onboarding documents",
-    start: "2026-02-03T10:00:00Z",
-    deadLine: "2026-02-05T18:00:00Z",
-    assignedBy: "HR Manager",
-    assignedTo: "Sophie Brown",
-    priority: "Medium",
-    status: "Assigned",
-    slaTime: "48h",
-    slaStatus: "On Track",
-    attachment: "",
-    notes: "New hire starts next week"
-  },
-  {
-    taskId: "TASK-003",
-    category: "Finance",
-    description: "Review Q1 expense reports",
-    start: "2026-02-01T08:30:00Z",
-    deadLine: "2026-02-07T17:00:00Z",
-    assignedBy: "Finance Director",
-    assignedTo: "Daniel Smith",
-    priority: "Low",
-    status: "In Progress",
-    slaTime: "72h",
-    slaStatus: "On Track",
-    attachment: "expenses-q1.xlsx",
-    notes: "Check compliance with policy"
-  },
-  {
-    taskId: "TASK-004",
-    category: "Operations",
-    description: "Warehouse inventory audit",
-    start: "2026-02-04T07:00:00Z",
-    deadLine: "2026-02-06T16:00:00Z",
-    assignedBy: "Operations Lead",
-    assignedTo: "Priya Patel",
-    priority: "High",
-    status: "Assigned",
-    slaTime: "36h",
-    slaStatus: "On Track",
-    attachment: "inventory-list.csv",
-    notes: "Include damaged items"
-  },
-  {
-    taskId: "TASK-005",
-    category: "Customer Support",
-    description: "Respond to escalated customer complaint",
-    start: "2026-02-05T11:15:00Z",
-    deadLine: "2026-02-05T15:15:00Z",
-    assignedBy: "Support Manager",
-    assignedTo: "Carlos Rivera",
-    priority: "High",
-    status: "Completed",
-    slaTime: "4h",
-    slaStatus: "On Track",
-    attachment: "customer-email.pdf",
-    notes: "Resolved with refund"
-  },
-  {
-    taskId: "TASK-006",
-    category: "Development",
-    description: "Implement password reset feature",
-    start: "2026-02-01T09:00:00Z",
-    deadLine: "2026-02-10T18:00:00Z",
-    assignedBy: "Tech Lead",
-    assignedTo: "Emily Chen",
-    priority: "Medium",
-    status: "In Progress",
-    slaTime: "120h",
-    slaStatus: "At Risk",
-    attachment: "feature-spec.docx",
-    notes: "Pending backend API"
-  },
-  {
-    taskId: "TASK-007",
-    category: "Marketing",
-    description: "Design social media campaign",
-    start: "2026-02-02T10:00:00Z",
-    deadLine: "2026-02-08T17:00:00Z",
-    assignedBy: "Marketing Head",
-    assignedTo: "Liam Wilson",
-    priority: "Low",
-    status: "Assigned",
-    slaTime: "96h",
-    slaStatus: "On Track",
-    attachment: "",
-    notes: "Target audience: Gen Z"
-  },
-  {
-    taskId: "TASK-008",
-    category: "Legal",
-    description: "Review vendor contract",
-    start: "2026-02-03T09:30:00Z",
-    deadLine: "2026-02-06T17:30:00Z",
-    assignedBy: "Procurement",
-    assignedTo: "Olivia Green",
-    priority: "Medium",
-    status: "Completed",
-    slaTime: "48h",
-    slaStatus: "On Track",
-    attachment: "vendor-contract.pdf",
-    notes: "Minor clause updated"
-  },
-  {
-    taskId: "TASK-009",
-    category: "IT Security",
-    description: "Investigate suspicious login attempts",
-    start: "2026-02-05T02:00:00Z",
-    deadLine: "2026-02-05T08:00:00Z",
-    assignedBy: "Security Officer",
-    assignedTo: "Noah Kim",
-    priority: "High",
-    status: "In Progress",
-    slaTime: "6h",
-    slaStatus: "Breached",
-    attachment: "security-logs.txt",
-    notes: "Multiple IPs detected"
-  },
-  {
-    taskId: "TASK-010",
-    category: "Administration",
-    description: "Schedule quarterly team meeting",
-    start: "2026-02-06T09:00:00Z",
-    deadLine: "2026-02-06T12:00:00Z",
-    assignedBy: "Office Manager",
-    assignedTo: "Hannah Moore",
-    priority: "Low",
-    status: "Completed",
-    slaTime: "3h",
-    slaStatus: "On Track",
-    attachment: "",
-    notes: "Calendar invites sent"
+  constructor(private apiService: ApiService) {
+    // Initialize with empty data until endpoint response arrives
+    this.newTasksChartOptions = this.getBaseChartOptions([0], '#10B981');
+    this.inProgressChartOptions = this.getBaseChartOptions([0], '#3B82F6');
+    this.blockedChartOptions = this.getBaseChartOptions([0], '#F59E0B');
+    this.overdueChartOptions = this.getBaseChartOptions([0], '#EF4444');
   }
-];
+
+  ngOnInit(): void {
+    this.loadServiceDetails();
+  }
+
+  loadServiceDetails(): void {
+    this.isLoadingServiceStats = true;
+    this.serviceStatsError = '';
+
+    this.apiService.getServiceDetails().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.serviceData = response.data;
+        } else {
+          this.serviceData = [];
+        }
+        this.updateMetricCharts();
+        this.isLoadingServiceStats = false;
+      },
+      error: () => {
+        this.serviceData = [];
+        this.serviceStatsError = 'Failed to load service stats';
+        this.updateMetricCharts();
+        this.isLoadingServiceStats = false;
+      },
+    });
+  }
+
+  private normalizeStatus(status: string): string {
+    return String(status || '')
+      .trim()
+      .toUpperCase();
+  }
+
+  private normalizeSlaStatus(slaStatus: string): string {
+    return String(slaStatus || '')
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, '_');
+  }
+
+  get newTasksCount(): number {
+    return this.serviceData.filter(
+      (item) => this.normalizeStatus(item.status) === 'PENDING',
+    ).length;
+  }
+
+  get inProgressCount(): number {
+    return this.serviceData.filter(
+      (item) => this.normalizeStatus(item.status) === 'ONGOING',
+    ).length;
+  }
+
+  get blockedCount(): number {
+    return this.serviceData.filter((item) => this.isBlockedTask(item)).length;
+  }
+
+  get overdueCount(): number {
+    return this.serviceData.filter((item) => this.isOverdueTask(item)).length;
+  }
+
+  private isBlockedTask(item: any): boolean {
+    const status = this.normalizeStatus(item.status);
+    const sla = this.normalizeSlaStatus(item.sla_status);
+    return (
+      status !== 'COMPLETED' &&
+      (sla === 'AT_RISK' || sla === 'BREACHED' || sla === 'BLOCKED')
+    );
+  }
+
+  private isOverdueTask(item: any): boolean {
+    const now = new Date().getTime();
+    const status = this.normalizeStatus(item.status);
+    const deadline = new Date(item.deadline).getTime();
+    return status !== 'COMPLETED' && !Number.isNaN(deadline) && deadline < now;
+  }
+
+  private buildMetricSeries(predicate: (item: any) => boolean): number[] {
+    const sorted = [...this.serviceData].sort(
+      (a, b) =>
+        new Date(a.start_time || a.deadline).getTime() -
+        new Date(b.start_time || b.deadline).getTime(),
+    );
+
+    if (!sorted.length) {
+      return [0];
+    }
+
+    let running = 0;
+    const series: number[] = [];
+
+    for (const item of sorted) {
+      if (predicate(item)) {
+        running += 1;
+      }
+      series.push(running);
+    }
+
+    return series.slice(-10);
+  }
+
+  private updateMetricCharts(): void {
+    this.newTasksChartOptions = this.getBaseChartOptions(
+      this.buildMetricSeries(
+        (item) => this.normalizeStatus(item.status) === 'PENDING',
+      ),
+      '#10B981',
+    );
+
+    this.inProgressChartOptions = this.getBaseChartOptions(
+      this.buildMetricSeries(
+        (item) => this.normalizeStatus(item.status) === 'ONGOING',
+      ),
+      '#3B82F6',
+    );
+
+    this.blockedChartOptions = this.getBaseChartOptions(
+      this.buildMetricSeries((item) => this.isBlockedTask(item)),
+      '#F59E0B',
+    );
+
+    this.overdueChartOptions = this.getBaseChartOptions(
+      this.buildMetricSeries((item) => this.isOverdueTask(item)),
+      '#EF4444',
+    );
+  }
+
+  private getBaseChartOptions(
+    data: number[],
+    color: string,
+  ): Partial<ChartOptions> {
+    return {
+      series: [
+        {
+          name: 'Tasks',
+          data: data,
+        },
+      ],
+      chart: {
+        height: 70,
+        type: 'area',
+        sparkline: {
+          enabled: true,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      colors: [color],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2,
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 0.5,
+          opacityFrom: 0.6,
+          opacityTo: 0.1,
+        },
+      },
+      xaxis: {
+        labels: { show: false },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+      },
+      yaxis: {
+        labels: { show: false },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+      },
+      grid: {
+        show: false,
+      },
+      tooltip: {
+        x: {
+          show: false,
+        },
+      },
+    };
+  }
+
+  get jobs(): Job[] {
+    return this.serviceData.map((service) => ({
+      serviceId: service.service_id,
+      taskId: `SRV-${service.service_id}`,
+      category: service.vehicle__vehicle_model
+        ? `${service.vehicle__vehicle_model} (${service.vehicle__registration_number || service.vehicle_id})`
+        : `Vehicle #${service.vehicle_id}`,
+      vehicleModel:
+        service.vehicle__vehicle_model || `Vehicle #${service.vehicle_id}`,
+      registrationNumber: service.vehicle__registration_number || 'N/A',
+      description: service.notes || 'Service task',
+      start: service.start_time,
+      deadLine: service.deadline,
+      assignedBy: service.assigned_by__email || 'N/A',
+      priority: this.normalizePriority(service.priority),
+      status: this.normalizeStatusForTable(service.status),
+      slaTime: service.sla_time ? `${service.sla_time}h` : 'N/A',
+      slaStatus: this.normalizeSlaStatusForTable(service.sla_status),
+      notes: service.notes || '',
+      vehicleId: service.vehicle_id,
+    }));
+  }
+
+  formatDateTime(dateString: string): string {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  private normalizePriority(priority: string): 'Low' | 'Medium' | 'High' {
+    const normalized = String(priority || '')
+      .trim()
+      .toUpperCase();
+    if (normalized === 'HIGH') return 'High';
+    if (normalized === 'MEDIUM') return 'Medium';
+    return 'Low';
+  }
+
+  private normalizeStatusForTable(
+    status: string,
+  ): 'Assigned' | 'In Progress' | 'Completed' {
+    const normalized = this.normalizeStatus(status);
+    if (normalized === 'PENDING') return 'Assigned';
+    if (normalized === 'ONGOING') return 'In Progress';
+    return 'Completed';
+  }
+
+  private normalizeSlaStatusForTable(
+    slaStatus: string,
+  ): 'On Track' | 'At Risk' | 'Breached' {
+    const normalized = this.normalizeSlaStatus(slaStatus);
+    if (normalized === 'AT_RISK') return 'At Risk';
+    if (normalized === 'BREACHED') return 'Breached';
+    if (normalized === 'BLOCKED') return 'Breached';
+    return 'On Track';
+  }
 
   pageSize = 5;
   index = 0;
 
-  get paginatedJobs(): Job[] {
-    return this.jobs.slice(this.index, this.index + this.pageSize);
-  }
+  filteredJobs = {
+    taskId: '',
+    category: '',
+    registrationNumber: '',
+    startDate: '',
+    endDate: '',
+    priority: '',
+    status: '',
+  };
 
+  get filteredJobList(): Job[] {
+    return this.jobs.filter((job) => {
+      const matchesTaskId =
+        !this.filteredJobs.taskId ||
+        job.taskId
+          .toLowerCase()
+          .includes(this.filteredJobs.taskId.toLowerCase());
+
+      const matchesCategory =
+        !this.filteredJobs.category ||
+        job.vehicleModel
+          .toLowerCase()
+          .includes(this.filteredJobs.category.toLowerCase());
+
+      const matchesRegistration =
+        !this.filteredJobs.registrationNumber ||
+        job.registrationNumber
+          .toLowerCase()
+          .includes(this.filteredJobs.registrationNumber.toLowerCase());
+
+      const matchesStartDate =
+        !this.filteredJobs.startDate ||
+        new Date(job.start).toDateString() ===
+          new Date(this.filteredJobs.startDate).toDateString();
+
+      const matchesEndDate =
+        !this.filteredJobs.endDate ||
+        new Date(job.deadLine).toDateString() ===
+          new Date(this.filteredJobs.endDate).toDateString();
+
+      const matchesPriority =
+        !this.filteredJobs.priority ||
+        job.priority.toLowerCase() === this.filteredJobs.priority.toLowerCase();
+
+      const matchesStatus =
+        !this.filteredJobs.status ||
+        job.status.toLowerCase() === this.filteredJobs.status.toLowerCase();
+
+      return (
+        matchesTaskId &&
+        matchesCategory &&
+        matchesRegistration &&
+        matchesStartDate &&
+        matchesEndDate &&
+        matchesPriority &&
+        matchesStatus
+      );
+    });
+  }
+  clearJobFilters() {
+    this.filteredJobs = {
+      taskId: '',
+      category: '',
+      registrationNumber: '',
+      startDate: '',
+      endDate: '',
+      priority: '',
+      status: '',
+    };
+  }
+  get paginatedJobs(): Job[] {
+    return this.filteredJobList.slice(this.index, this.index + this.pageSize);
+  }
   previous() {
     if (this.index > 0) {
       this.index -= this.pageSize;
@@ -304,8 +401,51 @@ jobs: Job[] = [
   }
 
   next() {
-    if (this.index + this.pageSize < this.jobs.length) {
+    if (this.index + this.pageSize < this.filteredJobList.length) {
       this.index += this.pageSize;
+    }
+  }
+
+  workerActionForm = false;
+  selectedJob: Job | null = null;
+  selectedServiceStatus: 'PENDING' | 'ONGOING' | 'COMPLETED' = 'PENDING';
+  isUpdatingServiceStatus = false;
+  serviceUpdateError = '';
+
+  openWorkerAction(job: Job): void {
+    this.selectedJob = job;
+    if (job.status === 'Assigned') this.selectedServiceStatus = 'PENDING';
+    else if (job.status === 'In Progress')
+      this.selectedServiceStatus = 'ONGOING';
+    else this.selectedServiceStatus = 'COMPLETED';
+    this.serviceUpdateError = '';
+    this.workerActionForm = true;
+  }
+
+  updateJobByWorker(form: any) {
+    if (form.valid && this.selectedJob) {
+      this.isUpdatingServiceStatus = true;
+      this.serviceUpdateError = '';
+      this.apiService
+        .updateServiceStatus(
+          this.selectedJob.serviceId,
+          this.selectedServiceStatus,
+        )
+        .subscribe({
+          next: () => {
+            const raw = this.serviceData.find(
+              (s) => s.service_id === this.selectedJob!.serviceId,
+            );
+            if (raw) raw.status = this.selectedServiceStatus;
+            this.isUpdatingServiceStatus = false;
+            this.workerActionForm = false;
+          },
+          error: () => {
+            this.serviceUpdateError =
+              'Failed to update status. Please try again.';
+            this.isUpdatingServiceStatus = false;
+          },
+        });
     }
   }
 
