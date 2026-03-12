@@ -8,10 +8,10 @@
         <i class="fa-solid fa-list-check text-2xl text-emerald-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">
+        <p class="text-3xl sm:text-4xl lg:text-6xl font-semibold leading-none">
           {{ isLoadingServiceStats ? "--" : newTasksCount }}
         </p>
-        <div class="w-32">
+        <div class="w-20 sm:w-24 lg:w-32">
           <apx-chart
             [series]="newTasksChartOptions.series!"
             [chart]="newTasksChartOptions.chart!"
@@ -35,10 +35,10 @@
         <i class="fa-solid fa-spinner text-2xl text-blue-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">
+        <p class="text-3xl sm:text-4xl lg:text-6xl font-semibold leading-none">
           {{ isLoadingServiceStats ? "--" : inProgressCount }}
         </p>
-        <div class="w-32">
+        <div class="w-20 sm:w-24 lg:w-32">
           <apx-chart
             [series]="inProgressChartOptions.series!"
             [chart]="inProgressChartOptions.chart!"
@@ -62,10 +62,10 @@
         <i class="fa-solid fa-ban text-2xl text-yellow-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">
+        <p class="text-3xl sm:text-4xl lg:text-6xl font-semibold leading-none">
           {{ isLoadingServiceStats ? "--" : blockedCount }}
         </p>
-        <div class="w-32">
+        <div class="w-20 sm:w-24 lg:w-32">
           <apx-chart
             [series]="blockedChartOptions.series!"
             [chart]="blockedChartOptions.chart!"
@@ -89,10 +89,10 @@
         <i class="fa-solid fa-triangle-exclamation text-2xl text-red-500"></i>
       </div>
       <div class="flex items-center justify-between">
-        <p class="text-6xl font-semibold">
+        <p class="text-3xl sm:text-4xl lg:text-6xl font-semibold leading-none">
           {{ isLoadingServiceStats ? "--" : overdueCount }}
         </p>
-        <div class="w-32">
+        <div class="w-20 sm:w-24 lg:w-32">
           <apx-chart
             [series]="overdueChartOptions.series!"
             [chart]="overdueChartOptions.chart!"
@@ -204,12 +204,24 @@
         </thead>
 
         <tbody class="divide-y text-sm">
+          <!-- Empty State Message -->
+          <tr *ngIf="paginatedJobs.length === 0">
+            <td colspan="9" class="px-4 py-6 text-center text-gray-500">
+              No tasks found matching your filters
+            </td>
+          </tr>
+
           <tr
             *ngFor="let job of paginatedJobs; let i = index"
             class="hover:bg-gray-50 border-b border-gray-200"
           >
             <td class="px-4 py-2.5 text-blue-600 font-medium whitespace-nowrap">
               {{ job.taskId }}
+              <span
+                *ngIf="job.isIssueTask"
+                class="ml-1 inline-block px-1.5 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-700"
+                >ISSUE</span
+              >
             </td>
 
             <td
@@ -289,8 +301,9 @@
                 <i class="fa-solid fa-eye"></i>
               </button>
               <button
+                *ngIf="!job.isIssueTask"
                 class="text-yellow-600 hover:text-yellow-700"
-                title="Action"
+                title="Update Status"
                 (click)="openWorkerAction(job)"
               >
                 <i class="fa-solid fa-user-gear"></i>

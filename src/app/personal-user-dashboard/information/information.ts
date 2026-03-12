@@ -380,11 +380,17 @@ export class Information implements OnInit {
     this.loadIssueDetails();
   }
 
+  private getSelectedVehicleId(): number | undefined {
+    const vehicleId = localStorage.getItem('selectedVehicleId');
+    return vehicleId ? Number(vehicleId) : undefined;
+  }
+
   loadChargingDetails(): void {
     this.isLoadingCharging = true;
     this.chargingError = '';
+    const vehicleId = this.getSelectedVehicleId();
 
-    this.apiService.getChargingDetails().subscribe({
+    this.apiService.getChargingDetails(vehicleId).subscribe({
       next: (response) => {
         console.log('Charging details response:', response);
         if (response.success && response.data?.vehicle_stats?.length > 0) {
@@ -407,8 +413,9 @@ export class Information implements OnInit {
   loadBillDetails(): void {
     this.isLoadingBills = true;
     this.billsError = '';
+    const vehicleId = this.getSelectedVehicleId();
 
-    this.apiService.getBillDetails().subscribe({
+    this.apiService.getBillDetails(vehicleId).subscribe({
       next: (response) => {
         console.log('Bill details response:', response);
         if (response.success && response.data?.bills) {
@@ -430,8 +437,9 @@ export class Information implements OnInit {
   loadIssueDetails(): void {
     this.isLoadingIssues = true;
     this.issuesError = '';
+    const vehicleId = this.getSelectedVehicleId();
 
-    this.apiService.getIssueDetails().subscribe({
+    this.apiService.getIssueDetails(vehicleId).subscribe({
       next: (response) => {
         console.log('Issue details response:', response);
         if (response.success && response.data) {

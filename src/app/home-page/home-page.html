@@ -36,20 +36,17 @@
     </button>
 
     <!-- User Icon (Desktop only) -->
-    <div class="hidden md:block relative">
+    <div
+      class="hidden md:block relative"
+      *ngIf="!isLoggedIn"
+      (mouseenter)="isUserDropdownOpen = true"
+      (mouseleave)="isUserDropdownOpen = false"
+    >
       <button
-        *ngIf="isLoggedIn"
-        (click)="goToProfile()"
-        class="text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
-        title="Go to Profile"
-      >
-        <i class="far fa-user-circle"></i>
-      </button>
-
-      <button
-        *ngIf="!isLoggedIn"
-        (click)="toggleUserDropdown()"
+        type="button"
         (mouseenter)="isUserDropdownOpen = true"
+        (focus)="isUserDropdownOpen = true"
+        (click)="isUserDropdownOpen = true"
         class="text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
         title="User Menu"
       >
@@ -58,10 +55,9 @@
 
       <!-- Dropdown Menu -->
       <div
-        *ngIf="!isLoggedIn && isUserDropdownOpen"
+        *ngIf="isUserDropdownOpen"
         (mouseenter)="isUserDropdownOpen = true"
-        (mouseleave)="isUserDropdownOpen = false"
-        class="absolute right-0 mt-2 w-48 bg-[#00712D] rounded-lg shadow-lg z-50 border border-[#D5ED9F]"
+        class="absolute right-0 top-full w-48 bg-[#00712D] rounded-lg shadow-lg z-[60] border border-[#D5ED9F]"
       >
         <a
           routerLink="/login"
@@ -78,6 +74,16 @@
           <i class="far fa-question-circle mr-2"></i>Help & Support
         </a>
       </div>
+    </div>
+
+    <div class="hidden md:block relative" *ngIf="isLoggedIn">
+      <button
+        (click)="goToProfile()"
+        class="text-2xl text-[#D5ED9F] hover:scale-110 transition duration-300"
+        title="Go to Profile"
+      >
+        <i class="far fa-user-circle"></i>
+      </button>
     </div>
   </div>
 </nav>

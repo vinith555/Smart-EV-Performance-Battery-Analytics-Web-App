@@ -47,6 +47,8 @@ export class Userdashboard implements OnInit {
   // Vehicle data from API
   vehicleData: any = null;
   vehicleStats: any = null;
+  allVehicles: any[] = []; // Store all vehicles
+  selectedVehicleId: any = null; // Track selected vehicle
 
   // Display properties
   evModel: string = 'Loading...';
@@ -70,6 +72,7 @@ export class Userdashboard implements OnInit {
   index = 0;
   statistics!: Partial<ChartOptions>;
   isLoading: boolean = true;
+  isSwitchingVehicle: boolean = false;
   error: string = '';
 
   constructor(private apiService: ApiService) {
@@ -77,8 +80,20 @@ export class Userdashboard implements OnInit {
   }
 
   ngOnInit(): void {
+    // Load vehicle ID from localStorage first if available
+    this.loadVehicleIdFromStorage();
     this.loadVehicleDetails();
-    this.loadTripDetails();
+  }
+
+  private loadVehicleIdFromStorage(): void {
+    const storedVehicleId = localStorage.getItem('selectedVehicleId');
+    if (storedVehicleId) {
+      this.selectedVehicleId = Number(storedVehicleId);
+    }
+  }
+
+  private saveVehicleIdToStorage(vehicleId: any): void {
+    localStorage.setItem('selectedVehicleId', String(vehicleId));
   }
 
   private formatDate(value: string | null | undefined): string {
@@ -106,7 +121,7 @@ export class Userdashboard implements OnInit {
   }
 
   loadTripDetails(): void {
-    this.apiService.getTripDetails().subscribe({
+    this.apiService.getTripDetails(this.selectedVehicleId).subscribe({
       next: (response) => {
         if (response?.success && Array.isArray(response.data)) {
           this.trips = response.data.map((trip: any) => ({
@@ -132,9 +147,11 @@ export class Userdashboard implements OnInit {
           }));
           this.index = 0;
         }
+        this.isSwitchingVehicle = false;
       },
       error: (error) => {
         console.error('Error fetching trip details:', error);
+        this.isSwitchingVehicle = false;
       },
     });
   }
@@ -144,38 +161,21 @@ export class Userdashboard implements OnInit {
     this.apiService.getVehicleDetails().subscribe({
       next: (response) => {
         if (response.success && response.data) {
-          // Get first vehicle and its stats
+          // Store all vehicles
           if (response.data.vehicle && response.data.vehicle.length > 0) {
-            this.vehicleData = response.data.vehicle[0];
-            this.evModel = this.vehicleData.vehicle_model || 'N/A';
-            this.registrationNumber =
-              this.vehicleData.registration_number || 'N/A';
-            this.vehicleColour = this.vehicleData.vehicle_colour || 'N/A';
-            this.vehicleImage = this.getVehicleImageById(
-              this.vehicleData.vehicle_id,
-            );
+            this.allVehicles = response.data.vehicle;
 
-            // Extract year from created_at
-            if (this.vehicleData.created_at) {
-              const date = new Date(this.vehicleData.created_at);
-              this.yearModel = date.getFullYear().toString();
+            // Set first vehicle as default if none selected
+            if (!this.selectedVehicleId) {
+              this.selectedVehicleId = this.allVehicles[0].vehicle_id;
+              this.saveVehicleIdToStorage(this.selectedVehicleId);
             }
-          }
 
-          // Get vehicle stats
-          if (
-            response.data.vehicle_stats &&
-            response.data.vehicle_stats.length > 0
-          ) {
-            this.vehicleStats = response.data.vehicle_stats[0];
-            this.batteryPercentage = this.vehicleStats.battery_percentage || 0;
-            this.batteryHealth = this.vehicleStats.battery_health || 0;
-            this.temperature = this.vehicleStats.temperature || 0;
-            this.batteryCapacity = this.vehicleStats.battery_capacity || 0;
-            this.estimatedRange = this.vehicleStats.estimated_range || 0;
-            this.isCharging = this.vehicleStats.is_charging || false;
-            this.kwh = this.vehicleStats.total || 0;
-            this.chargingTime = this.vehicleStats.charging_time || 'N/A';
+            // Load the selected vehicle data
+            this.loadSelectedVehicleData(response.data);
+
+            // Now load trip details for the selected vehicle
+            this.loadTripDetails();
           }
 
           this.isLoading = false;
@@ -188,6 +188,81 @@ export class Userdashboard implements OnInit {
       },
     });
   }
+
+  loadSelectedVehicleData(data: any): void {
+    // Find selected vehicle from allVehicles
+    this.vehicleData = this.allVehicles.find(
+      (v) => v.vehicle_id === this.selectedVehicleId,
+    );
+
+    if (this.vehicleData) {
+      this.evModel = this.vehicleData.vehicle_model || 'N/A';
+      this.registrationNumber = this.vehicleData.registration_number || 'N/A';
+      this.vehicleColour = this.vehicleData.vehicle_colour || 'N/A';
+      this.vehicleImage = this.getVehicleImageById(this.vehicleData.vehicle_id);
+
+      // Extract year from created_at
+      if (this.vehicleData.created_at) {
+        const date = new Date(this.vehicleData.created_at);
+        this.yearModel = date.getFullYear().toString();
+      }
+    }
+
+    // Get vehicle stats for selected vehicle
+    if (data.vehicle_stats && data.vehicle_stats.length > 0) {
+      this.vehicleStats =
+        data.vehicle_stats.find(
+          (vs: any) => vs.vehicle_id === this.selectedVehicleId,
+        ) || data.vehicle_stats[0];
+
+      this.batteryHealth = this.vehicleStats.battery_health || 0;
+      this.temperature = this.vehicleStats.temperature || 0;
+      this.batteryCapacity = this.vehicleStats.battery_capacity || 0;
+      this.estimatedRange = this.vehicleStats.estimated_range || 0;
+      this.isCharging = this.vehicleStats.is_charging || false;
+      this.kwh = this.vehicleStats.total || 0;
+      this.chargingTime = this.vehicleStats.charging_time || 'N/A';
+    }
+  }
+
+  onVehicleChange(vehicleId: any): void {
+    // Convert to number if it's a string
+    const vehicleIdNum =
+      typeof vehicleId === 'string' ? Number(vehicleId) : vehicleId;
+
+    this.selectedVehicleId = vehicleIdNum;
+    this.saveVehicleIdToStorage(vehicleIdNum);
+    this.isSwitchingVehicle = true;
+
+    // Immediately update display data from existing allVehicles array
+    if (this.allVehicles && this.allVehicles.length > 0) {
+      const selectedVehicle = this.allVehicles.find(
+        (v) => v.vehicle_id === vehicleIdNum,
+      );
+
+      if (selectedVehicle) {
+        this.evModel = selectedVehicle.vehicle_model || 'N/A';
+        this.registrationNumber = selectedVehicle.registration_number || 'N/A';
+        this.vehicleColour = selectedVehicle.vehicle_colour || 'N/A';
+        this.vehicleImage = this.getVehicleImageById(
+          selectedVehicle.vehicle_id,
+        );
+
+        if (selectedVehicle.created_at) {
+          const date = new Date(selectedVehicle.created_at);
+          this.yearModel = date.getFullYear().toString();
+        }
+      }
+    }
+
+    // Reload trip details for the selected vehicle
+    this.loadTripDetails();
+  }
+
+  retryLoadVehicleDetails(): void {
+    this.loadVehicleDetails();
+  }
+
   statisticsChangeFunction(data: number[]): Partial<ChartOptions> {
     return {
       series: [

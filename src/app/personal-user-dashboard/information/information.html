@@ -221,20 +221,8 @@
       <p class="text-red-700">{{ issuesError }}</p>
     </div>
 
-    <!-- Empty State -->
-    <div
-      *ngIf="!isLoadingIssues && !issuesError && filteredIssues.length === 0"
-      class="text-center py-12"
-    >
-      <i class="fas fa-wrench text-5xl text-slate-300 mb-3"></i>
-      <p class="text-slate-600">No issues found</p>
-    </div>
-
-    <!-- Data Table -->
-    <div
-      *ngIf="!isLoadingIssues && !issuesError && filteredIssues.length > 0"
-      class="overflow-x-auto mt-4"
-    >
+    <!-- Data Table Always Visible -->
+    <div *ngIf="!isLoadingIssues && !issuesError" class="overflow-x-auto mt-4">
       <table class="min-w-full">
         <thead class="text-gray-500 text-sm uppercase border-b border-gray-200">
           <tr class="">
@@ -322,6 +310,13 @@
         </thead>
 
         <tbody class="divide-y">
+          <!-- Empty State Message -->
+          <tr *ngIf="filteredIssues.length === 0">
+            <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+              No issues found matching your filters
+            </td>
+          </tr>
+
           <tr
             *ngFor="let issue of paginatedIssues; let i = index"
             class="hover:bg-gray-50 border-b border-gray-200"
@@ -397,7 +392,7 @@
 
     <!-- Pagination -->
     <div
-      *ngIf="!isLoadingIssues && !issuesError && filteredIssues.length > 0"
+      *ngIf="!isLoadingIssues && !issuesError"
       class="flex justify-between my-4"
     >
       <button

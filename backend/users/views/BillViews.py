@@ -121,29 +121,35 @@ def BillDetails(request):
 class BillDetailsView(BaseHandler):
     def getBillDetails(self, request):
         try:
+            # Get vehicle_id from query parameters if provided
+            vehicle_id = request.query_params.get("vehicle_id")
+
             # Get bills for vehicles owned by the current user
-            bills = (
-                Bill.objects.filter(customer=request.user)
-                .select_related("vehicle", "service", "issue")
-                .all()
-                .values(
-                    "bill_id",
-                    "vehicle__registration_number",
-                    "vehicle__vehicle_model",
-                    "service__service_id",
-                    "issue__issue_id",
-                    "bill_date",
-                    "due_date",
-                    "subtotal",
-                    "tax_percentage",
-                    "tax_amount",
-                    "discount",
-                    "total_amount",
-                    "payment_status",
-                    "payment_method",
-                    "payment_date",
-                    "notes",
-                )
+            bills_queryset = Bill.objects.filter(customer=request.user).select_related(
+                "vehicle", "service", "issue"
+            )
+
+            # If vehicle_id is provided, filter by that specific vehicle
+            if vehicle_id:
+                bills_queryset = bills_queryset.filter(vehicle_id=vehicle_id)
+
+            bills = bills_queryset.all().values(
+                "bill_id",
+                "vehicle__registration_number",
+                "vehicle__vehicle_model",
+                "service__service_id",
+                "issue__issue_id",
+                "bill_date",
+                "due_date",
+                "subtotal",
+                "tax_percentage",
+                "tax_amount",
+                "discount",
+                "total_amount",
+                "payment_status",
+                "payment_method",
+                "payment_date",
+                "notes",
             )
 
         except Exception as e:
@@ -159,6 +165,7 @@ class BillDetailsView(BaseHandler):
 
         logger.info(
             f"Bill details fetched successfully for user {request.user.user_id}"
+            + (f" and vehicle {vehicle_id}" if vehicle_id else "")
         )
 
         return JsonResponse(

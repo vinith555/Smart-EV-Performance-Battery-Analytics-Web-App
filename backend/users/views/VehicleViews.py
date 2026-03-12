@@ -106,22 +106,31 @@ def GetChargingDetails(request):
 class ChargingDetailsView(BaseHandler):
     def getChargingDetails(self, request):
         try:
-            vehicle_stats = (
-                VehicleStats.objects.filter(vehicle__owner=request.user)
-                .all()
-                .values(
-                    "stats_id",
-                    "vehicle_id",
-                    "battery_percentage",
-                    "total",
-                    "battery_health",
-                    "charging_time",
-                    "temperature",
-                    "battery_capacity",
-                    "is_charging",
-                    "estimated_range",
-                    "recorded_at",
+            # Get vehicle_id from query parameters if provided
+            vehicle_id = request.query_params.get("vehicle_id")
+
+            vehicle_stats_queryset = VehicleStats.objects.filter(
+                vehicle__owner=request.user
+            )
+
+            # If vehicle_id is provided, filter by that specific vehicle
+            if vehicle_id:
+                vehicle_stats_queryset = vehicle_stats_queryset.filter(
+                    vehicle_id=vehicle_id
                 )
+
+            vehicle_stats = vehicle_stats_queryset.all().values(
+                "stats_id",
+                "vehicle_id",
+                "battery_percentage",
+                "total",
+                "battery_health",
+                "charging_time",
+                "temperature",
+                "battery_capacity",
+                "is_charging",
+                "estimated_range",
+                "recorded_at",
             )
         except Exception as e:
             logger.error(f"Error fetching vehicle stats: {str(e)}")
@@ -136,6 +145,7 @@ class ChargingDetailsView(BaseHandler):
 
         logger.info(
             f"Vehicle stats fetched successfully for user {request.user.user_id}"
+            + (f" and vehicle {vehicle_id}" if vehicle_id else "")
         )
 
         return JsonResponse(

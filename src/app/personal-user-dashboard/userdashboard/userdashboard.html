@@ -14,398 +14,453 @@
   >
     <strong class="font-bold">Error!</strong>
     <span class="block sm:inline"> {{ error }}</span>
-    <button (click)="loadVehicleDetails()" class="ml-4 text-sm underline">
+    <button (click)="retryLoadVehicleDetails()" class="ml-4 text-sm underline">
       Retry
     </button>
   </div>
 
   <!-- Main Content -->
   <div *ngIf="!isLoading && !error" class="flex flex-col gap-y-8">
-    <section class="flex flex-wrap gap-6 h-auto">
+    <!-- Vehicle Selector -->
+    <div class="flex items-center gap-4">
+      <div class="w-full sm:w-72">
+        <label class="block text-sm font-medium text-gray-600 mb-1">
+          <i class="fa-solid fa-car-side text-green-600 mr-1"></i> Select
+          Vehicle
+        </label>
+        <select
+          [(ngModel)]="selectedVehicleId"
+          (change)="onVehicleChange(selectedVehicleId)"
+          [disabled]="isSwitchingVehicle"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white text-gray-700 font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          <option
+            *ngFor="let vehicle of allVehicles"
+            [value]="vehicle.vehicle_id"
+          >
+            {{ vehicle.vehicle_model }} — {{ vehicle.registration_number }}
+          </option>
+        </select>
+      </div>
+      <!-- Switching indicator shown inline next to dropdown -->
       <div
-        class="flex flex-col gap-4 w-full lg:flex-1 bg-white p-4 mx-auto rounded-xl shadow-md"
+        *ngIf="isSwitchingVehicle"
+        class="flex items-center gap-2 mt-5 text-green-600"
       >
-        <div class="flex justify-between items-center">
-          <h2 class="text-xl font-semibold">{{ evModel }}</h2>
-          <p
-            class="text-md text-[#2E7D32] font-semibold bg-[#E6F4EA] p-1 rounded"
-          >
-            {{ yearModel }}
-          </p>
-        </div>
-
-        <img
-          [src]="vehicleImage"
-          alt=""
-          class="w-full h-[260px] object-contain"
-        />
+        <i class="fas fa-spinner fa-spin text-lg"></i>
+        <span class="text-sm font-medium">Switching vehicle...</span>
       </div>
+    </div>
 
+    <!-- Switching overlay: dims the data sections while loading -->
+    <div
+      class="relative flex flex-col gap-y-8"
+      [class.pointer-events-none]="isSwitchingVehicle"
+    >
+      <!-- Overlay -->
       <div
-        class="w-full lg:flex-1 max-w-[650px] bg-white p-4 mx-auto rounded-xl shadow-md"
+        *ngIf="isSwitchingVehicle"
+        class="absolute inset-0 z-10 flex items-center justify-center bg-white/70 backdrop-blur-sm rounded-xl"
       >
-        <h2 class="text-xl font-semibold">Vehicle Location</h2>
-        <app-map></app-map>
-      </div>
-    </section>
-
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-white p-4 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold">Vehicle Details</h2>
-        <div class="grid grid-cols-2 gap-4 place-items-center py-6">
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fa-solid fa-id-card text-slate-700"></i>
-            <p class="text-sm font-medium text-gray-500">Registration Number</p>
-            <p class="text-lg font-semibold text-slate-700">
-              {{ registrationNumber }}
-            </p>
-          </div>
-
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-car text-green-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Model</p>
-            <p class="text-lg font-semibold text-green-500">{{ evModel }}</p>
-          </div>
-
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-battery-half text-blue-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Battery Capacity</p>
-            <p class="text-lg font-semibold text-blue-500">
-              {{ batteryCapacity }} kWh
-            </p>
-          </div>
-
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-road text-purple-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Range</p>
-            <p class="text-lg font-semibold text-purple-500">
-              {{ estimatedRange }} km
-            </p>
-          </div>
-
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-charging-station text-orange-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Charging Time</p>
-            <p class="text-lg font-semibold text-orange-500">
-              {{ chargingTime }}
-            </p>
-          </div>
-
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fa-solid fa-palette text-teal-600"></i>
-            <p class="text-sm font-medium text-gray-500">Color</p>
-            <p class="text-lg font-semibold text-teal-500">
-              {{ vehicleColour }}
-            </p>
-          </div>
+        <div class="flex flex-col items-center gap-3">
+          <i class="fas fa-spinner fa-spin text-4xl text-green-500"></i>
+          <p class="text-gray-600 font-medium">Loading vehicle data...</p>
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl shadow-md">
-        <div class="flex justify-between">
-          <h2 class="text-xl font-semibold">Charging Information</h2>
-          <h2 class="text-xl font-semibold">Live Status</h2>
-        </div>
-        <div class="grid grid-cols-2 gap-4 place-items-center mt-6">
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-battery-half text-green-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Battery Percentage</p>
-            <p class="text-lg font-semibold text-green-500">
-              {{ batteryPercentage }}%
-            </p>
-          </div>
-          <div
-            class="flex flex-col gap-2 rounded-xl px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-            [ngClass]="isCharging ? 'bg-green-100' : 'bg-gray-100'"
-          >
-            <i
-              class="fas fa-plug text-xl"
-              [ngClass]="isCharging ? 'text-green-600' : 'text-gray-600'"
-            ></i>
-            <p class="text-sm font-medium text-gray-500">Charging Status</p>
+      <section class="flex flex-wrap gap-6 h-auto">
+        <div
+          class="flex flex-col gap-4 w-full lg:flex-1 bg-white p-4 mx-auto rounded-xl shadow-md"
+        >
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold">{{ evModel }}</h2>
             <p
-              class="text-lg font-semibold"
-              [ngClass]="isCharging ? 'text-green-600' : 'text-gray-600'"
+              class="text-md text-[#2E7D32] font-semibold bg-[#E6F4EA] p-1 rounded"
             >
-              {{ isCharging ? "Charging" : "Not Charging" }}
+              {{ yearModel }}
             </p>
           </div>
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-bolt text-blue-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">kWh Total</p>
-            <p class="text-lg font-semibold text-blue-500">{{ kwh }} kWh</p>
-          </div>
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-red-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-thermometer-half text-red-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Temperature</p>
-            <p class="text-lg font-semibold text-red-500">
-              {{ temperature }}°C
-            </p>
-          </div>
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-heart text-purple-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Battery Health</p>
-            <p class="text-lg font-semibold text-purple-500">
-              {{ batteryHealth }}%
-            </p>
-          </div>
-          <div
-            class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
-          >
-            <i class="fas fa-road text-orange-600 text-xl"></i>
-            <p class="text-sm font-medium text-gray-500">Est. Range</p>
-            <p class="text-lg font-semibold text-orange-500">
-              {{ estimatedRange }} km
-            </p>
-          </div>
+          <img
+            [src]="vehicleImage"
+            alt=""
+            class="w-full h-[260px] object-contain"
+          />
         </div>
-      </div>
-      <div
-        class="bg-white p-4 rounded-xl shadow-md sm:col-span-2 lg:col-span-1"
-      >
-        <h2 class="text-xl font-semibold">Statistics</h2>
-        <div class="flex my-2">
-          <button
-            type="button"
-            class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
-            (click)="
-              statistics = statisticsChangeFunction([10, 30, 42, 12, 50])
-            "
-          >
-            24 hours
-          </button>
-          <button
-            type="button"
-            class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
-            (click)="
-              statistics = statisticsChangeFunction([30, 10, 12, 66, 27])
-            "
-          >
-            30 days
-          </button>
-          <button
-            type="button"
-            class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
-            (click)="
-              statistics = statisticsChangeFunction([20, 18, 25, 46, 30])
-            "
-          >
-            1 year
-          </button>
-        </div>
-        <div>
-          <h3 class="text-gray-600 text-lg">Total Energy Consumed</h3>
-          <p class="text-gray-600">
-            <span class="text-black text-2xl font-semibold">50</span>kwh
-          </p>
-        </div>
-        <apx-chart
-          [series]="statistics.series!"
-          [chart]="statistics.chart!"
-          [xaxis]="statistics.xaxis!"
-          [stroke]="statistics.stroke!"
-          [dataLabels]="statistics.dataLabels!"
+
+        <div
+          class="w-full lg:flex-1 max-w-[650px] bg-white p-4 mx-auto rounded-xl shadow-md"
         >
-        </apx-chart>
-      </div>
-    </section>
-
-    <section class="relative w-full rounded-lg bg-white p-4 shadow-md">
-      <div class="flex justify-between">
-        <h2 class="text-xl font-semibold">Trip Summary</h2>
-        <div class="flex gap-x-2 text-lg">
-          <button
-            (click)="clearFilters()"
-            class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200"
-            title="Clear Filters"
-          >
-            <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
-            Clear Filters
-          </button>
-          <!-- <button (click)="filter = !filter"><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button> -->
+          <h2 class="text-xl font-semibold">Vehicle Location</h2>
+          <app-map></app-map>
         </div>
-      </div>
+      </section>
 
-      <div class="overflow-x-auto mt-4">
-        <table class="w-full min-w-[1120px] table-auto">
-          <thead class="text-gray-500 border-b border-gray-200">
-            <tr class="text-sm uppercase">
-              <th class="px-4 py-3 text-left w-[110px]">Trip ID</th>
-              <th class="px-4 py-3 text-left w-[130px]">Start Date</th>
-              <th class="px-4 py-3 text-left w-[130px]">End Date</th>
-              <th class="px-4 py-3 text-left w-[180px]">Start</th>
-              <th class="px-4 py-3 text-left w-[180px]">End</th>
-              <th class="px-4 py-3 text-left w-[120px]">Distance</th>
-              <th class="px-4 py-3 text-left w-[120px]">Duration</th>
-              <th class="px-4 py-3 text-left w-[130px]">Avg Speed</th>
-              <th class="px-4 py-3 text-left w-[120px]">Status</th>
-            </tr>
-            <tr class="normal-case">
-              <th class="px-4 py-2 w-[110px]">
-                <input
-                  [(ngModel)]="filterValues.tripId"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[130px]">
-                <input
-                  [(ngModel)]="filterValues.date"
-                  type="date"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[130px]">
-                <input
-                  [(ngModel)]="filterValues.endDate"
-                  type="date"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[180px]">
-                <input
-                  [(ngModel)]="filterValues.startLocation"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[180px]">
-                <input
-                  [(ngModel)]="filterValues.endLocation"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[120px]">
-                <input
-                  [(ngModel)]="filterValues.distance"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[120px]">
-                <input
-                  [(ngModel)]="filterValues.duration"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="px-4 py-2 w-[130px]">
-                <input
-                  [(ngModel)]="filterValues.avgSpeed"
-                  type="text"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                />
-              </th>
-              <th class="w-[120px] px-4 py-2">
-                <select
-                  [(ngModel)]="filterValues.status"
-                  name="status"
-                  id="status"
-                  class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                >
-                  <option value="">All</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </th>
-            </tr>
-          </thead>
-
-          <tbody class="divide-y text-sm">
-            <tr
-              *ngFor="let trip of paginatedTrips; let i = index"
-              class="hover:bg-gray-50 border-b border-gray-200"
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold">Vehicle Details</h2>
+          <div class="grid grid-cols-2 gap-4 place-items-center py-6">
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-slate-100 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
             >
-              <td
-                class="px-4 py-2.5 text-blue-600 font-medium whitespace-nowrap"
+              <i class="fa-solid fa-id-card text-slate-700"></i>
+              <p class="text-sm font-medium text-gray-500">
+                Registration Number
+              </p>
+              <p class="text-lg font-semibold text-slate-700">
+                {{ registrationNumber }}
+              </p>
+            </div>
+
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-car text-green-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Model</p>
+              <p class="text-lg font-semibold text-green-500">{{ evModel }}</p>
+            </div>
+
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-battery-half text-blue-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Battery Capacity</p>
+              <p class="text-lg font-semibold text-blue-500">
+                {{ batteryCapacity }} kWh
+              </p>
+            </div>
+
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-road text-purple-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Range</p>
+              <p class="text-lg font-semibold text-purple-500">
+                {{ estimatedRange }} km
+              </p>
+            </div>
+
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-charging-station text-orange-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Charging Time</p>
+              <p class="text-lg font-semibold text-orange-500">
+                {{ chargingTime }}
+              </p>
+            </div>
+
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-teal-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fa-solid fa-palette text-teal-600"></i>
+              <p class="text-sm font-medium text-gray-500">Color</p>
+              <p class="text-lg font-semibold text-teal-500">
+                {{ vehicleColour }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-md">
+          <div class="flex justify-between">
+            <h2 class="text-xl font-semibold">Charging Information</h2>
+            <h2 class="text-xl font-semibold">Live Status</h2>
+          </div>
+          <div class="grid grid-cols-2 gap-4 place-items-center mt-6">
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-green-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-battery-half text-green-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">
+                Battery Percentage
+              </p>
+              <p class="text-lg font-semibold text-green-500">
+                {{ batteryPercentage }}%
+              </p>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+              [ngClass]="isCharging ? 'bg-green-100' : 'bg-gray-100'"
+            >
+              <i
+                class="fas fa-plug text-xl"
+                [ngClass]="isCharging ? 'text-green-600' : 'text-gray-600'"
+              ></i>
+              <p class="text-sm font-medium text-gray-500">Charging Status</p>
+              <p
+                class="text-lg font-semibold"
+                [ngClass]="isCharging ? 'text-green-600' : 'text-gray-600'"
               >
-                {{ trip.tripId }}
-              </td>
-              <td class="px-4 py-2.5 whitespace-nowrap">{{ trip.date }}</td>
-              <td class="px-4 py-2.5 whitespace-nowrap">{{ trip.endDate }}</td>
-              <td
-                class="px-4 py-2.5 max-w-[180px] truncate"
-                [title]="trip.startLocation"
+                {{ isCharging ? "Charging" : "Not Charging" }}
+              </p>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-blue-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-bolt text-blue-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">kWh Total</p>
+              <p class="text-lg font-semibold text-blue-500">{{ kwh }} kWh</p>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-red-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-thermometer-half text-red-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Temperature</p>
+              <p class="text-lg font-semibold text-red-500">
+                {{ temperature }}°C
+              </p>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-purple-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-heart text-purple-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Battery Health</p>
+              <p class="text-lg font-semibold text-purple-500">
+                {{ batteryHealth }}%
+              </p>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl bg-orange-50 px-6 py-4 w-full text-start transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <i class="fas fa-road text-orange-600 text-xl"></i>
+              <p class="text-sm font-medium text-gray-500">Est. Range</p>
+              <p class="text-lg font-semibold text-orange-500">
+                {{ estimatedRange }} km
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white p-4 rounded-xl shadow-md sm:col-span-2 lg:col-span-1"
+        >
+          <h2 class="text-xl font-semibold">Statistics</h2>
+          <div class="flex my-2">
+            <button
+              type="button"
+              class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
+              (click)="
+                statistics = statisticsChangeFunction([10, 30, 42, 12, 50])
+              "
+            >
+              24 hours
+            </button>
+            <button
+              type="button"
+              class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
+              (click)="
+                statistics = statisticsChangeFunction([30, 10, 12, 66, 27])
+              "
+            >
+              30 days
+            </button>
+            <button
+              type="button"
+              class="px-4 py-2 hover:border hover:border-gray-300 rounded text-gray-700"
+              (click)="
+                statistics = statisticsChangeFunction([20, 18, 25, 46, 30])
+              "
+            >
+              1 year
+            </button>
+          </div>
+          <div>
+            <h3 class="text-gray-600 text-lg">Total Energy Consumed</h3>
+            <p class="text-gray-600">
+              <span class="text-black text-2xl font-semibold">50</span>kwh
+            </p>
+          </div>
+          <apx-chart
+            [series]="statistics.series!"
+            [chart]="statistics.chart!"
+            [xaxis]="statistics.xaxis!"
+            [stroke]="statistics.stroke!"
+            [dataLabels]="statistics.dataLabels!"
+          >
+          </apx-chart>
+        </div>
+      </section>
+
+      <section class="relative w-full rounded-lg bg-white p-4 shadow-md">
+        <div class="flex justify-between">
+          <h2 class="text-xl font-semibold">Trip Summary</h2>
+          <div class="flex gap-x-2 text-lg">
+            <button
+              (click)="clearFilters()"
+              class="inline-flex items-center gap-2 bg-white border border-gray-300 text-gray-600 text-sm font-medium px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 hover:border-gray-400 hover:text-gray-800 transition duration-200"
+              title="Clear Filters"
+            >
+              <i class="fa-solid fa-filter-circle-xmark text-gray-500"></i>
+              Clear Filters
+            </button>
+            <!-- <button (click)="filter = !filter"><i class="text-blue-500 fa-solid fa-filter" title="Filter"></i></button> -->
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full min-w-[1120px] table-auto">
+            <thead class="text-gray-500 border-b border-gray-200">
+              <tr class="text-sm uppercase">
+                <th class="px-4 py-3 text-left w-[110px]">Trip ID</th>
+                <th class="px-4 py-3 text-left w-[130px]">Start Date</th>
+                <th class="px-4 py-3 text-left w-[130px]">End Date</th>
+                <th class="px-4 py-3 text-left w-[180px]">Start</th>
+                <th class="px-4 py-3 text-left w-[180px]">End</th>
+                <th class="px-4 py-3 text-left w-[120px]">Distance</th>
+                <th class="px-4 py-3 text-left w-[120px]">Duration</th>
+                <th class="px-4 py-3 text-left w-[130px]">Avg Speed</th>
+                <th class="px-4 py-3 text-left w-[120px]">Status</th>
+              </tr>
+              <tr class="normal-case">
+                <th class="px-4 py-2 w-[110px]">
+                  <input
+                    [(ngModel)]="filterValues.tripId"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[130px]">
+                  <input
+                    [(ngModel)]="filterValues.date"
+                    type="date"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[130px]">
+                  <input
+                    [(ngModel)]="filterValues.endDate"
+                    type="date"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[180px]">
+                  <input
+                    [(ngModel)]="filterValues.startLocation"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[180px]">
+                  <input
+                    [(ngModel)]="filterValues.endLocation"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[120px]">
+                  <input
+                    [(ngModel)]="filterValues.distance"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[120px]">
+                  <input
+                    [(ngModel)]="filterValues.duration"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="px-4 py-2 w-[130px]">
+                  <input
+                    [(ngModel)]="filterValues.avgSpeed"
+                    type="text"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  />
+                </th>
+                <th class="w-[120px] px-4 py-2">
+                  <select
+                    [(ngModel)]="filterValues.status"
+                    name="status"
+                    id="status"
+                    class="w-full bg-white text-sm font-normal border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  >
+                    <option value="">All</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y text-sm">
+              <tr
+                *ngFor="let trip of paginatedTrips; let i = index"
+                class="hover:bg-gray-50 border-b border-gray-200"
               >
-                {{ trip.startLocation }}
-              </td>
-              <td
-                class="px-4 py-2.5 max-w-[180px] truncate"
-                [title]="trip.endLocation"
-              >
-                {{ trip.endLocation }}
-              </td>
-
-              <td class="px-4 py-2.5 font-semibold whitespace-nowrap">
-                {{ trip.distance }} km
-              </td>
-
-              <td class="px-4 py-2.5 whitespace-nowrap">
-                {{ trip.duration }}
-              </td>
-
-              <td class="px-4 py-2.5 whitespace-nowrap">
-                {{ trip.avgSpeed }} km/hr
-              </td>
-
-              <td class="px-4 py-2.5">
-                <span
-                  class="px-2 py-1 text-xs border rounded whitespace-nowrap"
-                  [ngClass]="{
-                    'border-green-500 bg-green-100 text-green-700':
-                      trip.status === 'Completed',
-                    'border-yellow-500 bg-yellow-100 text-yellow-700':
-                      trip.status === 'Ongoing',
-                    'border-red-500 bg-red-100 text-red-700':
-                      trip.status === 'Cancelled',
-                  }"
+                <td
+                  class="px-4 py-2.5 text-blue-600 font-medium whitespace-nowrap"
                 >
-                  {{ trip.status }}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="flex justify-between my-4">
-        <button
-          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-          (click)="previous()"
-          [disabled]="index <= 0"
-        >
-          <i class="fa-solid fa-caret-left"></i> Prev
-        </button>
+                  {{ trip.tripId }}
+                </td>
+                <td class="px-4 py-2.5 whitespace-nowrap">{{ trip.date }}</td>
+                <td class="px-4 py-2.5 whitespace-nowrap">
+                  {{ trip.endDate }}
+                </td>
+                <td
+                  class="px-4 py-2.5 max-w-[180px] truncate"
+                  [title]="trip.startLocation"
+                >
+                  {{ trip.startLocation }}
+                </td>
+                <td
+                  class="px-4 py-2.5 max-w-[180px] truncate"
+                  [title]="trip.endLocation"
+                >
+                  {{ trip.endLocation }}
+                </td>
 
-        <button
-          class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
-          (click)="next()"
-          [disabled]="index + pageSize >= filteredTrips.length"
-        >
-          Next <i class="fa-solid fa-caret-right"></i>
-        </button>
-      </div>
-    </section>
+                <td class="px-4 py-2.5 font-semibold whitespace-nowrap">
+                  {{ trip.distance }} km
+                </td>
+
+                <td class="px-4 py-2.5 whitespace-nowrap">
+                  {{ trip.duration }}
+                </td>
+
+                <td class="px-4 py-2.5 whitespace-nowrap">
+                  {{ trip.avgSpeed }} km/hr
+                </td>
+
+                <td class="px-4 py-2.5">
+                  <span
+                    class="px-2 py-1 text-xs border rounded whitespace-nowrap"
+                    [ngClass]="{
+                      'border-green-500 bg-green-100 text-green-700':
+                        trip.status === 'Completed',
+                      'border-yellow-500 bg-yellow-100 text-yellow-700':
+                        trip.status === 'Ongoing',
+                      'border-red-500 bg-red-100 text-red-700':
+                        trip.status === 'Cancelled',
+                    }"
+                  >
+                    {{ trip.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between my-4">
+          <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="previous()"
+            [disabled]="index <= 0"
+          >
+            <i class="fa-solid fa-caret-left"></i> Prev
+          </button>
+
+          <button
+            class="text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+            (click)="next()"
+            [disabled]="index + pageSize >= filteredTrips.length"
+          >
+            Next <i class="fa-solid fa-caret-right"></i>
+          </button>
+        </div>
+      </section>
+    </div>
+    <!-- end overlay wrapper -->
   </div>
+  <!-- end main content -->
 </div>

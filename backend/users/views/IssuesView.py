@@ -148,10 +148,17 @@ def UpdateIssueStatus(request, issue_id):
 class IssueDetailsView(BaseHandler):
     def getIssueDetails(self, request):
         try:
+            # Get vehicle_id from query parameters if provided
+            vehicle_id = request.query_params.get("vehicle_id")
+
             if getattr(request.user, "role", "") == "SERVICE":
                 issue_queryset = Issues.objects.filter(assigned_to=request.user)
             else:
                 issue_queryset = Issues.objects.filter(vehicle__owner=request.user)
+
+            # If vehicle_id is provided, filter by that specific vehicle
+            if vehicle_id:
+                issue_queryset = issue_queryset.filter(vehicle_id=vehicle_id)
 
             issue_details = issue_queryset.all().values(
                 "issue_id",
@@ -185,6 +192,7 @@ class IssueDetailsView(BaseHandler):
 
         logger.info(
             f"Issue details fetched successfully for user {request.user.user_id}"
+            + (f" and vehicle {vehicle_id}" if vehicle_id else "")
         )
 
         return JsonResponse(

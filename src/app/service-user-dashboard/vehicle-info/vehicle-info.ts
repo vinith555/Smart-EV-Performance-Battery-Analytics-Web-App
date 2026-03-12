@@ -61,6 +61,11 @@ export class VehicleInfo implements OnInit {
   issues: VehicleIssue[] = [];
   selectedVehicleIssue: VehicleIssue | null = null;
 
+  // Search-driven display state
+  activeVehicleFilter: string = '';
+  hasSearched: boolean = false;
+  isMarkingComplete: number | null = null; // tracks which issue ID is being completed
+
   vehicleInfo = {
     vehicleNumber: '',
     model: '',
@@ -90,22 +95,25 @@ export class VehicleInfo implements OnInit {
   searchVehicleNumber = '';
 
   searchVehicle(): void {
-    if (!this.searchVehicleNumber.trim()) {
-      // Reset to first vehicle if search is empty
-      if (this.issues.length > 0) {
-        this.selectedVehicleIssue = this.issues[0];
-        this.updateVehicleInfo();
-      }
+    const query = this.searchVehicleNumber.trim();
+    if (!query) {
+      this.activeVehicleFilter = '';
+      this.hasSearched = false;
+      this.selectedVehicleIssue = null;
+      this.index2 = 0;
       return;
     }
 
-    // Find vehicle by registration number
-    const found = this.issues.find((issue) =>
-      issue.vehicleNo
-        .toLowerCase()
-        .includes(this.searchVehicleNumber.toLowerCase()),
-    );
+    this.hasSearched = true;
+    this.activeVehicleFilter = query;
+    this.index2 = 0;
 
+    // Update selectedVehicleIssue to first matching non-completed issue
+    const found = this.issues.find(
+      (issue) =>
+        issue.vehicleNo.toLowerCase().includes(query.toLowerCase()) &&
+        issue.status !== 'Resolved',
+    );
     if (found) {
       this.selectedVehicleIssue = found;
       this.updateVehicleInfo();
@@ -149,7 +157,8 @@ export class VehicleInfo implements OnInit {
   loadIssueDetails(): void {
     this.isLoadingIssues = true;
     this.issuesError = '';
-
+    // SERVICE role: backend filters issues by assigned_to=request.user automatically.
+    // Do NOT pass a vehicle_id here — we load all assigned issues, then filter by vehicle search.
     this.apiService.getIssueDetails().subscribe({
       next: (response) => {
         if (response?.success && Array.isArray(response?.data)) {
@@ -175,14 +184,9 @@ export class VehicleInfo implements OnInit {
             notes: '',
           }));
           this.index2 = 0;
-          // Initialize selectedVehicleIssue with the first issue
-          if (this.issues.length > 0) {
-            this.selectedVehicleIssue = this.issues[0];
-            this.updateVehicleInfo();
-          }
+          // Do NOT auto-select — wait for the serviceman to search a vehicle
         } else {
           this.issues = [];
-          this.issuesError = 'No issues assigned to you.';
         }
         this.isLoadingIssues = false;
       },
@@ -207,7 +211,19 @@ export class VehicleInfo implements OnInit {
   }
 
   get filteredIssues(): VehicleIssue[] {
+    // Show nothing until a vehicle is searched
+    if (!this.hasSearched) return [];
+
     return this.issues.filter((issue) => {
+      // Must match the searched vehicle registration number
+      const matchesSearchedVehicle = issue.vehicleNo
+        .toLowerCase()
+        .includes(this.activeVehicleFilter.toLowerCase());
+
+      // Only show non-completed (active) issues
+      const isActive = issue.status !== 'Resolved';
+
+      // Table column filters
       const matchesIssueId =
         !this.vehiclefilterValues.issueId ||
         issue.issueId.includes(this.vehiclefilterValues.issueId);
@@ -248,6 +264,8 @@ export class VehicleInfo implements OnInit {
           .includes(this.vehiclefilterValues.status.toLowerCase());
 
       return (
+        matchesSearchedVehicle &&
+        isActive &&
         matchesIssueId &&
         matchesVehicleNo &&
         matchesCategory &&
@@ -257,6 +275,38 @@ export class VehicleInfo implements OnInit {
         matchesStatus
       );
     });
+  }
+
+  /**
+   * Directly marks an issue as Resolved (Completed).
+   * The issue disappears from the active list and flows into the service dashboard jobs table.
+   */
+  markIssueComplete(issue: VehicleIssue): void {
+    this.isMarkingComplete = issue.backendIssueId;
+    this.apiService
+      .updateIssueStatus(issue.backendIssueId, 'Resolved')
+      .subscribe({
+        next: (response: any) => {
+          if (response?.success) {
+            issue.status = 'Resolved';
+            issue.dateCompleted = this.formatDate(new Date().toISOString());
+            // Update the info card to the next active issue for this vehicle
+            const next = this.issues.find(
+              (i) =>
+                i.vehicleNo
+                  .toLowerCase()
+                  .includes(this.activeVehicleFilter.toLowerCase()) &&
+                i.status !== 'Resolved',
+            );
+            this.selectedVehicleIssue = next || null;
+            if (this.selectedVehicleIssue) this.updateVehicleInfo();
+          }
+          this.isMarkingComplete = null;
+        },
+        error: () => {
+          this.isMarkingComplete = null;
+        },
+      });
   }
 
   clearIssueFilters() {

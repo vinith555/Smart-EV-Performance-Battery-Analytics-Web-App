@@ -42,6 +42,7 @@ interface Job {
   slaStatus: 'On Track' | 'At Risk' | 'Breached';
   notes: string;
   vehicleId: number;
+  isIssueTask?: boolean; // true for completed-issue tasks (not service tasks)
 }
 
 @Component({
@@ -56,6 +57,10 @@ export class Suerdashboard implements OnInit {
   isLoadingServiceStats: boolean = true;
   serviceStatsError: string = '';
   serviceData: any[] = [];
+
+  // Completed issues resolved by this serviceman — shown as completed tasks in the jobs table
+  completedIssuesData: any[] = [];
+  isLoadingCompletedIssues: boolean = false;
 
   public newTasksChartOptions!: Partial<ChartOptions>;
   public inProgressChartOptions!: Partial<ChartOptions>;
@@ -72,6 +77,7 @@ export class Suerdashboard implements OnInit {
 
   ngOnInit(): void {
     this.loadServiceDetails();
+    this.loadCompletedIssues();
   }
 
   loadServiceDetails(): void {
@@ -93,6 +99,30 @@ export class Suerdashboard implements OnInit {
         this.serviceStatsError = 'Failed to load service stats';
         this.updateMetricCharts();
         this.isLoadingServiceStats = false;
+      },
+    });
+  }
+
+  /**
+   * Loads issues assigned to and resolved by this serviceman.
+   * These appear as "Completed" tasks in the jobs table.
+   */
+  loadCompletedIssues(): void {
+    this.isLoadingCompletedIssues = true;
+    this.apiService.getIssueDetails().subscribe({
+      next: (response) => {
+        if (response?.success && Array.isArray(response?.data)) {
+          this.completedIssuesData = response.data.filter(
+            (item: any) => item.is_resolved === true,
+          );
+        } else {
+          this.completedIssuesData = [];
+        }
+        this.isLoadingCompletedIssues = false;
+      },
+      error: () => {
+        this.completedIssuesData = [];
+        this.isLoadingCompletedIssues = false;
       },
     });
   }
@@ -274,7 +304,36 @@ export class Suerdashboard implements OnInit {
       slaStatus: this.normalizeSlaStatusForTable(service.sla_status),
       notes: service.notes || '',
       vehicleId: service.vehicle_id,
+      isIssueTask: false,
     }));
+  }
+
+  /** Completed issues (resolved by this serviceman) mapped to Job shape for the tasks table */
+  get completedIssueJobs(): Job[] {
+    return this.completedIssuesData.map((issue) => ({
+      serviceId: issue.issue_id,
+      taskId: `ISS-${String(issue.issue_id).padStart(3, '0')}`,
+      category: issue.category || 'Issue',
+      vehicleModel:
+        issue.vehicle__vehicle_model || `Vehicle #${issue.vehicle_id}`,
+      registrationNumber: issue.vehicle__registration_number || 'N/A',
+      description: issue.description || 'Issue task',
+      start: issue.date_reported,
+      deadLine: issue.date_completed || issue.date_reported,
+      assignedBy: issue.assigned_by__email || 'N/A',
+      priority: this.normalizePriority(issue.priority),
+      status: 'Completed' as const,
+      slaTime: 'N/A',
+      slaStatus: 'On Track' as const,
+      notes: '',
+      vehicleId: issue.vehicle_id,
+      isIssueTask: true,
+    }));
+  }
+
+  /** Combined list of service tasks + completed issue tasks */
+  get allJobs(): Job[] {
+    return [...this.jobs, ...this.completedIssueJobs];
   }
 
   formatDateTime(dateString: string): string {
@@ -332,7 +391,7 @@ export class Suerdashboard implements OnInit {
   };
 
   get filteredJobList(): Job[] {
-    return this.jobs.filter((job) => {
+    return this.allJobs.filter((job) => {
       const matchesTaskId =
         !this.filteredJobs.taskId ||
         job.taskId

@@ -1,11 +1,15 @@
-<div class="px-4">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="px-3 sm:px-4 pb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <!-- ── Left: Billing Items card ─────────────────────────────── -->
     <div
-      class="h-auto lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-md p-5"
+      class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-md p-4 sm:p-5"
     >
-      <h2 class="text-2xl font-semibold mb-4 text-slate-800">Generate Bill</h2>
+      <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-slate-800">
+        Generate Bill
+      </h2>
 
-      <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <!-- Record selector row -->
+      <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label
             class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1 block"
@@ -41,18 +45,29 @@
         </div>
       </div>
 
-      <h3 class="text-lg font-semibold mb-4">Billing Items</h3>
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-semibold">Billing Items</h3>
+        <button
+          class="flex items-center gap-1.5 px-3 py-1.5 text-sm border bg-blue-100 border-blue-300 text-blue-700 hover:text-white hover:bg-blue-600 rounded-full transition"
+          (click)="addEmptyItem()"
+        >
+          <i class="fa-solid fa-plus text-xs"></i> Add Item
+        </button>
+      </div>
 
-      <div class="overflow-y-auto min-w-full max-h-[400px]">
-        <table class="w-full text-md relative">
-          <thead class="bg-white sticky top-0 z-5">
+      <!-- Desktop table view (hidden on mobile) -->
+      <div
+        class="hidden sm:block overflow-x-auto max-h-[400px] overflow-y-auto"
+      >
+        <table class="w-full text-sm min-w-[480px] relative">
+          <thead class="bg-white sticky top-0 z-[5]">
             <tr class="border-b text-left text-gray-600">
-              <th class="py-2">Item</th>
-              <th>Qty</th>
-              <th>Rate</th>
-              <th>Tax</th>
-              <th>Total</th>
-              <th></th>
+              <th class="py-2 pr-2 w-[40%]">Item</th>
+              <th class="pr-2 w-[10%]">Qty</th>
+              <th class="pr-2 w-[15%]">Rate (₹)</th>
+              <th class="pr-2 w-[15%]">Tax (₹)</th>
+              <th class="pr-2 w-[12%]">Total</th>
+              <th class="w-[8%]"></th>
             </tr>
           </thead>
           <tbody>
@@ -60,39 +75,46 @@
               *ngFor="let item of billItems; let i = index"
               class="border-b border-slate-200"
             >
-              <td class="py-2">
+              <td class="py-1.5 pr-2">
                 <input
-                  class="border border-slate-300 rounded-md px-3 py-1.5 mr-2 w-full"
+                  class="border border-slate-300 rounded-md px-2 py-1.5 w-full focus:outline-none focus:ring-1 focus:ring-emerald-300"
                   [(ngModel)]="item.name"
+                  placeholder="Item name"
                 />
               </td>
-              <td>
+              <td class="pr-2">
                 <input
                   type="number"
-                  class="border border-slate-300 rounded-md px-3 py-1.5 w-16 mr-2"
+                  class="border border-slate-300 rounded-md px-2 py-1.5 w-full focus:outline-none focus:ring-1 focus:ring-emerald-300"
                   [(ngModel)]="item.qty"
                   min="1"
                 />
               </td>
-              <td>
+              <td class="pr-2">
                 <input
                   type="number"
-                  class="border border-slate-300 rounded-md px-3 py-1.5 w-24 mr-2"
+                  class="border border-slate-300 rounded-md px-2 py-1.5 w-full focus:outline-none focus:ring-1 focus:ring-emerald-300"
                   [(ngModel)]="item.rate"
                   min="0"
                 />
               </td>
-              <td>
+              <td class="pr-2">
                 <input
                   type="number"
-                  class="border border-slate-300 rounded-md px-3 py-1.5 w-20 mr-2"
+                  class="border border-slate-300 rounded-md px-2 py-1.5 w-full focus:outline-none focus:ring-1 focus:ring-emerald-300"
                   [(ngModel)]="item.tax"
                   min="0"
                 />
               </td>
-              <td class="font-medium">₹ {{ item.qty * item.rate }}</td>
+              <td class="pr-2 font-medium whitespace-nowrap">
+                ₹ {{ item.qty * item.rate }}
+              </td>
               <td>
-                <button class="text-red-500" (click)="removeItem(i)">
+                <button
+                  class="text-red-500 hover:text-red-700 transition"
+                  (click)="removeItem(i)"
+                  title="Remove"
+                >
                   <i class="fa fa-trash"></i>
                 </button>
               </td>
@@ -100,78 +122,171 @@
           </tbody>
         </table>
       </div>
-      <button
-        class="mt-4 px-4 py-2 border bg-blue-100 border-blue-300 text-blue-700 hover:text-white hover:bg-blue-600 rounded-full transition"
-        (click)="addEmptyItem()"
+
+      <!-- Mobile card view (shown only on small screens) -->
+      <div
+        class="sm:hidden flex flex-col gap-3 max-h-[420px] overflow-y-auto pr-1"
       >
-        Add Item
-      </button>
+        <div
+          *ngFor="let item of billItems; let i = index"
+          class="rounded-xl border border-slate-200 bg-slate-50 p-3 flex flex-col gap-2"
+        >
+          <!-- Item name -->
+          <div>
+            <label
+              class="text-xs text-slate-500 font-medium uppercase tracking-wide"
+              >Item Name</label
+            >
+            <input
+              class="mt-1 w-full border border-slate-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-emerald-300"
+              [(ngModel)]="item.name"
+              placeholder="Enter item name"
+            />
+          </div>
+          <!-- Qty / Rate / Tax row -->
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label
+                class="text-xs text-slate-500 font-medium uppercase tracking-wide"
+                >Qty</label
+              >
+              <input
+                type="number"
+                class="mt-1 w-full border border-slate-300 rounded-md px-2 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-emerald-300"
+                [(ngModel)]="item.qty"
+                min="1"
+              />
+            </div>
+            <div>
+              <label
+                class="text-xs text-slate-500 font-medium uppercase tracking-wide"
+                >Rate (₹)</label
+              >
+              <input
+                type="number"
+                class="mt-1 w-full border border-slate-300 rounded-md px-2 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-emerald-300"
+                [(ngModel)]="item.rate"
+                min="0"
+              />
+            </div>
+            <div>
+              <label
+                class="text-xs text-slate-500 font-medium uppercase tracking-wide"
+                >Tax (₹)</label
+              >
+              <input
+                type="number"
+                class="mt-1 w-full border border-slate-300 rounded-md px-2 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-emerald-300"
+                [(ngModel)]="item.tax"
+                min="0"
+              />
+            </div>
+          </div>
+          <!-- Footer: total + remove -->
+          <div
+            class="flex items-center justify-between pt-1 border-t border-slate-200"
+          >
+            <span class="text-sm font-semibold text-slate-700">
+              Total: ₹ {{ item.qty * item.rate }}
+            </span>
+            <button
+              class="text-red-500 hover:text-red-700 text-sm transition flex items-center gap-1"
+              (click)="removeItem(i)"
+            >
+              <i class="fa fa-trash"></i>
+              <span>Remove</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty state on mobile -->
+        <div
+          *ngIf="billItems.length === 0"
+          class="text-center py-8 text-slate-400 text-sm"
+        >
+          No items added. Tap "Add Item" above.
+        </div>
+      </div>
     </div>
 
+    <!-- ── Right: Bill details + Summary card ───────────────────── -->
     <div
-      class="bg-white rounded-2xl border border-slate-200 shadow-md p-5 space-y-6"
+      class="bg-white rounded-2xl border border-slate-200 shadow-md p-4 sm:p-5 space-y-5"
     >
-      <div class="grid grid-cols-2 gap-x-4">
-        <div class="flex flex-col">
-          <label for="vehicleNo" class="font-semibold">Vehicle No:</label>
+      <!-- Bill meta fields -->
+      <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1">
+          <label for="vehicleNo" class="text-sm font-semibold text-slate-700"
+            >Vehicle No</label
+          >
           <input
             id="vehicleNo"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="vehicleNo"
             type="text"
             [(ngModel)]="billMeta.vehicleNo"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="billNo" class="font-semibold">Bill No:</label>
+        <div class="flex flex-col gap-1">
+          <label for="billNo" class="text-sm font-semibold text-slate-700"
+            >Bill No</label
+          >
           <input
             id="billNo"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="billNo"
             type="text"
             [(ngModel)]="billMeta.billNo"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="owner" class="font-semibold">Owner:</label>
+        <div class="flex flex-col gap-1">
+          <label for="owner" class="text-sm font-semibold text-slate-700"
+            >Owner</label
+          >
           <input
             id="owner"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="owner"
             type="text"
             [(ngModel)]="billMeta.owner"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="date" class="font-semibold">Date:</label>
+        <div class="flex flex-col gap-1">
+          <label for="date" class="text-sm font-semibold text-slate-700"
+            >Date</label
+          >
           <input
             id="date"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="date"
             type="date"
             [(ngModel)]="billMeta.date"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="place" class="font-semibold">Place:</label>
+        <div class="flex flex-col gap-1">
+          <label for="place" class="text-sm font-semibold text-slate-700"
+            >Place</label
+          >
           <input
             id="place"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="place"
             type="text"
             [(ngModel)]="billMeta.place"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="type" class="font-semibold">Type Of Payment:</label>
+        <div class="flex flex-col gap-1">
+          <label for="type" class="text-sm font-semibold text-slate-700"
+            >Payment Type</label
+          >
           <select
             id="type"
-            class="p-1 border border-slate-300 rounded bg-white"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-200"
             name="type"
             [(ngModel)]="billMeta.paymentType"
           >
@@ -182,22 +297,26 @@
             <option value="WALLET">Wallet</option>
           </select>
         </div>
-        <div class="flex flex-col">
-          <label for="biller" class="font-semibold">Biller:</label>
+        <div class="flex flex-col gap-1">
+          <label for="biller" class="text-sm font-semibold text-slate-700"
+            >Biller</label
+          >
           <input
             id="biller"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="biller"
             type="text"
             [(ngModel)]="billMeta.biller"
             readonly
           />
         </div>
-        <div class="flex flex-col">
-          <label for="time" class="font-semibold">Time:</label>
+        <div class="flex flex-col gap-1">
+          <label for="time" class="text-sm font-semibold text-slate-700"
+            >Time</label
+          >
           <input
             id="time"
-            class="p-1 border border-slate-300 rounded bg-slate-100 text-slate-600"
+            class="px-3 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-600 text-sm focus:outline-none"
             name="time"
             type="time"
             [(ngModel)]="billMeta.time"
@@ -205,10 +324,14 @@
           />
         </div>
       </div>
+
+      <!-- Add from catalog -->
       <div>
-        <h3 class="text-lg font-semibold mb-2">Add From Records</h3>
+        <h3 class="text-base font-semibold mb-2 text-slate-700">
+          Add From Catalog
+        </h3>
         <select
-          class="border border-slate-300 rounded p-1.5 w-full"
+          class="border border-slate-300 rounded-lg px-3 py-2 w-full text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200"
           (change)="addFromTable($event)"
         >
           <option value="">Select Item</option>
@@ -217,33 +340,46 @@
           </option>
         </select>
       </div>
-      <div class="border-t pt-1">
-        <h3 class="text-lg font-semibold mb-1">Bill Summary</h3>
-        <div class="flex justify-between">
-          <span>Subtotal</span>
-          <span>₹ {{ getTotal() | number: "1.2-2" }}</span>
+
+      <!-- Bill Summary -->
+      <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <h3 class="text-base font-semibold mb-3 text-slate-700">
+          Bill Summary
+        </h3>
+        <div
+          class="flex justify-between text-sm py-1.5 border-b border-slate-200"
+        >
+          <span class="text-slate-600">Subtotal</span>
+          <span class="font-medium">₹ {{ getTotal() | number: "1.2-2" }}</span>
         </div>
-        <div class="flex justify-between mb-2">
-          <span>Tax (10%)</span>
-          <span>₹ {{ getTotal() * 0.1 | number: "1.2-2" }}</span>
+        <div
+          class="flex justify-between text-sm py-1.5 border-b border-slate-200"
+        >
+          <span class="text-slate-600">Tax (10%)</span>
+          <span class="font-medium"
+            >₹ {{ getTotal() * 0.1 | number: "1.2-2" }}</span
+          >
         </div>
-        <div class="flex justify-between font-bold text-lg border-t pt-2">
+        <div
+          class="flex justify-between py-2 font-bold text-base text-emerald-700"
+        >
           <span>Grand Total</span>
           <span>₹ {{ getTotal() * 1.1 | number: "1.2-2" }}</span>
         </div>
       </div>
+
       <button
-        class="w-full py-2 font-semibold bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-full text-lg transition"
+        class="w-full py-3 font-semibold bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-xl text-base transition disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="generateBill()"
         [disabled]="isRegisteringIssues"
       >
-        <i class="fa-solid fa-file-invoice"></i>
+        <i class="fa-solid fa-file-invoice mr-1"></i>
         {{ isRegisteringIssues ? "Registering..." : "Generate Bill" }}
       </button>
 
       <p
         *ngIf="registerStatusMessage"
-        class="text-sm"
+        class="text-sm text-center"
         [ngClass]="{
           'text-emerald-700': registerStatusType === 'success',
           'text-red-600': registerStatusType === 'error',

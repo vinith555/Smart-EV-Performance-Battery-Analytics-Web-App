@@ -152,10 +152,15 @@ export class ApiService {
 
   /**
    * Get charging details for user's vehicles
+   * @param vehicleId Optional vehicle ID to filter charging details for specific vehicle
    * @returns Observable with charging data
    */
-  getChargingDetails(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-charging-details/`, {
+  getChargingDetails(vehicleId?: number): Observable<any> {
+    let url = `${this.apiUrl}/get-charging-details/`;
+    if (vehicleId) {
+      url += `?vehicle_id=${vehicleId}`;
+    }
+    return this.http.get(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -164,10 +169,15 @@ export class ApiService {
 
   /**
    * Get trip details for user's vehicles
+   * @param vehicleId Optional vehicle ID to filter trips for specific vehicle
    * @returns Observable with trip data
    */
-  getTripDetails(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-trip-details/`, {
+  getTripDetails(vehicleId?: number): Observable<any> {
+    let url = `${this.apiUrl}/get-trip-details/`;
+    if (vehicleId) {
+      url += `?vehicle_id=${vehicleId}`;
+    }
+    return this.http.get(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -188,10 +198,15 @@ export class ApiService {
 
   /**
    * Get issue details for user's vehicles
+   * @param vehicleId Optional vehicle ID to filter issues for specific vehicle
    * @returns Observable with issue data
    */
-  getIssueDetails(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-issue-details/`, {
+  getIssueDetails(vehicleId?: number): Observable<any> {
+    let url = `${this.apiUrl}/get-issue-details/`;
+    if (vehicleId) {
+      url += `?vehicle_id=${vehicleId}`;
+    }
+    return this.http.get(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -234,10 +249,15 @@ export class ApiService {
 
   /**
    * Get bill details for current user
+   * @param vehicleId Optional vehicle ID to filter bills for specific vehicle
    * @returns Observable with bill data
    */
-  getBillDetails(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-bill-details/`, {
+  getBillDetails(vehicleId?: number): Observable<any> {
+    let url = `${this.apiUrl}/get-bill-details/`;
+    if (vehicleId) {
+      url += `?vehicle_id=${vehicleId}`;
+    }
+    return this.http.get(url, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
