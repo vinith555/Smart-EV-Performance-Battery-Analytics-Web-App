@@ -40,7 +40,6 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.apiService.login(email, password).pipe(
       tap((response) => {
-        console.log('Login response:', response);
         if (response.access && response.refresh) {
           localStorage.setItem('accessToken', response.access);
           localStorage.setItem('refreshToken', response.refresh);
@@ -114,11 +113,6 @@ export class AuthService {
    */
   isAuthenticated(): boolean {
     const hasToken = this.hasToken();
-    console.log('AuthService.isAuthenticated():', hasToken);
-    console.log(
-      'Access token:',
-      this.getAccessToken()?.substring(0, 20) + '...',
-    );
     return hasToken;
   }
 
@@ -127,10 +121,8 @@ export class AuthService {
    * @returns Observable
    */
   loadCurrentUser(): Observable<any> {
-    console.log('AuthService: Loading current user details...');
     return this.apiService.getUserDetail().pipe(
       tap((response) => {
-        console.log('AuthService: User details loaded:', response);
         if (response.success && response.data) {
           const user: User = {
             user_id: response.data.user_id,

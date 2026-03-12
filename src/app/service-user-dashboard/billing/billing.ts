@@ -372,7 +372,5 @@ export class Billing implements OnInit {
             'Bill generated locally, but failed to register items as issues.';
         },
       });
-
-    console.log('Bill Generated:', payload);
   }
 }

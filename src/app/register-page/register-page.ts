@@ -72,8 +72,6 @@ export class RegisterPage {
         this.successMessage =
           'Account created successfully! Redirecting to login...';
 
-        console.log('Registration successful:', response);
-
         // Redirect to login after a short delay
         setTimeout(() => {
           this.router.navigate(['/login']);

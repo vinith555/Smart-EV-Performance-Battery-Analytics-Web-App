@@ -68,17 +68,13 @@ export class LoginPage implements OnInit {
         .login(this.credentials.email, this.credentials.password)
         .subscribe({
           next: (response) => {
-            console.log('Login successful:', response);
             this.successMessage = 'Login successful! Redirecting...';
 
             // Load user details after login to ensure we have complete user data
             this.authService.loadCurrentUser().subscribe({
               next: (userResponse) => {
                 this.isLoading = false;
-                console.log('User details loaded:', userResponse);
-
                 const currentUser = this.authService.getCurrentUser();
-                console.log('Current user from service:', currentUser);
 
                 if (currentUser && currentUser.role) {
                   // Redirect based on user role
@@ -95,7 +91,6 @@ export class LoginPage implements OnInit {
                       break;
                   }
                 } else {
-                  console.warn('User role not found, redirecting to profile');
                   this.router.navigate(['/profile']);
                 }
               },

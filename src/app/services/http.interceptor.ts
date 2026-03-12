@@ -25,9 +25,6 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     // Get access token
     const token = this.authService.getAccessToken();
 
-    console.log('HttpInterceptor: Intercepting request to:', request.url);
-    console.log('HttpInterceptor: Token exists:', !!token);
-
     // Clone request and add authorization header if token exists
     if (token) {
       request = request.clone({
@@ -35,17 +32,10 @@ export class HttpAuthInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('HttpInterceptor: Added Authorization header');
-    } else {
-      console.log(
-        'HttpInterceptor: No token found, proceeding without Authorization header',
-      );
     }
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log('HttpInterceptor: Error caught:', error.status);
-
         // Handle 401 Unauthorized errors
         if (error.status === 401) {
           console.log(
@@ -54,16 +44,8 @@ export class HttpAuthInterceptor implements HttpInterceptor {
 
           // Clear tokens and user data
           this.authService.logout().subscribe({
-            next: () => {
-              console.log(
-                'HttpInterceptor: Logout successful, redirecting to login',
-              );
-            },
-            error: (logoutError) => {
-              console.log(
-                'HttpInterceptor: Logout API failed, clearing local data anyway',
-              );
-            },
+            next: () => {},
+            error: () => {},
             complete: () => {
               // Always clear local storage and redirect regardless of API response
               localStorage.removeItem('accessToken');

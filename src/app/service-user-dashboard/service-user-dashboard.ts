@@ -55,16 +55,12 @@ export class ServiceUserDashboard implements OnInit {
     this.loadingService.show('Loading user data...');
     this.apiService.getUserDetail().subscribe({
       next: (response) => {
-        console.log('User data response:', response);
-        console.log('User data object:', response.data);
         if (response.success && response.data) {
           this.userName = response.data.name || 'Service User';
           this.userRole = response.data.role || 'Service User';
           // Try different possible field names for user ID
           this.userId =
             response.data.id || response.data.user_id || response.data.pk;
-          console.log('User ID loaded:', this.userId);
-          console.log('Full user data:', response.data);
           // After getting user data, load notifications
           if (this.userId) {
             this.loadNotifications();
@@ -88,14 +84,11 @@ export class ServiceUserDashboard implements OnInit {
    */
   loadNotifications() {
     if (!this.userId) {
-      console.warn('User ID not available, skipping notifications load');
       return;
     }
 
-    console.log('Loading notifications for user ID:', this.userId);
     this.apiService.getNotificationDetails(this.userId).subscribe({
       next: (response) => {
-        console.log('Notifications response:', response);
         if (response.success && response.data && Array.isArray(response.data)) {
           // Map backend notifications with proper structure
           this.notifications = response.data.map((notif: any) => ({
@@ -106,15 +99,12 @@ export class ServiceUserDashboard implements OnInit {
             user_id: notif.user_id,
             vehicle_id: notif.vehicle_id,
           }));
-          console.log('Notifications loaded:', this.notifications);
         } else {
-          console.warn('Invalid notifications response format:', response);
           this.notifications = [];
         }
         this.loadingService.hide();
       },
       error: (error) => {
-        console.error('Error loading notifications:', error);
         this.notifications = [];
         this.loadingService.hide();
       },
@@ -149,11 +139,9 @@ export class ServiceUserDashboard implements OnInit {
    * Logout user and redirect to login page
    */
   logout() {
-    console.log('Logging out...');
     this.loadingService.show('Logging out...');
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Logout successful');
         this.loadingService.hide();
         this.router.navigate(['/login']);
       },

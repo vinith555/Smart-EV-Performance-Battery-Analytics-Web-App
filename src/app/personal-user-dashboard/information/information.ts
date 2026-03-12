@@ -371,7 +371,6 @@ export class Information implements OnInit {
     }
   }
   issueUpdatedData(data: NgForm) {
-    console.log(data.value);
   }
 
   ngOnInit(): void {
@@ -392,7 +391,6 @@ export class Information implements OnInit {
 
     this.apiService.getChargingDetails(vehicleId).subscribe({
       next: (response) => {
-        console.log('Charging details response:', response);
         if (response.success && response.data?.vehicle_stats?.length > 0) {
           // Get the latest stats (first item)
           this.chargingData = response.data.vehicle_stats[0];
@@ -417,7 +415,6 @@ export class Information implements OnInit {
 
     this.apiService.getBillDetails(vehicleId).subscribe({
       next: (response) => {
-        console.log('Bill details response:', response);
         if (response.success && response.data?.bills) {
           this.billsData = response.data.bills;
           this.isLoadingBills = false;
@@ -441,7 +438,6 @@ export class Information implements OnInit {
 
     this.apiService.getIssueDetails(vehicleId).subscribe({
       next: (response) => {
-        console.log('Issue details response:', response);
         if (response.success && response.data) {
           this.issuesData = response.data;
           this.isLoadingIssues = false;
@@ -525,7 +521,6 @@ export class Information implements OnInit {
 
     this.apiService.deleteIssue(issueId).subscribe({
       next: (response) => {
-        console.log('Issue deleted successfully:', response);
         // Remove from local array
         this.issuesData.splice(this.issueDeleteIndex, 1);
         this.cancelDeleteIssue();
@@ -542,7 +537,6 @@ export class Information implements OnInit {
     const bill = this.billsData[billIndex];
 
     if (!bill) {
-      console.error('Bill not found');
       return;
     }
 

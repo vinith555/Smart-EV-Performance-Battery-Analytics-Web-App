@@ -106,7 +106,6 @@ export class Helpsupport implements OnInit {
 
   submitSupport(form: any) {
     if (form.valid) {
-      console.log('Support Ticket Submitted:', form.value);
       this.showSupportForm = false;
       form.reset();
     }
