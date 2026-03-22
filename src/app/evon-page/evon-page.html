@@ -1,0 +1,102 @@
+<div class="evon-shell">
+  <aside class="evon-sidebar">
+    <div class="evon-brand">
+      <div class="evon-brand-logo">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      <div>
+        <h2>EV Admin</h2>
+        <p>AI Operations</p>
+      </div>
+    </div>
+
+    <nav class="evon-nav">
+      <a routerLink="/admin-dashboard" routerLinkActive="active-link">
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+      </a>
+      <a routerLink="/admin-evon" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <i class="fa-solid fa-robot"></i>
+        Talk to Evon
+      </a>
+      <a routerLink="/help-support" routerLinkActive="active-link">
+        <i class="fa-solid fa-headset"></i>
+        Help & Support
+      </a>
+    </nav>
+
+    <div class="evon-sidebar-footer">
+      <div class="evon-user-chip">
+        <span class="avatar"><i class="fa-solid fa-user"></i></span>
+        <div>
+          <p class="name">{{ userName }}</p>
+          <p class="role">{{ userRole }}</p>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="evon-main">
+    <header class="evon-header">
+      <div>
+        <h1>Talk to Evon</h1>
+        <p>Your AI analytics partner for live EV platform database insights.</p>
+      </div>
+      <div class="evon-status">
+        <span class="dot"></span>
+        Online
+      </div>
+    </header>
+
+    <section class="evon-quick-prompts">
+      <button
+        type="button"
+        *ngFor="let prompt of quickPrompts"
+        (click)="sendQuickPrompt(prompt)"
+      >
+        {{ prompt }}
+      </button>
+    </section>
+
+    <section class="evon-chat-panel">
+      <div #messagesWrap class="messages-wrap">
+        <div class="messages-flow">
+          <div
+            *ngFor="let msg of chatMessages"
+            class="msg-row"
+            [ngClass]="{ 'user': msg.role === 'user', 'evon': msg.role === 'evon' }"
+          >
+            <div class="msg-bubble" [ngClass]="{ 'error': msg.isError }">
+              <p>{{ msg.text }}</p>
+              <span>{{ msg.createdAt | date: 'shortTime' }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="isEvonLoading" class="msg-row evon">
+            <div class="msg-bubble typing">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              <p>Evon is analyzing your data...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-wrap">
+        <input
+          type="text"
+          [(ngModel)]="evonPrompt"
+          (keyup.enter)="sendEvonPrompt()"
+          placeholder="Ask Evon anything about users, vehicles, services, issues, bills..."
+        />
+        <button type="button" (click)="sendEvonPrompt()" [disabled]="isEvonLoading">
+          <i class="fa-solid fa-paper-plane"></i>
+          Send
+        </button>
+      </div>
+    </section>
+  </main>
+</div>
