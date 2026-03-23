@@ -97,7 +97,9 @@ def _extract_sql(raw_text):
         return ""
 
     # Prefer fenced SQL block if model returns markdown.
-    code_match = re.search(r"```(?:sql)?\s*(.*?)```", raw_text, re.IGNORECASE | re.DOTALL)
+    code_match = re.search(
+        r"```(?:sql)?\s*(.*?)```", raw_text, re.IGNORECASE | re.DOTALL
+    )
     if code_match:
         return code_match.group(1).strip()
 
@@ -121,7 +123,7 @@ def _is_safe_select_query(sql):
 
     referenced_tables = re.findall(r"(?:from|join)\s+([a-zA-Z0-9_\.\"]+)", cleaned)
     normalized_tables = {
-        table.replace('"', '').split(".")[-1] for table in referenced_tables
+        table.replace('"', "").split(".")[-1] for table in referenced_tables
     }
 
     if normalized_tables and not normalized_tables.issubset(ALLOWED_TABLES):
@@ -175,10 +177,16 @@ def _try_builtin_text2sql(prompt):
             "LIMIT 25"
         )
         rows = _execute_safe_sql(sql, [f"%{owner_name}%"])
-        return _summarize_rows(rows, "vehicle records"), len(rows), "builtin_text2sql_vehicle_by_owner"
+        return (
+            _summarize_rows(rows, "vehicle records"),
+            len(rows),
+            "builtin_text2sql_vehicle_by_owner",
+        )
 
     # Example: "services for vehicle id 1"
-    vehicle_id_match = re.search(r"service(?:s)?\s+(?:for|of)\s+vehicle\s*(?:id)?\s*(\d+)", text)
+    vehicle_id_match = re.search(
+        r"service(?:s)?\s+(?:for|of)\s+vehicle\s*(?:id)?\s*(\d+)", text
+    )
     if vehicle_id_match:
         vehicle_id = int(vehicle_id_match.group(1))
         sql = (
@@ -186,10 +194,16 @@ def _try_builtin_text2sql(prompt):
             "FROM users_service WHERE vehicle_id = %s LIMIT 25"
         )
         rows = _execute_safe_sql(sql, [vehicle_id])
-        return _summarize_rows(rows, "service records"), len(rows), "builtin_text2sql_services_by_vehicle"
+        return (
+            _summarize_rows(rows, "service records"),
+            len(rows),
+            "builtin_text2sql_services_by_vehicle",
+        )
 
     # Example: "issues for vehicle id 1"
-    issues_vehicle_match = re.search(r"issue(?:s)?\s+(?:for|of)\s+vehicle\s*(?:id)?\s*(\d+)", text)
+    issues_vehicle_match = re.search(
+        r"issue(?:s)?\s+(?:for|of)\s+vehicle\s*(?:id)?\s*(\d+)", text
+    )
     if issues_vehicle_match:
         vehicle_id = int(issues_vehicle_match.group(1))
         sql = (
@@ -197,7 +211,11 @@ def _try_builtin_text2sql(prompt):
             "FROM users_issues WHERE vehicle_id = %s LIMIT 25"
         )
         rows = _execute_safe_sql(sql, [vehicle_id])
-        return _summarize_rows(rows, "issue records"), len(rows), "builtin_text2sql_issues_by_vehicle"
+        return (
+            _summarize_rows(rows, "issue records"),
+            len(rows),
+            "builtin_text2sql_issues_by_vehicle",
+        )
 
     return None
 
@@ -235,12 +253,16 @@ def _try_langchain_text2sql(prompt):
     db_uri = _build_db_uri()
 
     if not api_key or not db_uri:
-        logger.warning("LangChain text2sql enabled but OPENAI_API_KEY or DB URI is missing")
+        logger.warning(
+            "LangChain text2sql enabled but OPENAI_API_KEY or DB URI is missing"
+        )
         return None
 
     try:
         db = SQLDatabase.from_uri(db_uri, include_tables=sorted(ALLOWED_TABLES))
-        llm = ChatOpenAI(model=os.getenv("EVON_LLM_MODEL", "gpt-4o-mini"), temperature=0)
+        llm = ChatOpenAI(
+            model=os.getenv("EVON_LLM_MODEL", "gpt-4o-mini"), temperature=0
+        )
         chain = create_sql_query_chain(llm, db)
 
         sql_candidate = chain.invoke(
@@ -264,7 +286,9 @@ def _try_langchain_text2sql(prompt):
 
 def _format_user_detail(user_obj):
     company_name = (
-        user_obj.company.company_name if getattr(user_obj, "company", None) else "No Company"
+        user_obj.company.company_name
+        if getattr(user_obj, "company", None)
+        else "No Company"
     )
     status = "active" if user_obj.is_active else "inactive"
     return (
@@ -316,15 +340,86 @@ def _format_bill_detail(bill_obj):
     )
 
 
+def _try_smalltalk_response(prompt):
+    text = (prompt or "").lower().strip()
+    normalized = re.sub(r"[^a-z0-9\s]", " ", text)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+
+    greeting_terms = {"hi", "hello", "hey", "hola", "yo"}
+    goodbye_terms = {"bye", "goodbye", "see you", "cya"}
+
+    # Greetings like "hi", "hello evon", "hey there"
+    if (
+        normalized in greeting_terms
+        or any(normalized.startswith(f"{word} ") for word in greeting_terms)
+        or "good morning" in normalized
+        or "good evening" in normalized
+        or "good afternoon" in normalized
+    ):
+        return (
+            "Hi! I am Evon, your EV analytics assistant. You can ask things like: 'How many active users are there?', 'How many unresolved issues are there?', or 'Tell me about vehicle id 1'.",
+            None,
+            "smalltalk_greeting",
+        )
+
+    # Identity questions like "who are u?"
+    if any(
+        phrase in normalized
+        for phrase in [
+            "who are you",
+            "who r you",
+            "who are u",
+            "what are you",
+            "your name",
+            "are you a bot",
+        ]
+    ):
+        return (
+            "I am Evon, the admin analytics assistant for Smart EV operations. I can help with users, vehicles, services, issues, bills, trips, notifications, and battery health insights.",
+            None,
+            "smalltalk_identity",
+        )
+
+    if "help" in normalized or "what can you do" in normalized:
+        return (
+            "I can answer EV operations analytics queries. Try: 'How many active vehicles?', 'How many overdue bills?', 'How many unresolved issues?', 'What is the average battery health?', or 'Tell me about user id 1'.",
+            None,
+            "smalltalk_help",
+        )
+
+    if any(term in normalized for term in ["thank you", "thanks", "thx"]):
+        return (
+            "You're welcome. Ask me any EV analytics question when you're ready.",
+            None,
+            "smalltalk_thanks",
+        )
+
+    if any(term in normalized for term in goodbye_terms):
+        return (
+            "Goodbye. I will be here when you need EV analytics insights.",
+            None,
+            "smalltalk_goodbye",
+        )
+
+    return None
+
+
 def _answer_for_prompt(prompt):
     text = prompt.lower()
+
+    # Conversational messages (hi, who are you, help, thanks, etc.)
+    smalltalk_response = _try_smalltalk_response(prompt)
+    if smalltalk_response:
+        return smalltalk_response
 
     is_count_intent = ("how many" in text) or ("total" in text)
 
     # Entity detail queries
     user_id = _extract_entity_id(text, "user")
     if user_id is not None and not is_count_intent:
-        user_obj = User.objects.select_related("company").filter(user_id=user_id).first()
+        user_obj = (
+            User.objects.select_related("company").filter(user_id=user_id).first()
+        )
         if not user_obj:
             return f"I could not find any user with id {user_id}.", None, "user_detail"
         return _format_user_detail(user_obj), user_id, "user_detail"
@@ -348,7 +443,11 @@ def _answer_for_prompt(prompt):
     if issue_id is not None and not is_count_intent:
         issue_obj = Issues.objects.filter(issue_id=issue_id).first()
         if not issue_obj:
-            return f"I could not find any issue with id {issue_id}.", None, "issue_detail"
+            return (
+                f"I could not find any issue with id {issue_id}.",
+                None,
+                "issue_detail",
+            )
         return _format_issue_detail(issue_obj), issue_id, "issue_detail"
 
     service_id = _extract_entity_id(text, "service")
@@ -418,11 +517,19 @@ def _answer_for_prompt(prompt):
     # Service and issue insights
     if "ongoing service" in text:
         count = Service.objects.filter(status="ONGOING").count()
-        return f"Currently there are {count} ongoing services.", count, "ongoing_services"
+        return (
+            f"Currently there are {count} ongoing services.",
+            count,
+            "ongoing_services",
+        )
 
     if "pending service" in text:
         count = Service.objects.filter(status="PENDING").count()
-        return f"Currently there are {count} pending services.", count, "pending_services"
+        return (
+            f"Currently there are {count} pending services.",
+            count,
+            "pending_services",
+        )
 
     if "completed service" in text:
         count = Service.objects.filter(status="COMPLETED").count()
@@ -434,7 +541,11 @@ def _answer_for_prompt(prompt):
 
     if "open issue" in text or "unresolved issue" in text:
         count = Issues.objects.filter(is_resolved=False).count()
-        return f"Currently there are {count} unresolved issues.", count, "unresolved_issues"
+        return (
+            f"Currently there are {count} unresolved issues.",
+            count,
+            "unresolved_issues",
+        )
 
     if "resolved issue" in text:
         count = Issues.objects.filter(is_resolved=True).count()
@@ -468,7 +579,11 @@ def _answer_for_prompt(prompt):
 
     if "active compan" in text:
         count = Company.objects.filter(is_active=True).count()
-        return f"Currently there are {count} active companies.", count, "active_companies"
+        return (
+            f"Currently there are {count} active companies.",
+            count,
+            "active_companies",
+        )
 
     if "trip" in text and ("how many" in text or "total" in text):
         count = Trip.objects.count()
@@ -484,9 +599,15 @@ def _answer_for_prompt(prompt):
         )
 
     if "average battery health" in text:
-        avg_health = VehicleStats.objects.aggregate(value=Avg("battery_health"))["value"]
+        avg_health = VehicleStats.objects.aggregate(value=Avg("battery_health"))[
+            "value"
+        ]
         if avg_health is None:
-            return "No battery health data is available yet.", None, "average_battery_health"
+            return (
+                "No battery health data is available yet.",
+                None,
+                "average_battery_health",
+            )
         rounded = round(float(avg_health), 2)
         return (
             f"The average battery health is currently {rounded}%.",
