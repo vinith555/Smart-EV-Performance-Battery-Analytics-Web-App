@@ -15,3 +15,8 @@ sqlparse==0.5.5
 typing-extensions==4.13.2
 tzdata==2025.3
 whitenoise==6.7.0
+# Optional Evon Text-to-SQL stack (enable only if using EVON_TEXT2SQL_ENABLED=True)
+# langchain==0.3.7
+# langchain-community==0.3.7
+# langchain-openai==0.2.8
+

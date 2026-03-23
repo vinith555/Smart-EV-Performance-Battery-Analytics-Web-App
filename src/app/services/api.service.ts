@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -320,6 +321,54 @@ export class ApiService {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
+  }
+
+  /**
+   * Get admin dashboard data
+   * @param includeDetails Whether to include scoped detail rows
+   * @param scopeType Scope type for detail mode ('user' or 'vehicle')
+   * @param scopeId Scope id for detail mode
+   * @returns Observable with summary counts and optional scoped details
+   */
+  getAdminDashboardData(
+    includeDetails: boolean = false,
+    scopeType?: 'user' | 'vehicle',
+    scopeId?: number,
+  ): Observable<any> {
+    let params = new HttpParams().set(
+      'include_details',
+      String(includeDetails),
+    );
+
+    if (includeDetails && scopeType && scopeId !== undefined) {
+      params = params
+        .set('scope_type', scopeType)
+        .set('scope_id', String(scopeId));
+    }
+
+    return this.http.get(`${this.apiUrl}/admin/dashboard-data/`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  }
+
+  /**
+   * Ask Evon analytics assistant a natural language question
+   * @param prompt User's analytics question
+   * @returns Observable with Evon answer
+   */
+  askEvon(prompt: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/admin/evon-query/`,
+      { prompt },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    );
   }
 
   /**

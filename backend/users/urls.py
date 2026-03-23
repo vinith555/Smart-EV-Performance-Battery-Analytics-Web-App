@@ -8,6 +8,8 @@ from .views import (
     UserInfoView,
     NotificationView,
     BillViews,
+    AdminDashboardView,
+    EvonView,
 )
 from .views.authView import (
     RegisterView,
@@ -88,5 +90,15 @@ urlpatterns = [
         "delete-notification/<int:notification_id>/",
         NotificationView.DeleteNotification,
         name="delete-notification",
+    ),
+    path(
+        "admin/dashboard-data/",
+        AdminDashboardView.AdminDashboardData,
+        name="admin-dashboard-data",
+    ),
+    path(
+        "admin/evon-query/",
+        EvonView.EvonQuery,
+        name="admin-evon-query",
     ),
 ]

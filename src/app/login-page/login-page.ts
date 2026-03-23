@@ -80,7 +80,7 @@ export class LoginPage implements OnInit {
                   // Redirect based on user role
                   switch (currentUser.role.toUpperCase()) {
                     case 'ADMIN':
-                      this.router.navigate(['/']);
+                      this.router.navigate(['/admin-dashboard']);
                       break;
                     case 'SERVICE':
                       this.router.navigate(['/service-user-dashboard']);

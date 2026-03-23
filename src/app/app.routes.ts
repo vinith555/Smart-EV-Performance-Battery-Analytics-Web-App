@@ -4,6 +4,8 @@ import { LoginPage } from './login-page/login-page';
 import { RegisterPage } from './register-page/register-page';
 import { PersonalUserDashboard } from './personal-user-dashboard/personal-user-dashboard';
 import { ServiceUserDashboard } from './service-user-dashboard/service-user-dashboard';
+import { AdminDashboard } from './admin-dashboard/admin-dashboard';
+import { EvonPage } from './evon-page/evon-page';
 import { Generalhome } from './home-page/generalhome/generalhome';
 import { About } from './home-page/about/about';
 import { Userdashboard } from './personal-user-dashboard/userdashboard/userdashboard';
@@ -56,6 +58,18 @@ export const routes: Routes = [
       { path: 'vehicle-info', component: VehicleInfo },
       { path: 'billing', component: Billing },
     ],
+  },
+  {
+    path: 'admin-dashboard',
+    component: AdminDashboard,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] },
+  },
+  {
+    path: 'admin-evon',
+    component: EvonPage,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] },
   },
   { path: 'help-support', component: Helpsupport },
   { path: '404', component: NotFoundPage },
